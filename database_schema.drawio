@@ -1,0 +1,538 @@
+<mxfile host="app.diagrams.net" modified="2025-05-27T00:00:00.000Z" agent="draw.io" etag="schema-v1" version="24.4.8" type="device">
+  <diagram name="Database Schema" id="database-schema">
+    <mxGraphModel dx="2074" dy="1196" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2339" pageHeight="3300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Users Table -->
+        <mxCell id="users" value="users" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#E6F3FF;strokeColor=#1E88E5;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="200" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="users-fields" value="id (PK)&#10;name&#10;email (unique)&#10;email_verified_at&#10;password&#10;remember_token&#10;created_at&#10;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="users">
+          <mxGeometry y="30" width="200" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Govs Table -->
+        <mxCell id="govs" value="govs" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#E8F5E8;strokeColor=#4CAF50;" vertex="1" parent="1">
+          <mxGeometry x="400" y="100" width="180" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="govs-fields" value="id (PK)&#xa;name_en&#xa;name_ar&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="govs">
+          <mxGeometry y="30" width="180" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Areas Table -->
+        <mxCell id="areas" value="areas" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#E8F5E8;strokeColor=#4CAF50;" vertex="1" parent="1">
+          <mxGeometry x="650" y="100" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="areas-fields" value="id (PK)&#xa;name_en&#xa;name_ar&#xa;gov_id (FK)&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="areas">
+          <mxGeometry y="30" width="180" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Addresses Table -->
+        <mxCell id="addresses" value="addresses" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#E8F5E8;strokeColor=#4CAF50;" vertex="1" parent="1">
+          <mxGeometry x="400" y="300" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="addresses-fields" value="id (PK)&#xa;content&#xa;area_id (FK)&#xa;user_id (FK)&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="addresses">
+          <mxGeometry y="30" width="180" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Categories Table -->
+        <mxCell id="categories" value="categories" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FFF3E0;strokeColor=#FF9800;" vertex="1" parent="1">
+          <mxGeometry x="900" y="100" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="categories-fields" value="id (PK)&#xa;name_en&#xa;name_ar&#xa;slug (unique)&#xa;image&#xa;is_active&#xa;parent_id (FK)&#xa;display_order&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="categories">
+          <mxGeometry y="30" width="200" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Brands Table -->
+        <mxCell id="brands" value="brands" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FFF3E0;strokeColor=#FF9800;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="100" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="brands-fields" value="id (PK)&#xa;name_en&#xa;name_ar&#xa;slug (unique)&#xa;image&#xa;is_active&#xa;parent_id (FK)&#xa;display_order&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="brands">
+          <mxGeometry y="30" width="200" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Products Table -->
+        <mxCell id="products" value="products" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FFF3E0;strokeColor=#FF9800;" vertex="1" parent="1">
+          <mxGeometry x="900" y="400" width="200" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="products-fields" value="id (PK)&#xa;name_en&#xa;name_ar&#xa;slug (unique)&#xa;description_en&#xa;description_ar&#xa;price&#xa;sale_price&#xa;cost_price&#xa;category_id (FK)&#xa;brand_id (FK)&#xa;is_active&#xa;is_featured&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="products">
+          <mxGeometry y="30" width="200" height="220" as="geometry" />
+        </mxCell>
+
+        <!-- Product Variants Table -->
+        <mxCell id="product_variants" value="product_variants" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FFF3E0;strokeColor=#FF9800;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="400" width="220" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="product_variants-fields" value="id (PK)&#xa;product_id (FK)&#xa;sku (unique)&#xa;images (JSON)&#xa;quantity&#xa;price&#xa;sale_price&#xa;color&#xa;size&#xa;capacity&#xa;additional_attributes (JSON)&#xa;is_default&#xa;is_active&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="product_variants">
+          <mxGeometry y="30" width="220" height="270" as="geometry" />
+        </mxCell>
+
+        <!-- Carts Table -->
+        <mxCell id="carts" value="carts" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#F3E5F5;strokeColor=#9C27B0;" vertex="1" parent="1">
+          <mxGeometry x="100" y="400" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="carts-fields" value="id (PK)&#xa;user_id (FK)&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="carts">
+          <mxGeometry y="30" width="180" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Cart Items Table -->
+        <mxCell id="cart_items" value="cart_items" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#F3E5F5;strokeColor=#9C27B0;" vertex="1" parent="1">
+          <mxGeometry x="350" y="550" width="220" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="cart_items-fields" value="id (PK)&#xa;cart_id (FK)&#xa;product_id (FK)&#xa;product_variant_id (FK)&#xa;quantity&#xa;created_at&#xa;updated_at&#xa;&#xa;UNIQUE(cart_id, product_id, &#xa;product_variant_id)" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="cart_items">
+          <mxGeometry y="30" width="220" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Wishlist Items Table -->
+        <mxCell id="wishlist_items" value="wishlist_items" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#F3E5F5;strokeColor=#9C27B0;" vertex="1" parent="1">
+          <mxGeometry x="100" y="600" width="220" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="wishlist_items-fields" value="id (PK)&#xa;user_id (FK)&#xa;product_id (FK)&#xa;product_variant_id (FK)&#xa;created_at&#xa;updated_at&#xa;&#xa;UNIQUE(user_id, product_id, &#xa;product_variant_id)" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="wishlist_items">
+          <mxGeometry y="30" width="220" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Orders Table -->
+        <mxCell id="orders" value="orders" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FFEBEE;strokeColor=#F44336;" vertex="1" parent="1">
+          <mxGeometry x="100" y="850" width="250" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="orders-fields" value="id (PK)&#xa;user_id (FK)&#xa;order_status&#xa;payment_status&#xa;payment_method&#xa;subtotal&#xa;shipping_cost&#xa;discount&#xa;total&#xa;coupon_code&#xa;shipping_address_id (FK)&#xa;notes&#xa;payment_id&#xa;payment_details&#xa;promotion_id (FK)&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="orders">
+          <mxGeometry y="30" width="250" height="310" as="geometry" />
+        </mxCell>
+
+        <!-- Order Items Table -->
+        <mxCell id="order_items" value="order_items" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FFEBEE;strokeColor=#F44336;" vertex="1" parent="1">
+          <mxGeometry x="450" y="900" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="order_items-fields" value="id (PK)&#xa;order_id (FK)&#xa;product_id (FK)&#xa;variant_id (FK)&#xa;quantity&#xa;unit_price&#xa;subtotal&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="order_items">
+          <mxGeometry y="30" width="200" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Sections Table -->
+        <mxCell id="sections" value="sections" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#E1F5FE;strokeColor=#00BCD4;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="100" width="200" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="sections-fields" value="id (PK)&#xa;title_en&#xa;title_ar&#xa;active&#xa;sort_order&#xa;section_type&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="sections">
+          <mxGeometry y="30" width="200" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Section Product Pivot Table -->
+        <mxCell id="section_product" value="section_product" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#E1F5FE;strokeColor=#00BCD4;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="350" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="section_product-fields" value="id (PK)&#xa;section_id (FK)&#xa;product_id (FK)&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="section_product">
+          <mxGeometry y="30" width="200" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Promotions Table -->
+        <mxCell id="promotions" value="promotions" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FFF8E1;strokeColor=#FFC107;" vertex="1" parent="1">
+          <mxGeometry x="750" y="800" width="250" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="promotions-fields" value="id (PK)&#xa;name_en&#xa;name_ar&#xa;code (unique)&#xa;description_en&#xa;description_ar&#xa;type&#xa;value&#xa;min_order_value&#xa;usage_limit&#xa;usage_count&#xa;is_active&#xa;starts_at&#xa;expires_at&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="promotions">
+          <mxGeometry y="30" width="250" height="290" as="geometry" />
+        </mxCell>
+
+        <!-- Promotion Conditions Table -->
+        <mxCell id="promotion_conditions" value="promotion_conditions" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FFF8E1;strokeColor=#FFC107;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="800" width="220" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="promotion_conditions-fields" value="id (PK)&#xa;promotion_id (FK)&#xa;type&#xa;entity_id&#xa;quantity&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="promotion_conditions">
+          <mxGeometry y="30" width="220" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Promotion Rewards Table -->
+        <mxCell id="promotion_rewards" value="promotion_rewards" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FFF8E1;strokeColor=#FFC107;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="800" width="220" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="promotion_rewards-fields" value="id (PK)&#xa;promotion_id (FK)&#xa;type&#xa;entity_id&#xa;quantity&#xa;discount_percentage&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="promotion_rewards">
+          <mxGeometry y="30" width="220" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Promotion Usages Table -->
+        <mxCell id="promotion_usages" value="promotion_usages" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FFF8E1;strokeColor=#FFC107;" vertex="1" parent="1">
+          <mxGeometry x="750" y="1200" width="220" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="promotion_usages-fields" value="id (PK)&#xa;promotion_id (FK)&#xa;order_id (FK)&#xa;user_id (FK)&#xa;discount_amount&#xa;created_at&#xa;updated_at" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="promotion_usages">
+          <mxGeometry y="30" width="220" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships -->
+
+        <!-- Govs to Areas -->
+        <mxCell id="rel-govs-areas" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="govs" target="areas">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="165" as="sourcePoint" />
+            <mxPoint x="650" y="175" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-govs-areas-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-govs-areas">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Areas to Addresses -->
+        <mxCell id="rel-areas-addresses" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="areas" target="addresses">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="650" y="250" as="sourcePoint" />
+            <mxPoint x="580" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-areas-addresses-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-areas-addresses">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Users to Addresses -->
+        <mxCell id="rel-users-addresses" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="users" target="addresses">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="280" as="sourcePoint" />
+            <mxPoint x="400" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-users-addresses-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-users-addresses">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Categories self-reference -->
+        <mxCell id="rel-categories-self" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="categories" target="categories">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1000" y="100" as="sourcePoint" />
+            <mxPoint x="900" y="200" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1000" y="50" />
+              <mxPoint x="850" y="50" />
+              <mxPoint x="850" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-categories-self-label" value="1:N (parent)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-categories-self">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Brands self-reference -->
+        <mxCell id="rel-brands-self" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="brands" target="brands">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1300" y="100" as="sourcePoint" />
+            <mxPoint x="1400" y="200" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1300" y="50" />
+              <mxPoint x="1450" y="50" />
+              <mxPoint x="1450" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-brands-self-label" value="1:N (parent)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-brands-self">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Categories to Products -->
+        <mxCell id="rel-categories-products" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="categories" target="products">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1000" y="300" as="sourcePoint" />
+            <mxPoint x="1000" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-categories-products-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-categories-products">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Brands to Products -->
+        <mxCell id="rel-brands-products" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="brands" target="products">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1200" y="300" as="sourcePoint" />
+            <mxPoint x="1100" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-brands-products-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-brands-products">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Products to Product Variants -->
+        <mxCell id="rel-products-variants" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="products" target="product_variants">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1100" y="525" as="sourcePoint" />
+            <mxPoint x="1200" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-products-variants-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-products-variants">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Users to Carts -->
+        <mxCell id="rel-users-carts" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="users" target="carts">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="200" y="280" as="sourcePoint" />
+            <mxPoint x="190" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-users-carts-label" value="1:1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-users-carts">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Carts to Cart Items -->
+        <mxCell id="rel-carts-cartitems" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="carts" target="cart_items">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="520" as="sourcePoint" />
+            <mxPoint x="350" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-carts-cartitems-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-carts-cartitems">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Products to Cart Items -->
+        <mxCell id="rel-products-cartitems" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="products" target="cart_items">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="650" as="sourcePoint" />
+            <mxPoint x="570" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-products-cartitems-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-products-cartitems">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Product Variants to Cart Items -->
+        <mxCell id="rel-variants-cartitems" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="product_variants" target="cart_items">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1200" y="700" as="sourcePoint" />
+            <mxPoint x="570" y="635" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-variants-cartitems-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-variants-cartitems">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Users to Wishlist Items -->
+        <mxCell id="rel-users-wishlist" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="users" target="wishlist_items">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="280" as="sourcePoint" />
+            <mxPoint x="210" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-users-wishlist-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-users-wishlist">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Products to Wishlist Items -->
+        <mxCell id="rel-products-wishlist" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.8;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="products" target="wishlist_items">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="600" as="sourcePoint" />
+            <mxPoint x="320" y="685" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-products-wishlist-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-products-wishlist">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Users to Orders -->
+        <mxCell id="rel-users-orders" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="users" target="orders">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="200" y="280" as="sourcePoint" />
+            <mxPoint x="100" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-users-orders-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-users-orders">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Addresses to Orders -->
+        <mxCell id="rel-addresses-orders" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="addresses" target="orders">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="450" as="sourcePoint" />
+            <mxPoint x="350" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-addresses-orders-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-addresses-orders">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Orders to Order Items -->
+        <mxCell id="rel-orders-orderitems" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="orders" target="order_items">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="1015" as="sourcePoint" />
+            <mxPoint x="450" y="1000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-orders-orderitems-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-orders-orderitems">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Products to Order Items -->
+        <mxCell id="rel-products-orderitems" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="products" target="order_items">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="650" as="sourcePoint" />
+            <mxPoint x="650" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-products-orderitems-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-products-orderitems">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Product Variants to Order Items -->
+        <mxCell id="rel-variants-orderitems" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="product_variants" target="order_items">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1200" y="700" as="sourcePoint" />
+            <mxPoint x="650" y="1000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-variants-orderitems-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-variants-orderitems">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Sections to Section Product -->
+        <mxCell id="rel-sections-sectionproduct" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="sections" target="section_product">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1600" y="280" as="sourcePoint" />
+            <mxPoint x="1600" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-sections-sectionproduct-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-sections-sectionproduct">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Products to Section Product -->
+        <mxCell id="rel-products-sectionproduct" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="products" target="section_product">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1100" y="400" as="sourcePoint" />
+            <mxPoint x="1500" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-products-sectionproduct-label" value="N:M" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-products-sectionproduct">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Promotions to Promotion Conditions -->
+        <mxCell id="rel-promotions-conditions" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="promotions" target="promotion_conditions">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1000" y="896" as="sourcePoint" />
+            <mxPoint x="1100" y="890" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-promotions-conditions-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-promotions-conditions">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Promotions to Promotion Rewards -->
+        <mxCell id="rel-promotions-rewards" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="promotions" target="promotion_rewards">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1000" y="1024" as="sourcePoint" />
+            <mxPoint x="1400" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-promotions-rewards-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-promotions-rewards">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Promotions to Promotion Usages -->
+        <mxCell id="rel-promotions-usages" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="promotions" target="promotion_usages">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="875" y="1120" as="sourcePoint" />
+            <mxPoint x="860" y="1200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-promotions-usages-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-promotions-usages">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Orders to Promotion Usages -->
+        <mxCell id="rel-orders-usages" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="orders" target="promotion_usages">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="1190" as="sourcePoint" />
+            <mxPoint x="750" y="1275" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-orders-usages-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-orders-usages">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Users to Promotion Usages -->
+        <mxCell id="rel-users-usages" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="users" target="promotion_usages">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="280" as="sourcePoint" />
+            <mxPoint x="750" y="1200" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="50" y="280" />
+              <mxPoint x="50" y="1200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-users-usages-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-users-usages">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Promotions to Orders -->
+        <mxCell id="rel-promotions-orders" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="promotions" target="orders">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="750" y="960" as="sourcePoint" />
+            <mxPoint x="350" y="1190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-promotions-orders-label" value="1:N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-promotions-orders">
+          <mxGeometry x="-0.2" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="LEGEND" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=16;fontStyle=1;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#FAFAFA;strokeColor=#424242;" vertex="1" parent="1">
+          <mxGeometry x="1800" y="100" width="300" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-content" value="🔵 Users & Authentication&#xa;🟢 Geographic (Govs, Areas, Addresses)&#xa;🟠 Products & Catalog&#xa;🟣 Shopping (Cart, Wishlist)&#xa;🔴 Orders & Transactions&#xa;🟡 Promotions & Discounts&#xa;🔵 Content Sections&#xa;&#xa;Relationships:&#xa;1:1 = One to One&#xa;1:N = One to Many&#xa;N:M = Many to Many" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="legend">
+          <mxGeometry y="30" width="300" height="170" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,21 @@
+{
+  "payment_method_kashier": "Credit Card (Kashier)",
+  "processing_payment": "Processing Payment",
+  "initializing_payment": "Initializing Payment",
+  "payment_message": "Please wait while we connect to the secure payment gateway. Do not close this page.",
+  "payment_help_title": "Having trouble with payment?",
+  "payment_help_message": "If the payment window does not appear, please try refreshing this page. For assistance, contact our support team.",
+  "back_to_order": "Back to Order",
+  "payment": "Payment",
+  "complete_your_payment": "Complete Your Payment",
+  "please_complete_payment": "Please complete your payment to finalize your order",
+  "loading_payment_gateway": "Loading payment gateway...",
+  "error": "Error",
+  "back_to_checkout": "Back to Checkout",
+  "order_summary": "Order Summary",
+  "subtotal": "Subtotal",
+  "shipping": "Shipping",
+  "discount": "Discount",
+  "total": "Total",
+  "proceed_to_checkout": "Proceed to Checkout"
+}
