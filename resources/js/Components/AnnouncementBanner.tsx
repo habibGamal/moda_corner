@@ -1,5 +1,7 @@
 import { useI18n } from '@/hooks/use-i18n';
 import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Megaphone, Sparkles, X } from 'lucide-react';
 
 interface AnnouncementBannerProps {
   announcements: { id: number; title_en: string; title_ar: string; }[];
@@ -8,6 +10,7 @@ interface AnnouncementBannerProps {
 export default function AnnouncementBanner({ announcements }: AnnouncementBannerProps) {
   const { getLocalizedField } = useI18n();
   const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
 
   // Auto-rotate announcements
   useEffect(() => {
@@ -17,22 +20,224 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
       setCurrentAnnouncementIndex(prev =>
         prev === announcements.length - 1 ? 0 : prev + 1
       );
-    }, 5000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, [announcements]);
 
-  if (!announcements || announcements.length === 0) {
+  if (!announcements || announcements.length === 0 || !isVisible) {
     return null;
   }
 
+  const currentAnnouncement = announcements[currentAnnouncementIndex];
+
   return (
-    <div className="bg-primary text-primary-foreground py-2 relative overflow-hidden">
-      <div className="container mx-auto px-4 flex justify-center items-center animate-fadeIn">
-        <p className="text-center font-medium">
-          {getLocalizedField(announcements[currentAnnouncementIndex], 'title')}
-        </p>
-      </div>
-    </div>
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          className="relative rounded-xl overflow-hidden bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 bg-size-200 animate-gradient-x"
+        >
+          {/* Animated Background Elements */}
+          <div className="absolute inset-0 overflow-hidden">
+            {/* Floating particles */}
+            <motion.div
+              className="absolute top-2 left-1/4 w-1 h-1 bg-white/30 rounded-full"
+              animate={{
+                y: [0, -8, 0],
+                opacity: [0.3, 0.8, 0.3],
+                scale: [1, 1.2, 1]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            <motion.div
+              className="absolute top-3 right-1/3 w-1.5 h-1.5 bg-white/40 rounded-full"
+              animate={{
+                y: [0, -10, 0],
+                opacity: [0.4, 0.9, 0.4],
+                scale: [1, 1.3, 1]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1
+              }}
+            />
+            <motion.div
+              className="absolute bottom-2 left-1/3 w-1 h-1 bg-white/25 rounded-full"
+              animate={{
+                y: [0, -6, 0],
+                opacity: [0.25, 0.7, 0.25],
+                scale: [1, 1.1, 1]
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 2
+              }}
+            />
+
+            {/* Subtle glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
+          </div>
+
+          <div className="container mx-auto px-4 py-3 relative">
+            <div className="flex items-center justify-between">
+              {/* Left Icon */}
+              <motion.div
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{
+                  duration: 0.6,
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 15
+                }}
+                className="flex items-center"
+              >
+                <motion.div
+                  animate={{
+                    rotate: [0, 5, -5, 0],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <Megaphone className="h-5 w-5 text-white/90 mr-3" />
+                </motion.div>
+              </motion.div>
+
+              {/* Center Content */}
+              <div className="flex-1 flex items-center justify-center">
+                <motion.div
+                  key={currentAnnouncement.id}
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                    scale: 0.9,
+                    rotateX: 30
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    rotateX: 0
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: -20,
+                    scale: 1.1,
+                    rotateX: -30
+                  }}
+                  transition={{
+                    duration: 0.7,
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 12
+                  }}
+                  className="text-center"
+                >
+                  <motion.p
+                    className="text-white font-semibold text-sm md:text-base tracking-wide"
+                    animate={{
+                      textShadow: [
+                        "0 0 0px rgba(255,255,255,0)",
+                        "0 0 8px rgba(255,255,255,0.3)",
+                        "0 0 0px rgba(255,255,255,0)"
+                      ]
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    {getLocalizedField(currentAnnouncement, 'title')}
+                  </motion.p>
+                </motion.div>
+              </div>
+
+              {/* Right Icons */}
+              <div className="flex items-center space-x-2">
+                {/* Sparkles Icon */}
+                <motion.div
+                  animate={{
+                    rotate: [0, 360],
+                    scale: [1, 1.2, 1]
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                >
+                  <Sparkles className="h-4 w-4 text-yellow-200/80" />
+                </motion.div>
+
+                {/* Close Button */}
+                <motion.button
+                  onClick={() => setIsVisible(false)}
+                  className="p-1 rounded-full hover:bg-white/20 transition-colors duration-200"
+                  whileHover={{
+                    scale: 1.1,
+                    rotate: 90
+                  }}
+                  whileTap={{ scale: 0.9 }}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <X className="h-4 w-4 text-white/80 hover:text-white" />
+                </motion.button>
+              </div>
+            </div>
+
+            {/* Progress Indicators */}
+            {announcements.length > 1 && (
+              <motion.div
+                className="flex justify-center space-x-2 mt-2"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+              >
+                {announcements.map((_, index) => (
+                  <motion.div
+                    key={index}
+                    className={`h-1 rounded-full transition-all duration-300 ${
+                      index === currentAnnouncementIndex
+                        ? 'w-8 bg-white/90'
+                        : 'w-3 bg-white/40'
+                    }`}
+                    animate={{
+                      scale: index === currentAnnouncementIndex ? [1, 1.2, 1] : 1
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      repeat: index === currentAnnouncementIndex ? Infinity : 0,
+                      repeatDelay: 2
+                    }}
+                  />
+                ))}
+              </motion.div>
+            )}
+          </div>
+
+          {/* Subtle border glow */}
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
                 'email' => config('app.default_user.email'),
                 'password' => Hash::make(config('app.default_user.password')),
                 'name' => config('app.default_user.name'),
+                'is_admin' => true,
             ]);
     }
 }
