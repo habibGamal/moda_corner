@@ -47,7 +47,7 @@ describe('OrderCancellationService', function () {
                 'user_id' => $this->user->id,
                 'order_status' => OrderStatus::PROCESSING,
                 'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_method' => PaymentMethod::CREDIT_CARD,
                 'total' => 100.00,
             ]);
             OrderItem::factory()->create([
@@ -139,7 +139,7 @@ describe('OrderCancellationService', function () {
             $order = Order::factory()->create([
                 'user_id' => $this->user->id,
                 'order_status' => OrderStatus::PROCESSING,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_method' => PaymentMethod::CREDIT_CARD,
                 'payment_status' => PaymentStatus::PAID,
             ]);
 
@@ -150,7 +150,7 @@ describe('OrderCancellationService', function () {
             Log::shouldHaveReceived('info')
                 ->with('Order cancelled successfully', [
                     'order_id' => $order->id,
-                    'payment_method' => PaymentMethod::KASHIER->value,
+                    'payment_method' => PaymentMethod::CREDIT_CARD->value,
                     'payment_status' => PaymentStatus::PAID->value,
                     'reason' => 'Test reason',
                 ]);
@@ -163,7 +163,7 @@ describe('OrderCancellationService', function () {
             $order = Order::factory()->create([
                 'order_status' => OrderStatus::CANCELLED,
                 'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_method' => PaymentMethod::CREDIT_CARD,
             ]);
 
             // Act & Assert
@@ -175,7 +175,7 @@ describe('OrderCancellationService', function () {
             $order = Order::factory()->create([
                 'order_status' => OrderStatus::PROCESSING,
                 'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_method' => PaymentMethod::CREDIT_CARD,
             ]);
 
             // Act & Assert
@@ -187,7 +187,7 @@ describe('OrderCancellationService', function () {
             $order = Order::factory()->create([
                 'order_status' => OrderStatus::CANCELLED,
                 'payment_status' => PaymentStatus::PENDING,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_method' => PaymentMethod::CREDIT_CARD,
             ]);
 
             // Act & Assert
@@ -214,7 +214,7 @@ describe('OrderCancellationService', function () {
                 'user_id' => $this->user->id,
                 'order_status' => OrderStatus::CANCELLED,
                 'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_method' => PaymentMethod::CREDIT_CARD,
                 'total' => 150.00,
             ]);
 
@@ -243,7 +243,7 @@ describe('OrderCancellationService', function () {
             $order = Order::factory()->create([
                 'order_status' => OrderStatus::PROCESSING,
                 'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_method' => PaymentMethod::CREDIT_CARD,
             ]);
 
             // Act & Assert
@@ -257,7 +257,7 @@ describe('OrderCancellationService', function () {
                 'user_id' => $this->user->id,
                 'order_status' => OrderStatus::CANCELLED,
                 'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_method' => PaymentMethod::CREDIT_CARD,
                 'total' => 200.00,
             ]);
 
@@ -316,7 +316,7 @@ describe('OrderCancellationService', function () {
 
         it('processes multiple payment methods correctly', function () {
             $paymentMethods = [
-                PaymentMethod::KASHIER,
+                PaymentMethod::CREDIT_CARD,
             ];
 
             foreach ($paymentMethods as $paymentMethod) {

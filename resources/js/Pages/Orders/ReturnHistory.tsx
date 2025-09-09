@@ -57,7 +57,8 @@ export default function ReturnHistory({ returnHistory }: ReturnHistoryProps) {
     <>
       <Head title={t("return_history", "Return History")} />
 
-      <div className="space-y-6">
+      <div className="container mt-4">
+        <div className="space-y-6">
         <div className="flex items-center justify-between">
           <PageTitle
             title={t("return_history", "Return History")}
@@ -188,6 +189,7 @@ export default function ReturnHistory({ returnHistory }: ReturnHistoryProps) {
             ))}
           </div>
         )}
+        </div>
       </div>
     </>
   );

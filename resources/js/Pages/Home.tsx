@@ -33,11 +33,6 @@ export default function Home({
     const { t, getLocalizedField } = useI18n();
     const { title } = useSiteBranding();
 
-    // Filter active categories and brands
-    const activeCategories = categories?.filter((cat) => cat.is_active) || [];
-    const activeBrands = brands?.filter((brand) => brand.is_active) || [];
-    console.log(categories);
-
     return (
         <>
             <Head title={title} />
@@ -127,31 +122,12 @@ export default function Home({
                         <div className="flex-1 relative">
                             <div className="relative z-10 text-center">
                                     <HeroCarousel heroSlides={heroSlides} />
-                                {/* <img
-                                    src={
-                                        "storage/" + heroSlides[0]?.image || ""
-                                    }
-                                    alt="Nike Electric Shoe"
-                                    className="w-full rounded-3xl h-auto  mx-auto transform hover:scale-105 transition-transform duration-300"
-                                /> */}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="container">
-                {/* Category Grid */}
-                {/* <CategoryGrid
-                    categories={activeCategories}
-                    title={t("shop_by_category", "Shop by Category")}
-                /> */}
-
-                {/* Brand Grid */}
-                {/* <BrandGrid
-                    brands={activeBrands.slice(0, 12)}
-                    title={t("our_brands", "Our Brands")}
-                /> */}
-
+            <div className="container mt-4">
                 {sections &&
                     sections.map((section) => (
                         <ProductGrid

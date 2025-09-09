@@ -53,7 +53,8 @@ export default function Index({ items }: WishlistPageProps) {
         <>
             <Head title={t("wishlist", "Wishlist")} />
 
-            <div className="flex items-center justify-between mb-6">
+            <div className="container mt-4">
+                <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2">
                     <Heart className="h-6 w-6" />
                     {t("wishlist", "Wishlist")}
@@ -113,6 +114,7 @@ export default function Index({ items }: WishlistPageProps) {
                     </Button>
                 </div>
             )}
+            </div>
         </>
     );
 }

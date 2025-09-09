@@ -42,6 +42,16 @@ return [
         'mode' => env('KASHIER_MODE', 'test'), // 'test' or 'live'
     ],
 
+    'payment' => [
+        'default_gateway' => env('PAYMENT_DEFAULT_GATEWAY', 'kashier'),
+        'gateways' => [
+            'kashier' => [
+                'supports_credit_card' => true,
+                'supports_wallet' => true,
+            ],
+        ],
+    ],
+
     'facebook' => [
         'client_id' => env('FACEBOOK_CLIENT_ID'),
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),

@@ -70,15 +70,17 @@ export function PaymentMethodSection({
                                                 {method === "cash_on_delivery" && (
                                                     <Banknote className="w-4 h-4" />
                                                 )}
-                                                {method === "kashier" && (
+                                                {(method === "credit_card" || method === "wallet") && (
                                                     <CreditCard className="w-4 h-4" />
                                                 )}
                                                 {t(
                                                     `payment_method_${method}`,
                                                     method === "cash_on_delivery"
                                                         ? "Cash on Delivery"
-                                                        : method === "kashier"
-                                                        ? "Credit Card (Kashier)"
+                                                        : method === "credit_card"
+                                                        ? "Credit Card"
+                                                        : method === "wallet"
+                                                        ? "Wallet"
                                                         : method
                                                 )}
                                             </Label>

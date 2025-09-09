@@ -248,7 +248,7 @@ export default function Index({
     };
 
     return (
-        <>
+        <div className="container mt-4">
             <Head title={t("checkout", "Checkout")} />
 
             <div className="space-y-6">
@@ -312,6 +312,6 @@ export default function Index({
                     </form>
                 </Form>
             </div>
-        </>
+        </div>
     );
 }

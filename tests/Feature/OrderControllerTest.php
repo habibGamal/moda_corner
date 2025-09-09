@@ -188,7 +188,7 @@ describe('checkout', function () {
             ->has('paymentMethods')
             ->where('cartSummary.totalItems', 2)
             ->where('cartSummary.totalPrice', fn($value) => (float)$value === 200.0)
-            ->where('paymentMethods', ['cash_on_delivery', 'kashier'])
+            ->where('paymentMethods', ['cash_on_delivery', 'credit_card', 'wallet'])
             ->where('orderSummary', null) // No address selected initially
         );
     });
@@ -253,11 +253,11 @@ describe('store', function () {
                 ->assertSessionHas('success', 'Order placed successfully!');
     });
 
-    it('redirects to payment initiation for kashier payment', function () {
+    it('redirects to payment initiation for credit_card payment', function () {
         $orderData = [
             'address_id' => $this->address->id,
-            'payment_method' => 'kashier',
-            'notes' => 'Kashier payment order',
+            'payment_method' => 'credit_card',
+            'notes' => 'credit_card payment order',
         ];
 
         $response = $this->post(route('orders.store'), $orderData);
@@ -265,10 +265,10 @@ describe('store', function () {
         $order = Order::where('user_id', $this->user->id)->first();
 
         expect($order)->not->toBeNull();
-        expect($order->payment_method)->toBe(PaymentMethod::KASHIER);
+        expect($order->payment_method)->toBe(PaymentMethod::CREDIT_CARD);
         expect($order->payment_status)->toBe(PaymentStatus::PENDING);
 
-        $response->assertRedirect(route('kashier.payment.initiate', ['order_id' => $order->id]));
+        $response->assertRedirect(route('payment.initiate', ['order_id' => $order->id]));
     });
 
     it('validates required fields', function () {
@@ -462,7 +462,7 @@ describe('Order Flow Integration', function () {
         );
     });
 
-    it('completes kashier payment flow integration', function () {
+    it('completes credit_card payment flow integration', function () {
         // Create cart
         $cart = Cart::factory()->create(['user_id' => $this->user->id]);
         CartItem::factory()->create([
@@ -472,22 +472,22 @@ describe('Order Flow Integration', function () {
             'quantity' => 2,
         ]);
 
-        // Place order with Kashier payment
+        // Place order with credit_card payment
         $orderData = [
             'address_id' => $this->address->id,
-            'payment_method' => 'kashier',
-            'notes' => 'Kashier integration test',
+            'payment_method' => 'credit_card',
+            'notes' => 'credit_card integration test',
         ];
 
         $response = $this->post(route('orders.store'), $orderData);
 
         $order = Order::where('user_id', $this->user->id)->first();
         expect($order)->not->toBeNull();
-        expect($order->payment_method)->toBe(PaymentMethod::KASHIER);
+        expect($order->payment_method)->toBe(PaymentMethod::CREDIT_CARD);
         expect($order->payment_status)->toBe(PaymentStatus::PENDING);
 
         // Should redirect to payment initiation
-        $response->assertRedirect(route('kashier.payment.initiate', ['order_id' => $order->id]));
+        $response->assertRedirect(route('payment.initiate', ['order_id' => $order->id]));
     });
 
     it('handles order cancellation flow', function () {

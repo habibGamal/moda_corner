@@ -36,8 +36,8 @@ class StoreOrderRequest extends FormRequest
             'payment_method' => [
                 'required',
                 'string',
-                // Allow both cash_on_delivery and kashier payment methods
-                Rule::in(['cash_on_delivery', 'kashier']),
+                // Allow cash_on_delivery, credit_card, and wallet payment methods
+                Rule::in(['cash_on_delivery', 'credit_card', 'wallet']),
             ],
             'coupon_code' => 'nullable|string|max:255', // Add more specific validation if coupons are implemented (e.g., exists:coupons,code)
             'notes' => 'nullable|string|max:1000',

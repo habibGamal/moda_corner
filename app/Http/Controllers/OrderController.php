@@ -130,8 +130,12 @@ class OrderController extends Controller
                 'totalItems' => $this->cartService->getCartSummary()->totalItems,
                 'totalPrice' => $this->cartService->getCartSummary()->totalPrice,
             ],
-            // Pass allowed payment methods
-            'paymentMethods' => ['cash_on_delivery', 'kashier'],
+            // Pass allowed payment methods using enum values
+            'paymentMethods' => [
+                \App\Enums\PaymentMethod::CASH_ON_DELIVERY->value,
+                \App\Enums\PaymentMethod::CREDIT_CARD->value,
+                \App\Enums\PaymentMethod::WALLET->value,
+            ],
         ]);
     }
 
@@ -154,10 +158,11 @@ class OrderController extends Controller
 
             $order = $this->orderService->placeOrderFromCart($orderData);
 
-            // If payment method is Kashier, redirect to initiate payment
-            if ($request->validated('payment_method') === 'kashier') {
+            // If payment method requires online gateway, redirect to initiate payment
+            $paymentMethod = \App\Enums\PaymentMethod::from($request->validated('payment_method'));
+            if ($paymentMethod->requiresOnlineGateway()) {
                 // Create request to pass to initiatePayment
-                return redirect()->route('kashier.payment.initiate', [
+                return redirect()->route('payment.initiate', [
                     'order_id' => $order->id
                 ]);
             }

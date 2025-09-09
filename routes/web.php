@@ -1,23 +1,22 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderReturnController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentWebhookController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\AddressController;
-use App\Http\Controllers\KashierPaymentController;
-use App\Http\Controllers\OrderReturnController;
-use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Models\User;
 use App\Notifications\Notify;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return 'HI';
@@ -52,7 +51,8 @@ Route::get('/facebook-data-deletion', [App\Http\Controllers\PagesController::cla
 
 Route::get('/notify', function () {
     $subscriptions = User::all();
-    Notification::send($subscriptions, new Notify());
+    Notification::send($subscriptions, new Notify);
+
     return response()->json(['sent' => true]);
 });
 
@@ -109,18 +109,26 @@ Route::middleware('auth')->group(function () {
     Route::post('/orders/{order}/return', [OrderReturnController::class, 'requestReturn'])->name('orders.return.request')->where('order', '[0-9]+');
     Route::get('/orders/returns/history', [OrderReturnController::class, 'history'])->name('orders.returns.history');
 
-    // Kashier payment routes
-    Route::get('/payments/kashier/initiate', [KashierPaymentController::class, 'initiatePayment'])->name('kashier.payment.initiate');
-    Route::get('/payments/kashier/success', [KashierPaymentController::class, 'handleSuccess'])->name('kashier.payment.success');
-    Route::get('/payments/kashier/failure', [KashierPaymentController::class, 'handleFailure'])->name('kashier.payment.failure');
+    // Payment routes - updated to use new PaymentController
+    Route::get('/payments/initiate', [PaymentController::class, 'initiatePayment'])->name('payment.initiate');
+    Route::get('/payments/success', [PaymentController::class, 'handleSuccess'])->name('payment.success');
+    Route::get('/payments/failure', [PaymentController::class, 'handleFailure'])->name('payment.failure');
+    Route::get('/payments/{order}', [PaymentController::class, 'showPayment'])->name('payment.show');
 
-    // Keep the old route for backward compatibility but mark it as deprecated
-    Route::get('/payments/kashier/{order}', [KashierPaymentController::class, 'showPayment'])->name('kashier.payment.show');
+    // Legacy Kashier payment routes for backward compatibility
+    Route::get('/payments/kashier/initiate', [PaymentController::class, 'initiatePayment'])->name('kashier.payment.initiate');
+    Route::get('/payments/kashier/success', [PaymentController::class, 'handleSuccess'])->name('kashier.payment.success');
+    Route::get('/payments/kashier/failure', [PaymentController::class, 'handleFailure'])->name('kashier.payment.failure');
+    Route::get('/payments/kashier/{order}', [PaymentController::class, 'showPayment'])->name('kashier.payment.show');
 });
 
-// Kashier webhook - This route is not protected as it's accessed by the Kashier server
-Route::post('/webhooks/kashier', [KashierPaymentController::class, 'handleWebhook'])->name('kashier.payment.webhook')
-->withoutMiddleware([VerifyCsrfToken::class]);
+// Payment webhook - This route is not protected as it's accessed by payment gateways
+Route::post('/webhooks/payment', [PaymentWebhookController::class, 'handle'])->name('payment.webhook')
+    ->withoutMiddleware([VerifyCsrfToken::class]);
+
+// Legacy Kashier webhook for backward compatibility
+Route::post('/webhooks/kashier', [PaymentWebhookController::class, 'handle'])->name('kashier.payment.webhook')
+    ->withoutMiddleware([VerifyCsrfToken::class]);
 
 // API Routes for Settings
 Route::prefix('api')->group(function () {

@@ -52,7 +52,7 @@ export default function Show({ product }: ShowProps) {
     return (
         <>
             <Head title={getLocalizedField(product, "name")} />
-            <div className="container">
+            <div className="container mt-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-4">
                     {/* Left column - Product images */}
                     <div>

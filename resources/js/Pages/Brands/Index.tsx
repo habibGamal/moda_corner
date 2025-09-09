@@ -16,7 +16,7 @@ export default function Index({ brands }: BrandsPageProps) {
     const { t, getLocalizedField } = useI18n();
 
     return (
-        <>
+        <div className="container mt-4">
             <Head title={t("brands", "Brands")} />
 
             <div className="flex items-center gap-2 mb-8">
@@ -114,6 +114,6 @@ export default function Index({ brands }: BrandsPageProps) {
                     )}
                 />
             )}
-        </>
+        </div>
     );
 }

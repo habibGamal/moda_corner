@@ -89,7 +89,8 @@ export default function Show({ order, canRequestReturn = false }: OrderShowProps
         <>
             <Head title={t("order_details", "Order Details")} />
 
-            <div className="space-y-8">
+            <div className="container mt-4">
+                <div className="space-y-8">
                 {/* Order Header with Back Button and Order Number */}
                 <div className="flex flex-col gap-4">
                     <PageTitle
@@ -237,6 +238,7 @@ export default function Show({ order, canRequestReturn = false }: OrderShowProps
 
                 {/* "Thank you" message at the bottom */}
                 <OrderThankYou />
+                </div>
             </div>
         </>
     );

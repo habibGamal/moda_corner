@@ -25,7 +25,7 @@ export default function Index({ auth,  cart, cartSummary }: CartIndexProps) {
     } = useCart();
 
     return (
-        <>
+        <div className="container mt-4">
             <Head title={t("cart", "Shopping Cart")} />
 
             <div className="flex flex-col gap-8">
@@ -71,6 +71,6 @@ export default function Index({ auth,  cart, cartSummary }: CartIndexProps) {
                     </div>
                 )}
             </div>
-        </>
+        </div>
     );
 }

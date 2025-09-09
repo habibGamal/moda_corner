@@ -15,20 +15,22 @@ export default function SectionPage({
     return (
         <>
             <Head title={getLocalizedField(section, "title")} />
-            <PageTitle
-                title={getLocalizedField(section, "title")!}
-                icon={<Layers className="h-6 w-6" />}
-            />
-            <ProductGrid
-                key={section.id}
-                sectionId={section.id}
-                className="!pt-0"
-                viewType="grid"
-                emptyMessage={t(
-                    "no_products_available",
-                    "No products available in this section"
-                )}
-            />
+            <div className="container mt-4">
+                <PageTitle
+                    title={getLocalizedField(section, "title")!}
+                    icon={<Layers className="h-6 w-6" />}
+                />
+                <ProductGrid
+                    key={section.id}
+                    sectionId={section.id}
+                    className="!pt-0"
+                    viewType="grid"
+                    emptyMessage={t(
+                        "no_products_available",
+                        "No products available in this section"
+                    )}
+                />
+            </div>
         </>
     );
 }

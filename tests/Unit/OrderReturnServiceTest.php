@@ -347,7 +347,7 @@ describe('completeReturn', function () {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
             'return_status' => ReturnStatus::RETURN_APPROVED,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'payment_status' => PaymentStatus::PAID,
         ]);
 

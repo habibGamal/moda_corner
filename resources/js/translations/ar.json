@@ -280,7 +280,8 @@
     "payment_message": "يرجى الانتظار أثناء الاتصال ببوابة الدفع الآمن. لا تغلق هذه الصفحة.",
     "payment_help_title": "هل تواجه مشكلة في الدفع؟",
     "payment_help_message": "إذا لم تظهر نافذة الدفع، يرجى تحديث هذه الصفحة. للمساعدة، اتصل بفريق الدعم لدينا.",
-    "payment_method_kashier": "الدفع الإلكتروني",
+    "payment_method_credit_card": "بطاقة ائتمانية",
+    "payment_method_wallet": "المحفظة الإلكترونية",
     "payment_completed": "اكتمل الدفع",
     "payment_failed": "فشل الدفع",
     "payment_verification_failed": "فشل التحقق من الدفع",
@@ -312,5 +313,6 @@
     "language_preferences": "تفضيلات اللغة",
     "language_preferences_description": "اختر لغتك المفضلة لواجهة الموقع.",
     "select_language": "اختر اللغة",
-    "or_continue_with": "أو المتابعة باستخدام"
+    "or_continue_with": "أو المتابعة باستخدام",
+    "return_history": "العودة إلى السجل"
 }

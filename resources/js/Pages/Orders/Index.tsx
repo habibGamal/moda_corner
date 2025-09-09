@@ -79,11 +79,12 @@ export default function Index() {
         <>
             <Head title={t("my_orders", "My Orders")} />
 
-            <div className="space-y-6">
-                <PageTitle
-                    title={t("my_orders", "My Orders")}
-                    icon={<ShoppingBag className="h-6 w-6 text-primary" />}
-                />
+            <div className="container mt-4">
+                <div className="space-y-6">
+                    <PageTitle
+                        title={t("my_orders", "My Orders")}
+                        icon={<ShoppingBag className="h-6 w-6 text-primary" />}
+                    />
                 <ItemGrid<App.Models.Order>
                     className="py-0"
                     sectionId="orders"
@@ -206,6 +207,7 @@ export default function Index() {
                         </Card>
                     )}
                 />
+                </div>
             </div>
         </>
     );

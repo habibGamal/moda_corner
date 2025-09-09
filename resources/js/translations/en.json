@@ -239,7 +239,8 @@
     "payment_message": "Please wait while we connect to the secure payment gateway. Do not close this page.",
     "payment_help_title": "Having trouble with payment?",
     "payment_help_message": "If the payment window does not appear, please try refreshing this page. For assistance, contact our support team.",
-    "payment_method_kashier": "Online Payment (Kashier)",
+    "payment_method_credit_card": "Credit Card",
+    "payment_method_wallet": "Digital Wallet",
     "payment_completed": "Payment Completed",
     "payment_failed": "Payment Failed",
     "payment_verification_failed": "Payment verification failed",
@@ -276,5 +277,6 @@
     "language_preferences": "Language Preferences",
     "language_preferences_description": "Choose your preferred language for the interface.",
     "select_language": "Select Language",
-    "or_continue_with": "Or continue with"
+    "or_continue_with": "Or continue with",
+    "return_history": "Return to History"
 }

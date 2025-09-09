@@ -23,7 +23,7 @@ describe('ProcessRefundAction', function () {
             'user_id' => $this->user->id,
             'order_status' => OrderStatus::CANCELLED,
             'payment_status' => PaymentStatus::PAID,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'total' => 100.00,
             'cancelled_at' => now(),
         ]);
@@ -105,7 +105,7 @@ describe('ProcessRefundAction', function () {
             'user_id' => $this->user->id,
             'order_status' => OrderStatus::CANCELLED,
             'payment_status' => PaymentStatus::PAID,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'total' => 250.50,
             'cancelled_at' => now(),
         ]);
@@ -123,7 +123,7 @@ describe('ProcessRefundAction', function () {
             'user_id' => $this->user->id,
             'order_status' => OrderStatus::CANCELLED,
             'payment_status' => PaymentStatus::PAID,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'subtotal' => 85.00,
             'shipping_cost' => 15.00,
             'total' => 100.00,
