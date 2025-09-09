@@ -72,7 +72,7 @@ class KashierPaymentController extends Controller
             session()->put('kashier_order_id', $order->id);
 
             return Inertia::render('Payments/Kashier', [
-                'kashierParams' => $paymentData->toArray(),
+                'kashierParams' => $paymentData instanceof \App\DTOs\KashierPaymentData ? $paymentData->toArray() : [],
                 'order' => $order
             ]);
         } catch (Exception $e) {
@@ -186,39 +186,93 @@ class KashierPaymentController extends Controller
     public function handleWebhook(Request $request)
     {
         try {
-            Log::info('Kashier webhook received', ['payload' => $request->all()]);
+            // Get the raw payload and headers for proper signature validation
+            $rawPayload = $request->getContent();
+            $headers = $request->headers->all();
 
-            // Verify the signature
-            if (!$this->paymentService->validatePaymentResponse($request->all())) {
-                Log::warning('Invalid Kashier signature in webhook', ['params' => $request->all()]);
+            Log::info('Kashier webhook received', [
+                'payload' => $request->all(),
+                'raw_payload_length' => strlen($rawPayload),
+                'headers' => $headers
+            ]);
+
+            // Verify the signature using the new webhook validation method
+            if (!$this->paymentService->validatePaymentResponseWebhook($rawPayload, $headers)) {
+                Log::warning('Invalid Kashier signature in webhook', [
+                    'params' => $request->all(),
+                    'raw_payload' => $rawPayload,
+                    'headers' => $headers
+                ]);
                 return response()->json(['status' => 'error', 'message' => 'Invalid signature'], 400);
             }
 
-            $paymentRef = $request->input('merchantOrderId');
+            // Get payment data from the webhook
+            $webhookData = $request->all();
+            $merchantOrderId = $webhookData['data']['merchantOrderId'] ?? null;
+            $status = $webhookData['data']['status'] ?? null;
+            $transactionId = $webhookData['data']['transactionId'] ?? null;
+            $amount = $webhookData['data']['amount'] ?? null;
 
-            // We can't directly process this here because we might not have the session data
-            // The user may have already been redirected and payment confirmed
-            // Just log the event and return success
-            Log::info('Kashier payment confirmed via webhook', [
-                'paymentRef' => $paymentRef,
-                'paymentId' => $request->input('paymentId'),
-                'amount' => $request->input('amount'),
-                'request',
-                $request->all()
-            ]);
+            if (!$merchantOrderId) {
+                Log::error('Missing merchantOrderId in webhook data', ['webhook_data' => $webhookData]);
+                return response()->json(['status' => 'error', 'message' => 'Missing order reference'], 400);
+            }
 
-            $order = $this->orderService->getOrderById($request->input('orderId'));
-            // Payment data from Kashier
-            $paymentData = $request->all();
+            // Extract order ID from merchantOrderId (e.g., "Moda-5" -> 5)
+            $orderId = str_replace(config('app.name') . '-', '', $merchantOrderId);
 
-            // Process the successful payment
-            $this->paymentService->processSuccessfulPayment($order, $paymentData);
+            if (!$orderId) {
+                Log::error('Could not extract order ID from merchantOrderId', [
+                    'merchantOrderId' => $merchantOrderId,
+                    'webhook_data' => $webhookData
+                ]);
+                return response()->json(['status' => 'error', 'message' => 'Invalid order reference'], 400);
+            }
 
-            return response()->json(['status' => 'success']);
+            // Get the order
+            $order = Order::find($orderId);
+
+            if (!$order) {
+                Log::error('Order not found', ['order_id' => $orderId, 'merchantOrderId' => $merchantOrderId]);
+                return response()->json(['status' => 'error', 'message' => 'Order not found'], 404);
+            }
+
+            // Check if the payment was successful
+            if ($status === 'SUCCESS') {
+                // Process the successful payment
+                $this->paymentService->processSuccessfulPayment($order, $webhookData['data']);
+
+                Log::info('Kashier payment confirmed via webhook', [
+                    'order_id' => $orderId,
+                    'merchantOrderId' => $merchantOrderId,
+                    'transactionId' => $transactionId,
+                    'amount' => $amount,
+                    'status' => $status
+                ]);
+
+                return response()->json(['status' => 'success'], 200);
+            } else {
+                // Handle failed payment
+                $order->payment_status = PaymentStatus::FAILED;
+                $order->payment_details = json_encode($webhookData['data']);
+                $order->save();
+
+                Log::warning('Kashier payment failed via webhook', [
+                    'order_id' => $orderId,
+                    'merchantOrderId' => $merchantOrderId,
+                    'status' => $status,
+                    'webhook_data' => $webhookData['data']
+                ]);
+
+                return response()->json(['status' => 'success'], 200); // Still return 200 to acknowledge receipt
+            }
 
         } catch (Exception $e) {
-            Log::error('Error processing Kashier webhook: ' . $e->getMessage(), ['exception' => $e, 'payload' => $request->all()]);
-            return response()->json(['status' => 'error', 'message' => 'Internal server errorxxx'], 500);
+            Log::error('Error processing Kashier webhook: ' . $e->getMessage(), [
+                'exception' => $e,
+                'payload' => $request->all()
+            ]);
+            return response()->json(['status' => 'error', 'message' => 'Internal server error'], 500);
         }
     }
 
@@ -252,7 +306,7 @@ class KashierPaymentController extends Controller
 
             return Inertia::render('Payments/Kashier', [
                 'order' => $order,
-                'kashierParams' => $paymentData->toArray(),
+                'kashierParams' => $paymentData instanceof \App\DTOs\KashierPaymentData ? $paymentData->toArray() : [],
             ]);
         } catch (Exception $e) {
             Log::error('Error showing Kashier payment: ' . $e->getMessage(), ['exception' => $e]);

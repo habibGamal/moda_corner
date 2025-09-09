@@ -69,12 +69,12 @@ class KashierPaymentService implements PaymentServiceInterface
      * Process payment for an order
      *
      * @param Order $order The order to process payment for
-     * @return PaymentResultData The payment data for the Kashier payment form
+     * @return KashierPaymentData The payment data for the Kashier payment form
      */
     public function pay(Order $order): PaymentResultData
     {
         // Generate a unique reference for this payment attempt
-        $uniqueRef = $order->id;
+        $uniqueRef = config('app.name') . '-' . $order->id;
 
         // Format amount with 2 decimal places
         $amount = number_format($order->total, 2, '.', '');
@@ -94,7 +94,17 @@ class KashierPaymentService implements PaymentServiceInterface
         $redirectUrl = route('kashier.payment.success');
         $failureUrl = route('kashier.payment.failure');
         $webhookUrl = $this->getWebhookUrl();
-
+        logger()->info('Kashier Payment Data', [
+            'merchant_id' => $merchantId,
+            'order_id' => $uniqueRef,
+            'amount' => $amount,
+            'currency' => $currency,
+            'hash' => $hash,
+            'mode' => $this->getMode(),
+            'redirect_url' => $redirectUrl,
+            'failure_url' => $failureUrl,
+            'webhook_url' => $webhookUrl,
+        ]);
         return new KashierPaymentData(
             merchantId: $merchantId,
             orderId: $uniqueRef,
@@ -140,6 +150,91 @@ class KashierPaymentService implements PaymentServiceInterface
         return hash_equals($expectedSignature, $receivedSignature);
     }
 
+    /**
+     * Validate the webhook payload from Kashier
+     *
+     * @param string $rawPayload The raw JSON payload from the webhook
+     * @param array $headers The HTTP headers from the request
+     * @return bool Whether the signature is valid
+     */
+    public function validatePaymentResponseWebhook(string $rawPayload, array $headers): bool
+    {
+        try {
+            // Decode the JSON payload
+            $jsonData = json_decode($rawPayload, true);
+
+            if (!$jsonData || !isset($jsonData['data']) || !isset($jsonData['event'])) {
+                return false;
+            }
+
+            $dataObj = $jsonData['data'];
+            $event = $jsonData['event'];
+
+            // Check if signatureKeys exist
+            if (!isset($dataObj['signatureKeys']) || !is_array($dataObj['signatureKeys'])) {
+                return false;
+            }
+
+            // Sort the signature keys
+            $signatureKeys = $dataObj['signatureKeys'];
+            sort($signatureKeys);
+
+            // Convert headers to lowercase keys
+            $headers = array_change_key_case($headers, CASE_LOWER);
+
+            // Get the Kashier signature from headers
+            // Headers can be arrays, so we need to get the first value if it's an array
+            $kashierSignature = $headers['x-kashier-signature'] ?? null;
+            if (is_array($kashierSignature)) {
+                $kashierSignature = $kashierSignature[0] ?? null;
+            }
+
+            if (!$kashierSignature) {
+                return false;
+            }
+
+            // Build data array using signature keys
+            $data = [];
+            foreach ($signatureKeys as $key) {
+                if (isset($dataObj[$key])) {
+                    $data[$key] = $dataObj[$key];
+                }
+            }
+
+            // Build query string using RFC3986 encoding
+            $queryString = http_build_query(
+                $data,
+                '',
+                '&',
+                PHP_QUERY_RFC3986
+            );
+
+            // Generate the expected signature using the API key
+            $paymentApiKey = $this->getApiKey();
+            $expectedSignature = hash_hmac('sha256', $queryString, $paymentApiKey, false);
+
+            // Log signature validation details for debugging
+            Log::info('Kashier webhook signature validation', [
+                'query_string' => $queryString,
+                'expected_signature' => $expectedSignature,
+                'received_signature' => $kashierSignature,
+                'signature_keys' => $signatureKeys,
+                'event' => $event
+            ]);
+
+            // Compare signatures using timing-safe comparison
+            return hash_equals($expectedSignature, $kashierSignature);
+
+        } catch (\Exception $e) {
+            Log::error('Error validating Kashier webhook signature', [
+                'exception' => $e->getMessage(),
+                'raw_payload' => $rawPayload
+            ]);
+
+            return false;
+        }
+    }
+
 
     /**
      * Get the redirect URL for successful payments
@@ -170,7 +265,7 @@ class KashierPaymentService implements PaymentServiceInterface
      */
     public function getWebhookUrl(): string
     {
-        return route('kashier.payment.webhook');
+        return config('app.url') . '/webhooks/kashier';
     }
 
     /**
@@ -278,9 +373,11 @@ class KashierPaymentService implements PaymentServiceInterface
                 $responseData = $response->json();
 
                 // Check if webhook is enabled and has a URL
-                if (isset($responseData['body']['webhook']['isEnabled']) &&
+                if (
+                    isset($responseData['body']['webhook']['isEnabled']) &&
                     $responseData['body']['webhook']['isEnabled'] === true &&
-                    !empty($responseData['body']['webhook']['url'])) {
+                    !empty($responseData['body']['webhook']['url'])
+                ) {
                     return true;
                 }
 
@@ -331,9 +428,11 @@ class KashierPaymentService implements PaymentServiceInterface
             $responseData = $response->json();
 
             // Check for successful refund using the main status and response status
-            if ($response->successful() &&
+            if (
+                $response->successful() &&
                 isset($responseData['status']) && $responseData['status'] === 'SUCCESS' &&
-                isset($responseData['response']['status']) && $responseData['response']['status'] === 'REFUNDED') {
+                isset($responseData['response']['status']) && $responseData['response']['status'] === 'REFUNDED'
+            ) {
 
                 Log::info('Kashier refund successful', [
                     'order_id' => $refundRequest->orderId,

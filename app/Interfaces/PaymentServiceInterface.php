@@ -24,6 +24,15 @@ interface PaymentServiceInterface
     public function validatePaymentResponse(array $params): bool;
 
     /**
+     * Validate payment response from the payment gateway (webhook version)
+     *
+     * @param string $rawPayload The raw JSON payload from the webhook
+     * @param array $headers The HTTP headers from the request
+     * @return bool Whether the payment response is valid
+     */
+    public function validatePaymentResponseWebhook(string $rawPayload, array $headers): bool;
+
+    /**
      * Process a successful payment for an order
      *
      * @param Order $order The order to update
