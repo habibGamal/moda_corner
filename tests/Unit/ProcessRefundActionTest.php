@@ -6,7 +6,6 @@ use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Models\Order;
 use App\Models\User;
-use App\Services\OrderCancellationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -23,8 +22,8 @@ describe('ProcessRefundAction', function () {
             'user_id' => $this->user->id,
             'order_status' => OrderStatus::CANCELLED,
             'payment_status' => PaymentStatus::PAID,
-            'payment_method' => PaymentMethod::KASHIER,
-            'total' => 100.00,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
+            'total' => 100.00,CARD
             'cancelled_at' => now(),
         ]);
 
@@ -50,10 +49,10 @@ describe('ProcessRefundAction', function () {
             'order_status' => OrderStatus::PROCESSING,
             'payment_status' => PaymentStatus::PAID,
             'payment_method' => PaymentMethod::CREDIT_CARD,
-        ]);
+        ]);CARD
 
         // Act & Assert
-        expect(fn() => $this->processRefundAction->execute($order))
+        expect(fn () => $this->processRefundAction->execute($order))
             ->toThrow(Exception::class, 'Only cancelled orders can be refunded.');
     });
 
@@ -64,10 +63,10 @@ describe('ProcessRefundAction', function () {
             'order_status' => OrderStatus::CANCELLED,
             'payment_status' => PaymentStatus::PENDING,
             'payment_method' => PaymentMethod::CREDIT_CARD,
-        ]);
+        ]);CARD
 
         // Act & Assert
-        expect(fn() => $this->processRefundAction->execute($order))
+        expect(fn () => $this->processRefundAction->execute($order))
             ->toThrow(Exception::class, 'Only paid orders can be refunded.');
     });
 
@@ -81,7 +80,7 @@ describe('ProcessRefundAction', function () {
         ]);
 
         // Act & Assert
-        expect(fn() => $this->processRefundAction->execute($order))
+        expect(fn () => $this->processRefundAction->execute($order))
             ->toThrow(Exception::class, 'Cash on delivery orders do not require refunds.');
     });
 
@@ -92,10 +91,10 @@ describe('ProcessRefundAction', function () {
             'order_status' => OrderStatus::CANCELLED,
             'payment_status' => PaymentStatus::REFUNDED,
             'payment_method' => PaymentMethod::CREDIT_CARD,
-        ]);
+        ]);CARD
 
         // Act & Assert
-        expect(fn() => $this->processRefundAction->execute($order))
+        expect(fn () => $this->processRefundAction->execute($order))
             ->toThrow(Exception::class, 'This order has already been refunded.');
     });
 
@@ -105,8 +104,8 @@ describe('ProcessRefundAction', function () {
             'user_id' => $this->user->id,
             'order_status' => OrderStatus::CANCELLED,
             'payment_status' => PaymentStatus::PAID,
-            'payment_method' => PaymentMethod::KASHIER,
-            'total' => 250.50,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
+            'total' => 250.50,CARD
             'cancelled_at' => now(),
         ]);
 
@@ -123,8 +122,8 @@ describe('ProcessRefundAction', function () {
             'user_id' => $this->user->id,
             'order_status' => OrderStatus::CANCELLED,
             'payment_status' => PaymentStatus::PAID,
-            'payment_method' => PaymentMethod::KASHIER,
-            'subtotal' => 85.00,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
+            'subtotal' => 85.00,CARD
             'shipping_cost' => 15.00,
             'total' => 100.00,
             'cancelled_at' => now(),

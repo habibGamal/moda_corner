@@ -127,7 +127,7 @@ export default function Show({ order, canRequestReturn = false }: OrderShowProps
                         </div>
 
                         <div className="flex flex-wrap gap-2">
-                            {needsPayment() && (
+                            {/* {needsPayment() && (
                                 <Button
                                     asChild
                                     className="flex items-center gap-1"
@@ -137,7 +137,7 @@ export default function Show({ order, canRequestReturn = false }: OrderShowProps
                                         {t("complete_your_payment", "Complete Your Payment")}
                                     </a>
                                 </Button>
-                            )}
+                            )} */}
 
                             {/* Return Order Button */}
                             {canRequestReturn && !order.return_status && (

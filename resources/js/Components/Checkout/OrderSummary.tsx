@@ -56,7 +56,7 @@ export function OrderSummary({
     onCouponCodeInput,
 }: OrderSummaryProps) {
     const { t, currentLocale } = useI18n();
-
+    console.log("submit is disabled", isSubmitting , addressesLength === 0 , !selectedAddressId);
     return (
         <Card className="sticky top-4">
             <CardHeader>

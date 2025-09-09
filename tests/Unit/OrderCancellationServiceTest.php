@@ -47,7 +47,7 @@ describe('OrderCancellationService', function () {
                 'user_id' => $this->user->id,
                 'order_status' => OrderStatus::PROCESSING,
                 'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_method' => PaymentMethod::CARD,
                 'total' => 100.00,
             ]);
             OrderItem::factory()->create([
@@ -104,13 +104,13 @@ describe('OrderCancellationService', function () {
             ]);
 
             // Act & Assert
-            expect(fn() => $this->orderCancellationService->cancelOrder($order->id))
+            expect(fn () => $this->orderCancellationService->cancelOrder($order->id))
                 ->toThrow(Exception::class, 'Only orders in processing status can be cancelled');
         });
 
         it('throws exception for non-existent order', function () {
             // Act & Assert
-            expect(fn() => $this->orderCancellationService->cancelOrder(999))
+            expect(fn () => $this->orderCancellationService->cancelOrder(999))
                 ->toThrow(ModelNotFoundException::class);
         });
         it('sends notifications to customer', function () {
@@ -129,6 +129,7 @@ describe('OrderCancellationService', function () {
                 OrderCancellationNotification::class,
                 function ($notification) {
                     $array = $notification->toArray($this->user);
+
                     return $array['recipient'] === 'customer';
                 }
             );
@@ -138,8 +139,8 @@ describe('OrderCancellationService', function () {
             // Arrange
             $order = Order::factory()->create([
                 'user_id' => $this->user->id,
-                'order_status' => OrderStatus::PROCESSING,
-                'payment_method' => PaymentMethod::KASHIER,
+                'order_status' => OrderStatus::PROCCARD
+                'payment_method' => PaymentMethod::CREDIT_CARD,
                 'payment_status' => PaymentStatus::PAID,
             ]);
 
@@ -149,8 +150,8 @@ describe('OrderCancellationService', function () {
             // Assert
             Log::shouldHaveReceived('info')
                 ->with('Order cancelled successfully', [
-                    'order_id' => $order->id,
-                    'payment_method' => PaymentMethod::KASHIER->value,
+                    'order_id' => $order->id,CARD
+                    'payment_method' => PaymentMethod::CREDIT_CARD->value,
                     'payment_status' => PaymentStatus::PAID->value,
                     'reason' => 'Test reason',
                 ]);
@@ -162,8 +163,8 @@ describe('OrderCancellationService', function () {
             // Arrange
             $order = Order::factory()->create([
                 'order_status' => OrderStatus::CANCELLED,
-                'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_status' => PaymentStatus::CARD
+                'payment_method' => PaymentMethod::CREDIT_CARD,
             ]);
 
             // Act & Assert
@@ -174,8 +175,8 @@ describe('OrderCancellationService', function () {
             // Arrange
             $order = Order::factory()->create([
                 'order_status' => OrderStatus::PROCESSING,
-                'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_status' => PaymentStatus::CARD
+                'payment_method' => PaymentMethod::CREDIT_CARD,
             ]);
 
             // Act & Assert
@@ -186,8 +187,8 @@ describe('OrderCancellationService', function () {
             // Arrange
             $order = Order::factory()->create([
                 'order_status' => OrderStatus::CANCELLED,
-                'payment_status' => PaymentStatus::PENDING,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_status' => PaymentStatus::CARD
+                'payment_method' => PaymentMethod::CREDIT_CARD,
             ]);
 
             // Act & Assert
@@ -213,8 +214,8 @@ describe('OrderCancellationService', function () {
             $order = Order::factory()->create([
                 'user_id' => $this->user->id,
                 'order_status' => OrderStatus::CANCELLED,
-                'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_status' => PaymentStatus::CARD
+                'payment_method' => PaymentMethod::CREDIT_CARD,
                 'total' => 150.00,
             ]);
 
@@ -242,12 +243,12 @@ describe('OrderCancellationService', function () {
             // Arrange
             $order = Order::factory()->create([
                 'order_status' => OrderStatus::PROCESSING,
-                'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_status' => PaymentStatus::CARD
+                'payment_method' => PaymentMethod::CREDIT_CARD,
             ]);
 
             // Act & Assert
-            expect(fn() => $this->orderCancellationService->processRefund($order))
+            expect(fn () => $this->orderCancellationService->processRefund($order))
                 ->toThrow(Exception::class, 'This order does not require a refund');
         });
 
@@ -256,8 +257,8 @@ describe('OrderCancellationService', function () {
             $order = Order::factory()->create([
                 'user_id' => $this->user->id,
                 'order_status' => OrderStatus::CANCELLED,
-                'payment_status' => PaymentStatus::PAID,
-                'payment_method' => PaymentMethod::KASHIER,
+                'payment_status' => PaymentStatus::CARD
+                'payment_method' => PaymentMethod::CREDIT_CARD,
                 'total' => 200.00,
             ]);
 
@@ -291,7 +292,7 @@ describe('OrderCancellationService', function () {
             $result1 = $this->orderCancellationService->cancelOrder($order->id);
 
             // Second cancellation should fail
-            expect(fn() => $this->orderCancellationService->cancelOrder($order->id))
+            expect(fn () => $this->orderCancellationService->cancelOrder($order->id))
                 ->toThrow(Exception::class, 'Only orders in processing status can be cancelled');
 
             // Assert
@@ -305,7 +306,7 @@ describe('OrderCancellationService', function () {
             ]);
 
             // Act & Assert - Should throw exception for delivered order
-            expect(fn() => $this->orderCancellationService->cancelOrder($order->id))
+            expect(fn () => $this->orderCancellationService->cancelOrder($order->id))
                 ->toThrow(Exception::class, 'Only orders in processing status can be cancelled');
 
             // Verify order status wasn't changed
@@ -315,8 +316,8 @@ describe('OrderCancellationService', function () {
         });
 
         it('processes multiple payment methods correctly', function () {
-            $paymentMethods = [
-                PaymentMethod::KASHIER,
+            $paymentMethods = [CARD
+                PaymentMethod::CREDIT_CARD,
             ];
 
             foreach ($paymentMethods as $paymentMethod) {

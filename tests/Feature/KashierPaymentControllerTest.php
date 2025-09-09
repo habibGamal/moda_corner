@@ -2,14 +2,13 @@
 
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
-use App\Models\Order;
-use App\Models\User;
 use App\Models\Address;
 use App\Models\Area;
 use App\Models\Gov;
+use App\Models\Order;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Inertia\Testing\AssertableInertia;
 
@@ -36,17 +35,18 @@ beforeEach(function () {
     ]);
 });
 
-describe('initiatePayment', function () {    it('shows payment page for unpaid kashier order', function () {
+describe('initiatePayment', function () {
+    it('shows payment page for unpaid kashier order', function () {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CARD,
             'payment_status' => PaymentStatus::PENDING,
             'total' => 150.00,
             'shipping_address_id' => $this->address->id,
         ]);
 
         $response = $this->get(route('kashier.payment.initiate', [
-            'order_id' => $order->id
+            'order_id' => $order->id,
         ]));
 
         $response->assertInertia(fn (AssertableInertia $page) => $page
@@ -63,21 +63,23 @@ describe('initiatePayment', function () {    it('shows payment page for unpaid k
 
         // Check that order ID is stored in session
         expect(session('kashier_order_id'))->toBe($order->id);
-    });    it('redirects when order is already paid', function () {
+    });
+    it('redirects when order is already paid', function () {
         $order = Order::factory()->create([
-            'user_id' => $this->user->id,
-            'payment_method' => PaymentMethod::KASHIER,
+            'user_id' => $this->user->id,CARD
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'payment_status' => PaymentStatus::PAID,
             'shipping_address_id' => $this->address->id,
         ]);
 
         $response = $this->get(route('kashier.payment.initiate', [
-            'order_id' => $order->id
+            'order_id' => $order->id,
         ]));
 
         $response->assertRedirect(route('orders.show', $order->id))
-                ->assertSessionHas('info', 'This order has already been paid.');
-    });    it('redirects when order does not use kashier payment', function () {
+            ->assertSessionHas('info', 'This order has already been paid.');
+    });
+    it('redirects when order does not use kashier payment', function () {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
             'payment_method' => PaymentMethod::CASH_ON_DELIVERY,
@@ -86,26 +88,27 @@ describe('initiatePayment', function () {    it('shows payment page for unpaid k
         ]);
 
         $response = $this->get(route('kashier.payment.initiate', [
-            'order_id' => $order->id
+            'order_id' => $order->id,
         ]));
 
         $response->assertRedirect(route('orders.show', $order->id))
-                ->assertSessionHas('error', 'This order does not use online payment.');
-    });    it('redirects to orders when order not found', function () {
+            ->assertSessionHas('error', 'This order does not use online payment.');
+    });
+    it('redirects to orders when order not found', function () {
         $response = $this->get(route('kashier.payment.initiate', [
-            'order_id' => 999999
+            'order_id' => 999999,
         ]));
 
         $response->assertRedirect(route('orders.index'))
-                ->assertSessionHas('error');
+            ->assertSessionHas('error');
     });
 });
 
 describe('showPayment', function () {
-    it('shows payment page for valid order', function () {
+    it('shows payment page for valid order', fuCARD
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'payment_status' => PaymentStatus::PENDING,
             'total' => 200.00,
             'shipping_address_id' => $this->address->id,
@@ -125,10 +128,10 @@ describe('showPayment', function () {
         expect(session('kashier_order_id'))->toBe($order->id);
     });
 
-    it('redirects when order is already paid', function () {
+    it('redirects when order is already paid', CARD {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'payment_status' => PaymentStatus::PAID,
             'shipping_address_id' => $this->address->id,
         ]);
@@ -136,10 +139,10 @@ describe('showPayment', function () {
         $response = $this->get(route('kashier.payment.show', $order->id));
 
         $response->assertRedirect(route('orders.show', $order->id))
-                ->assertSessionHas('info', 'This order has already been paid.');
+            ->assertSessionHas('info', 'This order has already been paid.');
     });
 
-    it('redirects when order does not use kashier payment', function () {
+    it('redirects when order does not use kashiCARD, function () {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
             'payment_method' => PaymentMethod::CREDIT_CARD,
@@ -150,15 +153,15 @@ describe('showPayment', function () {
         $response = $this->get(route('kashier.payment.show', $order->id));
 
         $response->assertRedirect(route('orders.show', $order->id))
-                ->assertSessionHas('error', 'This order does not use online payment.');
+            ->assertSessionHas('error', 'This order does not use online payment.');
     });
 });
 
 describe('handleSuccess', function () {
-    it('processes successful payment with valid signature', function () {
+    it('processes successful payment with validCARD, function () {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'payment_status' => PaymentStatus::PENDING,
             'total' => 100.00,
             'shipping_address_id' => $this->address->id,
@@ -178,14 +181,14 @@ describe('handleSuccess', function () {
         ];
 
         // Generate valid signature
-        $queryString = 'paymentId=PAY123456&orderId=' . $order->id . '&amount=100.00&currency=EGP&status=SUCCESS';
+        $queryString = 'paymentId=PAY123456&orderId='.$order->id.'&amount=100.00&currency=EGP&status=SUCCESS';
         $validSignature = hash_hmac('sha256', $queryString, 'test-api-key-12345');
         $paymentData['signature'] = $validSignature;
 
         $response = $this->get(route('kashier.payment.success', $paymentData));
 
         $response->assertRedirect(route('orders.show', $order->id))
-                ->assertSessionHas('success', 'Payment completed successfully! Your order is being processed.');
+            ->assertSessionHas('success', 'Payment completed successfully! Your order is being processed.');
 
         // Verify order was updated
         $order->refresh();
@@ -197,10 +200,10 @@ describe('handleSuccess', function () {
         expect(session('kashier_order_id'))->toBeNull();
     });
 
-    it('rejects payment with invalid signature', function () {
+    it('rejects payment with invalid signature'CARD() {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'payment_status' => PaymentStatus::PENDING,
             'shipping_address_id' => $this->address->id,
         ]);
@@ -220,7 +223,7 @@ describe('handleSuccess', function () {
         $response = $this->get(route('kashier.payment.success', $paymentData));
 
         $response->assertRedirect(route('checkout.index'))
-                ->assertSessionHas('error', 'Payment verification failed. Please contact support.');
+            ->assertSessionHas('error', 'Payment verification failed. Please contact support.');
 
         // Verify order was not updated
         $order->refresh();
@@ -237,7 +240,7 @@ describe('handleSuccess', function () {
         $response = $this->get(route('kashier.payment.success', $paymentData));
 
         $response->assertRedirect(route('checkout.index'))
-                ->assertSessionHas('error', 'Payment information not found. Please try again.');
+            ->assertSessionHas('error', 'Payment information not found. Please try again.');
     });
 
     it('handles order not found error', function () {
@@ -252,15 +255,15 @@ describe('handleSuccess', function () {
         $response = $this->get(route('kashier.payment.success', $paymentData));
 
         $response->assertRedirect(route('checkout.index'))
-                ->assertSessionHas('error');
+            ->assertSessionHas('error');
     });
 });
 
 describe('handleFailure', function () {
-    it('handles payment failure and updates order status', function () {
+    it('handles payment failure and updates ordCARD function () {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'payment_status' => PaymentStatus::PENDING,
             'shipping_address_id' => $this->address->id,
         ]);
@@ -275,7 +278,7 @@ describe('handleFailure', function () {
         $response = $this->get(route('kashier.payment.failure', $failureData));
 
         $response->assertRedirect(route('checkout.index'))
-                ->assertSessionHas('error', 'Payment was not successful. Please try again or use a different payment method.');
+            ->assertSessionHas('error', 'Payment was not successful. Please try again or use a different payment method.');
 
         // Verify order status was updated
         $order->refresh();
@@ -294,7 +297,7 @@ describe('handleFailure', function () {
         $response = $this->get(route('kashier.payment.failure', $failureData));
 
         $response->assertRedirect(route('checkout.index'))
-                ->assertSessionHas('error', 'Payment was not successful. Please try again or use a different payment method.');
+            ->assertSessionHas('error', 'Payment was not successful. Please try again or use a different payment method.');
     });
 
     it('handles failure with invalid order ID', function () {
@@ -308,7 +311,7 @@ describe('handleFailure', function () {
         $response = $this->get(route('kashier.payment.failure', $failureData));
 
         $response->assertRedirect(route('checkout.index'))
-                ->assertSessionHas('error', 'Payment was not successful. Please try again or use a different payment method.');
+            ->assertSessionHas('error', 'Payment was not successful. Please try again or use a different payment method.');
 
         // Verify session was cleared
         expect(session('kashier_order_id'))->toBeNull();
@@ -334,7 +337,7 @@ describe('handleWebhook', function () {
         $response = $this->post(route('kashier.payment.webhook'), $webhookData);
 
         $response->assertOk()
-                ->assertJson(['status' => 'success']);
+            ->assertJson(['status' => 'success']);
     });
 
     it('rejects webhook with invalid signature', function () {
@@ -351,8 +354,9 @@ describe('handleWebhook', function () {
         $response = $this->post(route('kashier.payment.webhook'), $webhookData);
 
         $response->assertStatus(400)
-                ->assertJson(['status' => 'error', 'message' => 'Invalid signature']);
-    });    it('handles webhook processing errors gracefully', function () {
+            ->assertJson(['status' => 'error', 'message' => 'Invalid signature']);
+    });
+    it('handles webhook processing errors gracefully', function () {
         // Test with malformed data that might cause exceptions
         $webhookData = [
             'invalid' => 'data',
@@ -362,21 +366,21 @@ describe('handleWebhook', function () {
         $response = $this->post(route('kashier.payment.webhook'), $webhookData);
 
         $response->assertStatus(400)
-                ->assertJson(['status' => 'error', 'message' => 'Invalid signature']);
+            ->assertJson(['status' => 'error', 'message' => 'Invalid signature']);
     });
 });
 
-describe('Payment Flow Integration', function () {
+describe('Payment Flow Integration', function (CARD
     it('completes full payment flow from initiation to success', function () {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'payment_status' => PaymentStatus::PENDING,
             'total' => 250.00,
             'shipping_address_id' => $this->address->id,
         ]);        // Step 1: Initiate payment
         $initiateResponse = $this->get(route('kashier.payment.initiate', [
-            'order_id' => $order->id
+            'order_id' => $order->id,
         ]));
 
         $initiateResponse->assertInertia(fn (AssertableInertia $page) => $page
@@ -396,14 +400,14 @@ describe('Payment Flow Integration', function () {
             'mode' => 'test',
         ];
 
-        $queryString = 'paymentId=PAY654321&orderId=' . $order->id . '&amount=250.00&currency=EGP&status=SUCCESS';
+        $queryString = 'paymentId=PAY654321&orderId='.$order->id.'&amount=250.00&currency=EGP&status=SUCCESS';
         $validSignature = hash_hmac('sha256', $queryString, 'test-api-key-12345');
         $paymentData['signature'] = $validSignature;
 
         $successResponse = $this->get(route('kashier.payment.success', $paymentData));
 
         $successResponse->assertRedirect(route('orders.show', $order->id))
-                       ->assertSessionHas('success');
+            ->assertSessionHas('success');
 
         // Verify final order state
         $order->refresh();
@@ -411,17 +415,17 @@ describe('Payment Flow Integration', function () {
         expect($order->payment_id)->toBe('PAY654321');
         expect(session('kashier_order_id'))->toBeNull();
     });
-
+CARD
     it('handles payment failure flow correctly', function () {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CREDIT_CARD,
             'payment_status' => PaymentStatus::PENDING,
             'total' => 100.00,
             'shipping_address_id' => $this->address->id,
         ]);        // Step 1: Initiate payment
         $this->get(route('kashier.payment.initiate', [
-            'order_id' => $order->id
+            'order_id' => $order->id,
         ]));
 
         expect(session('kashier_order_id'))->toBe($order->id);
@@ -429,11 +433,11 @@ describe('Payment Flow Integration', function () {
         // Step 2: Simulate payment failure
         $failureResponse = $this->get(route('kashier.payment.failure', [
             'status' => 'FAILED',
-            'error' => 'Card declined'
+            'error' => 'Card declined',
         ]));
 
         $failureResponse->assertRedirect(route('checkout.index'))
-                       ->assertSessionHas('error');
+            ->assertSessionHas('error');
 
         // Verify order status was updated
         $order->refresh();

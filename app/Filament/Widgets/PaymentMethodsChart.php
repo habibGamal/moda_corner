@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\PaymentMethod;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
@@ -21,11 +20,12 @@ class PaymentMethodsChart extends ChartWidget
         $orderStatus = $this->filters['orderStatus'] ?? [];
 
         $baseQuery = \App\Models\Order::query()
-            ->when($startDate, fn($query) => $query->where('created_at', '>=', $startDate))
-            ->when($endDate, fn($query) => $query->where('created_at', '<=', $endDate))
-            ->when(!empty($orderStatus), fn($query) => $query->whereIn('order_status', $orderStatus));        $paymentMethodCounts = [
+            ->when($startDate, fn ($query) => $query->where('created_at', '>=', $startDate))
+            ->when($endDate, fn ($query) => $query->where('created_at', '<=', $endDate))
+            ->when(! empty($orderStatus), fn ($query) => $query->whereIn('order_status', $orderStatus));
+        $paymentMethodCounts = [
             'cash_on_delivery' => $baseQuery->clone()->where('payment_method', \App\Enums\PaymentMethod::CASH_ON_DELIVERY)->count(),
-            'kashier' => $baseQuery->clone()->where('payment_method', \App\Enums\PaymentMethod::KASHIER)->count(),
+            'kashier' => $baseQuery->clone()->where('payment_method', \App\Enums\PaymentMethod::CARD)->count(),
         ];
 
         $labels = [
@@ -38,7 +38,7 @@ class PaymentMethodsChart extends ChartWidget
         // Calculate revenue for each payment method
         $revenueData = [
             $baseQuery->clone()->where('payment_method', \App\Enums\PaymentMethod::CASH_ON_DELIVERY)->sum('total'),
-            $baseQuery->clone()->where('payment_method', \App\Enums\PaymentMethod::KASHIER)->sum('total'),
+            $baseQuery->clone()->where('payment_method', \App\Enums\PaymentMethod::CARD)->sum('total'),
         ];
 
         return [
@@ -64,7 +64,9 @@ class PaymentMethodsChart extends ChartWidget
     protected function getType(): string
     {
         return 'pie';
-    }    protected function getOptions(): array
+    }
+
+    protected function getOptions(): array
     {
         return [
             'responsive' => true,

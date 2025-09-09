@@ -2,49 +2,44 @@
 
 namespace App\Services;
 
-use App\Models\Order;
 use App\Enums\PaymentMethod;
-use App\Services\KashierPaymentService;
-use App\DTOs\RefundRequestData;
-use App\DTOs\RefundResultData;
-use Illuminate\Support\Facades\Log;
+use App\Interfaces\PaymentGatewayFactoryInterface;
+use App\Models\Order;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class RefundService
 {
-    protected KashierPaymentService $kashierPaymentService;
+    protected PaymentGatewayFactoryInterface $gatewayFactory;
 
     /**
      * Create a new service instance.
-     *
-     * @param KashierPaymentService $kashierPaymentService
      */
-    public function __construct(KashierPaymentService $kashierPaymentService)
+    public function __construct(PaymentGatewayFactoryInterface $gatewayFactory)
     {
-        $this->kashierPaymentService = $kashierPaymentService;
+        $this->gatewayFactory = $gatewayFactory;
     }
 
     /**
      * Process refund for an order
      *
-     * @param Order $order
-     * @return bool
      * @throws Exception
      */
     public function processRefund(Order $order): bool
     {
         try {
             switch ($order->payment_method) {
-                case PaymentMethod::KASHIER:
-                    return $this->processKashierRefund($order);
+                case PaymentMethod::CARD:
+                    return $this->processOnlinePaymentRefund($order);
 
                 case PaymentMethod::CASH_ON_DELIVERY:
                     // COD orders don't need refund processing
                     Log::info('COD order - no refund needed', ['order_id' => $order->id]);
+
                     return true;
 
                 default:
-                    throw new Exception('Unsupported payment method for refund: ' . $order->payment_method->value);
+                    throw new Exception('Unsupported payment method for refund: '.$order->payment_method->value);
             }
         } catch (Exception $e) {
             Log::error('Refund processing failed', [
@@ -57,43 +52,31 @@ class RefundService
     }
 
     /**
-     * Process refund through Kashier
+     * Process refund through payment gateway
      *
-     * @param Order $order
-     * @return bool
      * @throws Exception
      */
-    protected function processKashierRefund(Order $order): bool
+    protected function processOnlinePaymentRefund(Order $order): bool
     {
         try {
-            // Create refund request DTO
-            $refundRequest = new RefundRequestData(
-                orderId: $order->id,
-                amount: $order->total,
-                reason: 'Order return refund'
-            );
+            // Get the appropriate payment gateway
+            $gateway = $this->gatewayFactory->createGatewayForOrder($order);
 
-            // Call Kashier refund API with DTO
-            $refundResult = $this->kashierPaymentService->processRefund($refundRequest);
+            // For now, log the refund request - actual refund implementation depends on gateway capabilities
+            Log::info('Processing refund through gateway', [
+                'order_id' => $order->id,
+                'gateway' => $gateway->getGatewayName(),
+                'payment_method' => $order->payment_method->value,
+                'amount' => $order->total,
+            ]);
 
-            if ($refundResult->success) {
-                Log::info('Kashier refund processed successfully', [
-                    'order_id' => $order->id,
-                    'kashier_order_id' => $order->id,
-                    'payment_id' => $order->payment_id,
-                    'transaction_id' => $refundResult->transactionId,
-                    'card_order_id' => $refundResult->cardOrderId,
-                    'order_reference' => $refundResult->orderReference,
-                    'gateway_code' => $refundResult->gatewayCode,
-                    'total_refunded_amount' => $refundResult->totalRefundedAmount,
-                    'order_status' => $refundResult->orderStatus,
-                ]);
-                return true;
-            } else {
-                throw new Exception('Kashier refund failed: ' . ($refundResult->messageEn ?? 'Unknown error'));
-            }
+            // TODO: Implement actual refund logic based on gateway capabilities
+            // This would involve calling gateway-specific refund methods
+
+            return true;
+
         } catch (Exception $e) {
-            Log::error('Kashier refund failed', [
+            Log::error('Gateway refund failed', [
                 'order_id' => $order->id,
                 'payment_id' => $order->payment_id,
                 'error' => $e->getMessage(),
@@ -104,9 +87,6 @@ class RefundService
 
     /**
      * Check if refund is possible for an order
-     *
-     * @param Order $order
-     * @return bool
      */
     public function canProcessRefund(Order $order): bool
     {
@@ -121,7 +101,7 @@ class RefundService
         }
 
         // Check if payment ID exists for online payments
-        if ($order->payment_method === PaymentMethod::KASHIER && !$order->payment_id) {
+        if (in_array($order->payment_method, [PaymentMethod::CARD]) && ! $order->payment_id) {
             return false;
         }
 

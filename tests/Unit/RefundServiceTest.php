@@ -32,7 +32,7 @@ describe('Refund Processing', function () {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
             'total' => 150.00,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CARD,
             'payment_status' => PaymentStatus::PAID,
             'payment_id' => 'kashier-payment-123',
         ]);
@@ -48,9 +48,9 @@ describe('Refund Processing', function () {
                     'orderReference' => 'TEST-ORD-37089',
                 ],
                 'messages' => [
-                    'en' => 'Refund successful'
-                ]
-            ], 200)
+                    'en' => 'Refund successful',
+                ],
+            ], 200),
         ]);
 
         $result = $this->refundService->processRefund($order);
@@ -80,7 +80,7 @@ describe('Refund Processing', function () {
             'id' => 12345,
             'user_id' => $this->user->id,
             'total' => 150.75,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CARD,
             'payment_status' => PaymentStatus::PAID,
             'payment_id' => 'kashier-payment-123',
         ]);
@@ -89,8 +89,8 @@ describe('Refund Processing', function () {
             'https://test-fep.kashier.io/v3/orders/*' => Http::response([
                 'status' => 'SUCCESS',
                 'response' => ['status' => 'REFUNDED'],
-                'messages' => ['en' => 'Success']
-            ], 200)
+                'messages' => ['en' => 'Success'],
+            ], 200),
         ]);
 
         $this->refundService->processRefund($order);
@@ -104,7 +104,7 @@ describe('Refund Processing', function () {
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
             'total' => 150.00,
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CARD,
             'payment_status' => PaymentStatus::PAID,
             'payment_id' => 'kashier-payment-123',
         ]);
@@ -114,15 +114,15 @@ describe('Refund Processing', function () {
                 'status' => 'FAILED',
                 'response' => [
                     'status' => 'FAILED',
-                    'gatewayCode' => 'DECLINED'
+                    'gatewayCode' => 'DECLINED',
                 ],
                 'messages' => [
-                    'en' => 'Refund declined by gateway'
-                ]
-            ], 400)
+                    'en' => 'Refund declined by gateway',
+                ],
+            ], 400),
         ]);
 
-        expect(fn() => $this->refundService->processRefund($order))
+        expect(fn () => $this->refundService->processRefund($order))
             ->toThrow(Exception::class, 'Kashier refund failed: Refund declined by gateway');
     });
 });
@@ -141,7 +141,7 @@ describe('Refund Eligibility Check', function () {
 
     it('returns false for unpaid orders', function () {
         $order = Order::factory()->create([
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CARD,
             'payment_status' => PaymentStatus::PENDING,
         ]);
 
@@ -152,7 +152,7 @@ describe('Refund Eligibility Check', function () {
 
     it('returns false for Kashier orders without payment ID', function () {
         $order = Order::factory()->create([
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CARD,
             'payment_status' => PaymentStatus::PAID,
             'payment_id' => null,
         ]);
@@ -164,7 +164,7 @@ describe('Refund Eligibility Check', function () {
 
     it('returns true for eligible Kashier orders', function () {
         $order = Order::factory()->create([
-            'payment_method' => PaymentMethod::KASHIER,
+            'payment_method' => PaymentMethod::CARD,
             'payment_status' => PaymentStatus::PAID,
             'payment_id' => 'kashier-payment-123',
         ]);

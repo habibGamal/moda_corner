@@ -13,7 +13,7 @@ import {
 import { Label } from "@/Components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
 import { useI18n } from "@/hooks/use-i18n";
-import { Banknote, CreditCard } from "lucide-react";
+import { Banknote, CreditCard, Smartphone } from "lucide-react";
 import { Control } from "react-hook-form";
 
 interface PaymentMethodSectionProps {
@@ -28,6 +28,32 @@ export function PaymentMethodSection({
     direction,
 }: PaymentMethodSectionProps) {
     const { t } = useI18n();
+
+    const getPaymentMethodIcon = (method: string) => {
+        switch (method) {
+            case "cash_on_delivery":
+                return <Banknote className="w-4 h-4" />;
+            case "card":
+                return <CreditCard className="w-4 h-4" />;
+            case "wallet":
+                return <Smartphone className="w-4 h-4" />;
+            default:
+                return <CreditCard className="w-4 h-4" />;
+        }
+    };
+
+    const getPaymentMethodLabel = (method: string) => {
+        switch (method) {
+            case "cash_on_delivery":
+                return t("payment_method_cash_on_delivery", "Cash on Delivery");
+            case "card":
+                return t("payment_method_card", "Credit/Debit Card");
+            case "wallet":
+                return t("payment_method_wallet", "Mobile Wallet");
+            default:
+                return method;
+        }
+    };
 
     return (
         <Card>
@@ -67,20 +93,8 @@ export function PaymentMethodSection({
                                                 htmlFor={`payment-${method}`}
                                                 className="font-medium cursor-pointer flex py-2 items-center gap-2"
                                             >
-                                                {method === "cash_on_delivery" && (
-                                                    <Banknote className="w-4 h-4" />
-                                                )}
-                                                {method === "kashier" && (
-                                                    <CreditCard className="w-4 h-4" />
-                                                )}
-                                                {t(
-                                                    `payment_method_${method}`,
-                                                    method === "cash_on_delivery"
-                                                        ? "Cash on Delivery"
-                                                        : method === "kashier"
-                                                        ? "Credit Card (Kashier)"
-                                                        : method
-                                                )}
+                                                {getPaymentMethodIcon(method)}
+                                                {getPaymentMethodLabel(method)}
                                             </Label>
                                         </div>
                                     ))}

@@ -9,15 +9,15 @@ use Filament\Support\Contracts\HasLabel;
 enum PaymentMethod: string implements HasColor, HasIcon, HasLabel
 {
     case CASH_ON_DELIVERY = 'cash_on_delivery';
-    case CREDIT_CARD = 'credit_card';
-    case KASHIER = 'kashier';
+    case CARD = 'card';
+    case WALLET = 'wallet';
 
     public function getColor(): ?string
     {
         return match ($this) {
             self::CASH_ON_DELIVERY => 'gray',
-            self::CREDIT_CARD => 'primary',
-            self::KASHIER => 'success',
+            self::CARD => 'primary',
+            self::WALLET => 'success',
         };
     }
 
@@ -25,8 +25,8 @@ enum PaymentMethod: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
             self::CASH_ON_DELIVERY => 'heroicon-o-banknotes',
-            self::CREDIT_CARD => 'heroicon-o-credit-card',
-            self::KASHIER => 'heroicon-o-credit-card',
+            self::CARD => 'heroicon-o-credit-card',
+            self::WALLET => 'heroicon-o-wallet',
         };
     }
 
@@ -34,8 +34,8 @@ enum PaymentMethod: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
             self::CASH_ON_DELIVERY => 'الدفع عند الاستلام',
-            self::CREDIT_CARD => 'بطاقة ائتمانية',
-            self::KASHIER => 'الدفع الإلكتروني (كاشير)',
+            self::CARD => 'بطاقة ائتمانية',
+            self::WALLET => 'محفظة إلكترونية',
         };
     }
 
@@ -48,8 +48,8 @@ enum PaymentMethod: string implements HasColor, HasIcon, HasLabel
     {
         return [
             self::CASH_ON_DELIVERY->value => self::CASH_ON_DELIVERY->getLabel(),
-            self::KASHIER->value => self::KASHIER->getLabel(),
-            self::CREDIT_CARD->value => self::CREDIT_CARD->getLabel(),
+            self::CARD->value => self::CARD->getLabel(),
+            self::WALLET->value => self::WALLET->getLabel(),
         ];
     }
 }

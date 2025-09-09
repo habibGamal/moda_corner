@@ -42,6 +42,14 @@ return [
         'mode' => env('KASHIER_MODE', 'test'), // 'test' or 'live'
     ],
 
+    'paymob' => [
+        'api_key' => env('PAYMOB_API_KEY'),
+        'secret_key' => env('PAYMOB_SECRET_KEY'),
+        'public_key' => env('PAYMOB_PUBLIC_KEY'),
+        'integration_id' => env('PAYMOB_INTEGRATION_ID'),
+        'mode' => env('PAYMOB_MODE', 'test'), // 'test' or 'live'
+    ],
+
     'facebook' => [
         'client_id' => env('FACEBOOK_CLIENT_ID'),
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),

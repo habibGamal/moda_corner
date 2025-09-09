@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Services\KashierPaymentService;
-use Illuminate\Console\Command;
+use App\Interfaces\PaymentGatewayFactoryInterface;
+use App\Services\Payment\Gateways\KashierGateway;
 use Exception;
+use Illuminate\Console\Command;
 
 class RegisterKashierWebhook extends Command
 {
@@ -25,17 +26,17 @@ class RegisterKashierWebhook extends Command
     protected $description = 'Register webhook URL with Kashier payment system';
 
     /**
-     * The Kashier payment service instance.
+     * The Payment Gateway Factory instance.
      */
-    protected KashierPaymentService $kashierService;
+    protected PaymentGatewayFactoryInterface $gatewayFactory;
 
     /**
      * Create a new command instance.
      */
-    public function __construct(KashierPaymentService $kashierService)
+    public function __construct(PaymentGatewayFactoryInterface $gatewayFactory)
     {
         parent::__construct();
-        $this->kashierService = $kashierService;
+        $this->gatewayFactory = $gatewayFactory;
     }
 
     /**
@@ -46,66 +47,32 @@ class RegisterKashierWebhook extends Command
         $this->info('Kashier Webhook Registration');
         $this->info('============================');
 
-        // Check if we only want to check registration status
-        if ($this->option('check')) {
-            return $this->checkWebhookStatus();
-        }
-
-        // Display current configuration
-        $this->displayConfiguration();
-
-        // Check if webhook is already registered (unless forced)
-        if (!$this->option('force')) {
-            $isRegistered = $this->kashierService->isWebhookRegistered();
-
-            if ($isRegistered === true) {
-                $this->warn('Webhook is already registered with Kashier.');
-                $this->info('Use --force option to re-register or --check to verify status.');
-                return Command::SUCCESS;
-            } elseif ($isRegistered === null) {
-                $this->warn('Unable to check webhook registration status.');
-                $this->info('Proceeding with registration...');
-            }
-        }
-
-        // Confirm registration
-        if (!$this->confirmRegistration()) {
-            $this->info('Registration cancelled.');
-            return Command::SUCCESS;
-        }
-
-        // Register the webhook
         try {
-            $this->info('Registering webhook URL with Kashier...');
+            // Get Kashier gateway
+            $kashierGateway = $this->gatewayFactory->createGateway('kashier');
 
-            $response = $this->kashierService->registerWebhookUrl();
+            if (! ($kashierGateway instanceof KashierGateway)) {
+                $this->error('Failed to get Kashier gateway instance.');
 
-            if (isset($response['status']) && $response['status'] === 200) {
-                $this->success('✅ Webhook URL registered successfully!');
-
-                // Display registration details
-                if (isset($response['body']['webhook'])) {
-                    $webhook = $response['body']['webhook'];
-                    $this->info('Registration Details:');
-                    $this->table(
-                        ['Property', 'Value'],
-                        [
-                            ['URL', $webhook['url'] ?? 'N/A'],
-                            ['Enabled', $webhook['isEnabled'] ? 'Yes' : 'No'],
-                            ['Merchant ID', $webhook['MID'] ?? 'N/A'],
-                        ]
-                    );
-                }
-
-                return Command::SUCCESS;
-            } else {
-                $this->error('❌ Registration failed. Check logs for details.');
                 return Command::FAILURE;
             }
 
+            // Check if we only want to check registration status
+            if ($this->option('check')) {
+                return $this->checkWebhookStatus($kashierGateway);
+            }
+
+            // Display current configuration
+            $this->displayConfiguration($kashierGateway);
+
+            $this->warn('Note: Webhook registration functionality needs to be implemented in the new KashierGateway.');
+            $this->info('This command is temporarily disabled during the architecture migration.');
+
+            return Command::SUCCESS;
+
         } catch (Exception $e) {
-            $this->error('❌ Registration failed: ' . $e->getMessage());
-            $this->info('Check the logs for more details.');
+            $this->error('❌ Command failed: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }
@@ -113,16 +80,15 @@ class RegisterKashierWebhook extends Command
     /**
      * Display current Kashier configuration
      */
-    protected function displayConfiguration(): void
+    protected function displayConfiguration(KashierGateway $kashierGateway): void
     {
         $this->info('Current Configuration:');
         $this->table(
             ['Setting', 'Value'],
             [
-                ['Mode', $this->kashierService->getMode()],
-                ['Merchant ID', $this->kashierService->getMerchantId()],
-                ['API Base URL', $this->kashierService->getApiBaseUrl()],
-                ['Webhook URL', $this->kashierService->getWebhookUrl()],
+                ['Gateway Name', $kashierGateway->getGatewayName()],
+                ['Webhook URL', $kashierGateway->getWebhookUrl()],
+                ['Supported Methods', implode(', ', $kashierGateway->getSupportedPaymentMethods())],
             ]
         );
         $this->newLine();
@@ -131,20 +97,12 @@ class RegisterKashierWebhook extends Command
     /**
      * Check webhook registration status
      */
-    protected function checkWebhookStatus(): int
+    protected function checkWebhookStatus(KashierGateway $kashierGateway): int
     {
         $this->info('Checking webhook registration status...');
 
-        $isRegistered = $this->kashierService->isWebhookRegistered();
-
-        if ($isRegistered === true) {
-            $this->success('✅ Webhook is registered and enabled.');
-        } elseif ($isRegistered === false) {
-            $this->warn('⚠️  Webhook is not registered or not enabled.');
-        } else {
-            $this->error('❌ Unable to check webhook registration status.');
-            return Command::FAILURE;
-        }
+        $this->warn('Webhook status checking needs to be implemented in the new KashierGateway.');
+        $this->info('Webhook URL: '.$kashierGateway->getWebhookUrl());
 
         return Command::SUCCESS;
     }

@@ -1,0 +1,552 @@
+<?php
+
+namespace App\Services\Payment\Gateways;
+
+use App\DTOs\Payment\DirectPaymentData;
+use App\DTOs\Payment\PaymentRedirectData;
+use App\DTOs\Payment\PaymentRequestData;
+use App\DTOs\Payment\PaymentResponseData;
+use App\DTOs\Payment\PaymentValidationData;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
+use App\Interfaces\PaymentGatewayInterface;
+use App\Models\Order;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
+class PaymobGateway implements PaymentGatewayInterface
+{
+    /**
+     * Get the gateway identifier
+     */
+    public function getGatewayName(): string
+    {
+        return 'paymob';
+    }
+
+    /**
+     * Get the Paymob API key from config
+     */
+    public function getApiKey(): string
+    {
+        return config('services.paymob.api_key');
+    }
+
+    /**
+     * Get the Paymob secret key from config
+     */
+    public function getSecretKey(): string
+    {
+        return config('services.paymob.secret_key');
+    }
+
+    /**
+     * Get the Paymob public key from config
+     */
+    public function getPublicKey(): string
+    {
+        return config('services.paymob.public_key');
+    }
+
+    /**
+     * Get the Paymob integration ID from config
+     */
+    public function getIntegrationId(): string
+    {
+        return config('services.paymob.integration_id');
+    }
+
+    /**
+     * Get the current mode (test/live) from config
+     */
+    public function getMode(): string
+    {
+        return config('services.paymob.mode', 'test');
+    }
+
+    /**
+     * Get the Paymob API base URL
+     */
+    public function getApiBaseUrl(): string
+    {
+        return 'https://accept.paymob.com';
+    }
+
+    /**
+     * Create payment intention with Paymob
+     *
+     * @throws \Exception
+     */
+    private function createPaymentIntention(Order $order): array
+    {
+        $url = $this->getApiBaseUrl() . '/v1/intention/';
+
+        $payload = [
+            'amount' => (int) round((float) $order->total * 100), // Amount in cents
+            'currency' => 'EGP',
+            'payment_methods' => [$this->getIntegrationId()],
+            'items' => [
+                [
+                    'name' => "Order #{$order->id}",
+                    'amount' => (int) round((float) $order->total * 100),
+                    'description' => "Payment for order #{$order->id}",
+                    'quantity' => 1,
+                ],
+            ],
+            'billing_data' => $this->getBillingData($order),
+            'customer' => $this->getCustomerData($order),
+            'extras' => [
+                'order_id' => $order->id,
+            ],
+            'special_reference' => "ORDER-{$order->id}-" . time(),
+            'notification_url' => $this->getWebhookUrl(),
+            'redirection_url' => route('orders.show', $order->id),
+        ];
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => $this->getSecretKey(),
+                'Content-Type' => 'application/json',
+            ])->post($url, $payload);
+
+            if (!$response->successful()) {
+                Log::error('Paymob intention creation failed', [
+                    'status' => $response->status(),
+                    'response' => $response->body(),
+                    'payload' => $payload,
+                ]);
+
+                throw new \Exception('Failed to create payment intention: ' . $response->body());
+            }
+
+            $responseData = $response->json();
+
+            Log::info('Paymob intention created successfully', [
+                'order_id' => $order->id,
+                'intention_id' => $responseData['id'] ?? null,
+                'client_secret' => $responseData['client_secret'] ?? null,
+            ]);
+
+            return $responseData;
+        } catch (\Exception $e) {
+            Log::error('Paymob API call failed', [
+                'order_id' => $order->id,
+                'exception' => $e->getMessage(),
+                'payload' => $payload,
+            ]);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Get billing data for Paymob
+     */
+    private function getBillingData(Order $order): array
+    {
+        $shippingAddress = $order->shippingAddress;
+
+        return [
+            'first_name' => $order->user->name ?? 'Customer',
+            'last_name' => 'Customer',
+            'email' => $order->user->email ?? 'customer@example.com',
+            'phone_number' => $shippingAddress->phone ?? '01000000000',
+            'country' => 'EG',
+            'state' => $shippingAddress->city ?? 'Cairo',
+            'city' => $shippingAddress->city ?? 'Cairo',
+            'street' => $shippingAddress->address_line_1 ?? 'N/A',
+            'building' => $shippingAddress->address_line_2 ?? '',
+            'apartment' => '',
+            'floor' => '',
+        ];
+    }
+
+    /**
+     * Get customer data for Paymob
+     */
+    private function getCustomerData(Order $order): array
+    {
+        return [
+            'first_name' => $order->user->name ?? 'Customer',
+            'last_name' => '',
+            'email' => $order->user->email ?? 'customer@example.com',
+            'phone_number' => $order->shippingAddress->phone ?? '01000000000',
+        ];
+    }
+
+    /**
+     * Validate payment response from the payment gateway
+     *
+     * @param  array  $params  The response parameters from the payment gateway
+     * @return PaymentValidationData The validation result
+     */
+    public function validatePaymentResponse(array $params): PaymentValidationData
+    {
+        try {
+            // Paymob sends webhook data with specific structure
+            // Validate the HMAC signature if provided
+            if (isset($params['hmac'])) {
+                $calculatedHmac = $this->calculateHmac($params);
+                if (!hash_equals($calculatedHmac, $params['hmac'])) {
+                    return PaymentValidationData::invalid('Invalid HMAC signature', $params);
+                }
+            }
+
+            // Extract payment information
+            $transactionId = $params['id'] ?? $params['transaction_id'] ?? '';
+            $orderId = $params['order']['merchant_order_id'] ?? $params['merchant_order_id'] ?? '';
+            $amount = isset($params['amount_cents']) ? (string) ($params['amount_cents'] / 100) : '';
+            $currency = $params['currency'] ?? 'EGP';
+            $success = ($params['success'] ?? false) === true || ($params['success'] ?? '') === 'true';
+
+            if (!$success) {
+                return PaymentValidationData::invalid(
+                    'Payment was not successful',
+                    $params
+                );
+            }
+
+            return PaymentValidationData::valid(
+                transactionId: $transactionId,
+                orderId: $orderId,
+                amount: $amount,
+                currency: $currency,
+                status: 'paid',
+                rawData: $params
+            );
+        } catch (\Exception $e) {
+            Log::error('Paymob payment validation error', [
+                'error' => $e->getMessage(),
+                'params' => $params,
+            ]);
+
+            return PaymentValidationData::invalid(
+                'Payment validation failed: ' . $e->getMessage(),
+                $params
+            );
+        }
+    }
+
+    /**
+     * Calculate HMAC for Paymob webhook validation
+     */
+    private function calculateHmac(array $data): string
+    {
+        // Paymob HMAC calculation logic
+        // This is a simplified version - you may need to adjust based on Paymob's exact requirements
+        $concatenatedString = '';
+
+        // Concatenate specific fields in order
+        $fields = [
+            'amount_cents',
+            'created_at',
+            'currency',
+            'error_occured',
+            'has_parent_transaction',
+            'id',
+            'integration_id',
+            'is_3d_secure',
+            'is_auth',
+            'is_capture',
+            'is_refunded',
+            'is_standalone_payment',
+            'is_voided',
+            'order.id',
+            'owner',
+            'pending',
+            'source_data.pan',
+            'source_data.sub_type',
+            'source_data.type',
+            'success',
+        ];
+
+        foreach ($fields as $field) {
+            if (strpos($field, '.') !== false) {
+                $parts = explode('.', $field);
+                $value = $data;
+                foreach ($parts as $part) {
+                    $value = $value[$part] ?? '';
+                }
+                $concatenatedString .= $value;
+            } else {
+                $concatenatedString .= $data[$field] ?? '';
+            }
+        }
+
+        return hash_hmac('sha512', $concatenatedString, $this->getSecretKey());
+    }
+
+    /**
+     * Process a successful payment for an order
+     *
+     * @param  Order  $order  The order to update
+     * @param  array  $paymentData  The payment data from payment gateway
+     * @return PaymentResponseData The payment processing result
+     */
+    public function processSuccessfulPayment(Order $order, array $paymentData): PaymentResponseData
+    {
+        try {
+            // Update the order payment status to paid
+            $order->payment_status = PaymentStatus::PAID;
+            $order->payment_details = json_encode($paymentData);
+            $order->payment_id = $paymentData['id'] ?? $paymentData['transaction_id'] ?? null;
+            $order->save();
+
+            return PaymentResponseData::success(
+                order: $order,
+                transactionId: $paymentData['id'] ?? $paymentData['transaction_id'] ?? '',
+                paymentId: $paymentData['id'] ?? null,
+                paymentDetails: $paymentData,
+                rawData: $paymentData
+            );
+        } catch (\Exception $e) {
+            Log::error('Failed to process successful Paymob payment', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'payment_data' => $paymentData,
+            ]);
+
+            return PaymentResponseData::failure(
+                order: $order,
+                errorMessage: 'Failed to process payment: ' . $e->getMessage(),
+                rawData: $paymentData
+            );
+        }
+    }
+
+
+
+
+    /**
+     * Get the webhook URL for the payment gateway
+     */
+    public function getWebhookUrl(): string
+    {
+        return route('paymob.payment.webhook');
+    }
+
+    /**
+     * Check if the gateway supports the given payment method
+     */
+    public function supportsPaymentMethod(string $method): bool
+    {
+        return in_array($method, $this->getSupportedPaymentMethods());
+    }
+
+    /**
+     * Get supported payment methods for this gateway
+     */
+    public function getSupportedPaymentMethods(): array
+    {
+        return [
+            PaymentMethod::CREDIT_CARD->value,
+            'paymob',
+            'card',
+        ];
+    }
+
+    /**
+     * Process payment without redirection (for direct API payments)
+     *
+     * @param  Order  $order  The order to process payment for
+     * @param  DirectPaymentData  $paymentData  The payment data from the client (card details or intention data)
+     * @return PaymentResponseData The payment processing result
+     */
+    public function processPaymentWithoutRedirection(Order $order, DirectPaymentData $paymentData): PaymentResponseData
+    {
+        try {
+            $paymentData = $paymentData->toArray();
+            // For Paymob, we can either create a new intention or use card details directly
+            // If intentionId is provided, we'll use the existing intention
+            if (isset($paymentData['intentionId'])) {
+                return $this->processPaymentWithIntention($order, $paymentData);
+            }
+
+            // Otherwise, create a new intention and process payment
+            return $this->processPaymentWithNewIntention($order, $paymentData);
+
+        } catch (\Exception $e) {
+            Log::error('Paymob direct payment failed', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'payment_data' => $paymentData,
+            ]);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Process payment using existing intention
+     */
+    private function processPaymentWithIntention(Order $order, array $paymentData): PaymentResponseData
+    {
+        try {
+            $intentionId = $paymentData['intentionId'];
+
+            // Confirm the payment intention
+            $url = $this->getApiBaseUrl() . "/v1/intention/{$intentionId}/confirm/";
+
+            $payload = [
+                'payment_method' => [
+                    'type' => 'card',
+                    'card' => [
+                        'number' => $paymentData['cardNumber'] ?? '',
+                        'exp_month' => str_pad($paymentData['expiryMonth'] ?? '', 2, '0', STR_PAD_LEFT),
+                        'exp_year' => $paymentData['expiryYear'] ?? '',
+                        'cvc' => $paymentData['securityCode'] ?? '',
+                    ],
+                ],
+            ];
+
+            $response = Http::withHeaders([
+                'Authorization' => $this->getSecretKey(),
+                'Content-Type' => 'application/json',
+            ])
+                ->withOptions([
+                    'verify' => app()->environment('local') ? false : true,
+                ])
+                ->post($url, $payload);
+
+            $responseData = $response->json();
+
+            Log::info('Paymob intention confirmation response', [
+                'order_id' => $order->id,
+                'intention_id' => $intentionId,
+                'status' => $response->status(),
+                'response' => $responseData,
+            ]);
+
+            if ($response->successful() && isset($responseData['status']) && $responseData['status'] === 'succeeded') {
+                // Payment was successful
+                $transactionId = $responseData['id'] ?? '';
+
+                // Update order status
+                $order->payment_status = PaymentStatus::PAID;
+                $order->payment_details = json_encode($responseData);
+                $order->payment_id = $transactionId;
+                $order->save();
+
+                return PaymentResponseData::success(
+                    order: $order,
+                    transactionId: $transactionId,
+                    paymentId: $transactionId,
+                    paymentDetails: $responseData,
+                    rawData: $responseData
+                );
+            }
+
+            // Payment failed or requires additional action
+            $errorMessage = $responseData['failure_reason'] ??
+                $responseData['message'] ??
+                'Payment failed';
+
+            return PaymentResponseData::failure(
+                order: $order,
+                errorMessage: $errorMessage,
+                rawData: $responseData
+            );
+
+        } catch (\Exception $e) {
+            Log::error('Paymob intention confirmation failed', [
+                'order_id' => $order->id,
+                'intention_id' => $paymentData['intentionId'] ?? 'unknown',
+                'error' => $e->getMessage(),
+            ]);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Process payment by creating a new intention
+     */
+    private function processPaymentWithNewIntention(Order $order, array $paymentData): PaymentResponseData
+    {
+        try {
+            // Create payment intention
+            $url = $this->getApiBaseUrl() . '/v1/intention/';
+
+            $payload = [
+                'amount' => (int) round((float) $order->total * 100), // Amount in cents
+                'currency' => 'EGP',
+                'payment_methods' => [$this->getIntegrationId()],
+                'items' => [
+                    [
+                        'name' => "Order #{$order->id}",
+                        'amount' => (int) round((float) $order->total * 100),
+                        'description' => "Payment for order #{$order->id}",
+                        'quantity' => 1,
+                    ],
+                ],
+                'billing_data' => $this->getBillingData($order),
+                'customer' => $this->getCustomerData($order),
+                'extras' => [
+                    'order_id' => $order->id,
+                ],
+                'special_reference' => "ORDER-{$order->id}-" . time(),
+                'confirm' => true, // Auto-confirm the intention
+                'payment_method' => [
+                    'type' => 'card',
+                    'card' => [
+                        'number' => $paymentData['cardNumber'] ?? '',
+                        'exp_month' => str_pad($paymentData['expiryMonth'] ?? '', 2, '0', STR_PAD_LEFT),
+                        'exp_year' => $paymentData['expiryYear'] ?? '',
+                        'cvc' => $paymentData['securityCode'] ?? '',
+                    ],
+                ],
+            ];
+
+            $response = Http::withHeaders([
+                'Authorization' => "Token {$this->getSecretKey()}",
+                'Content-Type' => 'application/json',
+            ])
+                ->withOptions([
+                    'verify' => app()->environment('local') ? false : true,
+                ])
+                ->post($url, $payload);
+
+            $responseData = $response->json();
+
+            Log::info('Paymob direct payment intention response', [
+                'order_id' => $order->id,
+                'status' => $response->status(),
+                'response' => $responseData,
+            ]);
+
+            if ($response->successful() && isset($responseData['status']) && $responseData['status'] === 'succeeded') {
+                // Payment was successful
+                $transactionId = $responseData['id'] ?? '';
+
+                // Update order status
+                $order->payment_status = PaymentStatus::PAID;
+                $order->payment_details = json_encode($responseData);
+                $order->payment_id = $transactionId;
+                $order->save();
+
+                return PaymentResponseData::success(
+                    order: $order,
+                    transactionId: $transactionId,
+                    paymentId: $transactionId,
+                    paymentDetails: $responseData,
+                    rawData: $responseData
+                );
+            }
+
+            // Payment failed or requires additional action
+            $errorMessage = $responseData['failure_reason'] ??
+                $responseData['message'] ??
+                'Payment failed';
+
+            throw new \Exception($errorMessage);
+
+        } catch (\Exception $e) {
+            Log::error('Paymob direct payment intention creation failed', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            throw $e;
+        }
+    }
+}

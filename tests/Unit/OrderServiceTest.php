@@ -121,14 +121,14 @@ describe('placeOrderFromCart', function () {
 
         $orderData = new OrderPlacementData(
             addressId: $address->id,
-            paymentMethod: PaymentMethod::CREDIT_CARD,
+            paymentMethod: PaymentMethod::CARD,
             couponCode: 'SAVE10'
         );
 
         $order = $this->orderService->placeOrderFromCart($orderData);
 
         expect($order->coupon_code)->toBe('SAVE10');
-        expect($order->payment_method)->toBe(PaymentMethod::CREDIT_CARD);
+        expect($order->payment_method)->toBe(PaymentMethod::CARD);
     });
 
     it('throws exception when cart is empty', function () {

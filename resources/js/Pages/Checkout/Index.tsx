@@ -1,5 +1,6 @@
 import AddressModal from "@/Components/AddressModal";
 import { CheckoutForm, OrderSummary } from "@/Components/Checkout";
+import CustomCardForm from "@/Components/Payments/CustomCardForm";
 import { Button } from "@/Components/ui/button";
 import { Form } from "@/Components/ui/form";
 import { PageTitle } from "@/Components/ui/page-title";
@@ -31,9 +32,10 @@ interface CheckoutProps extends App.Interfaces.AppPageProps {
     };
     addresses: App.Models.Address[];
     paymentMethods: string[];
+    defaultPaymentMethod?: string;
 }
 
-// Define form schema with zod
+// Define form schema with zod - conditional validation based on payment method
 const checkoutFormSchema = z.object({
     address_id: z.string({
         required_error: "Please select a shipping address",
@@ -43,6 +45,86 @@ const checkoutFormSchema = z.object({
     }),
     notes: z.string().optional(),
     coupon_code: z.string().optional(),
+    // Card payment fields - conditionally required
+    card_number: z
+        .string()
+        .optional(),
+    expiry_month: z
+        .string()
+        .optional(),
+    expiry_year: z
+        .string()
+        .optional(),
+    security_code: z
+        .string()
+        .optional(),
+    name_on_card: z
+        .string()
+        .optional(),
+    // Wallet payment fields - conditionally required
+    mobile_phone: z
+        .string()
+        .optional(),
+}).superRefine((data, ctx) => {
+    // Validate card fields if payment method is card
+    if (data.payment_method === 'card') {
+        if (!data.card_number || data.card_number.length < 13 || data.card_number.length > 19 || !/^\d{13,19}$/.test(data.card_number)) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Card number must be 13-19 digits",
+                path: ["card_number"],
+            });
+        }
+        if (!data.expiry_month || !/^(0[1-9]|1[0-2])$/.test(data.expiry_month)) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Enter a valid month (01-12)",
+                path: ["expiry_month"],
+            });
+        }
+        if (!data.expiry_year || !/^\d{2}$/.test(data.expiry_year)) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Enter a valid year (YY)",
+                path: ["expiry_year"],
+            });
+        } else {
+            const currentYear = new Date().getFullYear() % 100;
+            const inputYear = parseInt(data.expiry_year);
+            if (inputYear < currentYear) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "Card has expired",
+                    path: ["expiry_year"],
+                });
+            }
+        }
+        if (!data.security_code || !/^\d{3,4}$/.test(data.security_code) || data.security_code.length < 3 || data.security_code.length > 4) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "CVV must be 3 or 4 digits",
+                path: ["security_code"],
+            });
+        }
+        if (!data.name_on_card || data.name_on_card.length < 2 || data.name_on_card.length > 50 || !/^[a-zA-Z\s]+$/.test(data.name_on_card)) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Name must be 2-50 characters and contain only letters and spaces",
+                path: ["name_on_card"],
+            });
+        }
+    }
+
+    // Validate wallet fields if payment method is wallet
+    if (data.payment_method === 'wallet') {
+        if (!data.mobile_phone || !/^01[0-9]{9}$/.test(data.mobile_phone)) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Mobile phone must be a valid Egyptian number (01xxxxxxxxx)",
+                path: ["mobile_phone"],
+            });
+        }
+    }
 });
 
 export default function Index({
@@ -50,6 +132,7 @@ export default function Index({
     cartSummary,
     addresses,
     paymentMethods,
+    defaultPaymentMethod,
 }: CheckoutProps) {
     const { t, direction } = useI18n();
     const [orderSummary, setOrderSummary] =
@@ -75,13 +158,16 @@ export default function Index({
                     ? addresses[0].id.toString()
                     : "",
             payment_method:
-                paymentMethods.length > 0
+                defaultPaymentMethod ||
+                (paymentMethods.length > 0
                     ? paymentMethods[0]
-                    : "cash_on_delivery",
+                    : "cash_on_delivery"),
             notes: "",
             coupon_code: initialCouponCode,
         },
     });
+
+    console.log("Form errors:", form.formState.errors);
 
     // Reload order summary whenever address is changed
     useEffect(() => {
@@ -152,13 +238,19 @@ export default function Index({
                 if (page.props.orderSummary) {
                     setOrderSummary(page.props.orderSummary as OrderSummary);
                     // Check if the coupon was actually applied by checking if there's a promotion
-                    const newOrderSummary = page.props.orderSummary as OrderSummary;
-                    if (!newOrderSummary.appliedPromotion && newOrderSummary.discount === 0) {
+                    const newOrderSummary = page.props
+                        .orderSummary as OrderSummary;
+                    if (
+                        !newOrderSummary.appliedPromotion &&
+                        newOrderSummary.discount === 0
+                    ) {
                         // Coupon was not applied, show error
-                        setCouponError(t(
-                            "invalid_coupon_code",
-                            "Invalid coupon code. Please check and try again."
-                        ));
+                        setCouponError(
+                            t(
+                                "invalid_coupon_code",
+                                "Invalid coupon code. Please check and try again."
+                            )
+                        );
                     } else {
                         setCouponError(null);
                     }
@@ -169,10 +261,12 @@ export default function Index({
                 if (errors.coupon_code) {
                     setCouponError(errors.coupon_code);
                 } else {
-                    setCouponError(t(
-                        "coupon_error",
-                        "Failed to apply coupon code. Please try again."
-                    ));
+                    setCouponError(
+                        t(
+                            "coupon_error",
+                            "Failed to apply coupon code. Please try again."
+                        )
+                    );
                 }
             },
         });
@@ -218,6 +312,7 @@ export default function Index({
 
     // Handle order submission
     const onSubmit = (values: z.infer<typeof checkoutFormSchema>) => {
+        console.log("Submitting order with values:", values);
         if (!values.address_id) {
             toast({
                 title: t("address_required", "Address is required"),
@@ -232,19 +327,29 @@ export default function Index({
 
         setIsSubmitting(true);
 
+        // Prepare base submission data
+        const submissionData: any = {
+            address_id: parseInt(values.address_id),
+            payment_method: values.payment_method,
+            notes: values.notes || null,
+            coupon_code: values.coupon_code || null,
+        };
+
+        // Add payment-specific fields based on payment method
+        if (values.payment_method === 'card') {
+            submissionData.card_number = values.card_number;
+            submissionData.expiry_month = values.expiry_month;
+            submissionData.expiry_year = values.expiry_year;
+            submissionData.security_code = values.security_code;
+            submissionData.name_on_card = values.name_on_card;
+        } else if (values.payment_method === 'wallet') {
+            submissionData.mobile_phone = values.mobile_phone;
+        }
+
         // Submit the order
-        router.post(
-            route("orders.store"),
-            {
-                address_id: parseInt(values.address_id),
-                payment_method: values.payment_method,
-                notes: values.notes || null,
-                coupon_code: values.coupon_code || null,
-            },
-            {
-                onFinish: () => setIsSubmitting(false),
-            }
-        );
+        router.post(route("orders.store"), submissionData, {
+            onFinish: () => setIsSubmitting(false),
+        });
     };
 
     return (
@@ -287,7 +392,7 @@ export default function Index({
                         <CheckoutForm
                             addresses={addresses}
                             paymentMethods={paymentMethods}
-                            control={form.control}
+                            form={form}
                             direction={direction}
                         />
 
