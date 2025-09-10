@@ -6,10 +6,10 @@ import { Link, router, usePage } from "@inertiajs/react";
 import {
     PropsWithChildren,
     ReactNode,
-    useLayoutEffect,
     useRef,
     useState,
 } from "react";
+import { useIsomorphicLayoutEffect } from "@/hooks/use-isomorphic-layout-effect";
 
 // Import our custom components
 import DesktopNav from "@/Components/DesktopNav";
@@ -42,17 +42,17 @@ export default function MainLayout({
     const section = useRef<HTMLDivElement>(null);
     const animationInjection = useRef<HTMLDivElement>(null);
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         // const html = document.querySelector("html") as HTMLHtmlElement;
         // html.setAttribute("dir", "rtl");
 
         const logo = document.querySelector(
             ".loading-container"
         ) as HTMLElement;
-        logo.classList.add("disabled");
+        logo?.classList.add("disabled");
     }, []);
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         const existingAnimation = document.getElementById(
             "section-logo-animation"
         );

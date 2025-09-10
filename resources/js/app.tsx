@@ -2,7 +2,7 @@ import '../css/app.css';
 import './bootstrap';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { createRoot } from 'react-dom/client';
+import { hydrateRoot } from 'react-dom/client';
 import { Toaster } from './Components/ui/toaster';
 import MainLayout from './Layouts/MainLayout';
 import './i18n';
@@ -25,14 +25,12 @@ createInertiaApp({
         return page;
     },
     setup({ el, App, props }) {
-        const root = createRoot(el);
-
-        root.render(
+        hydrateRoot(el, (
             <>
                 <App {...props} />
                 <Toaster />
             </>
-        );
+        ));
     },
     progress: {
         color: '#4B5563',

@@ -1,6 +1,6 @@
 import { Button } from "@/Components/ui/button";
-import { CartItemList } from "@/Components/Cart/CartItemList";
-import { OrderSummary } from "@/Components/Cart/OrderSummary";
+import { CartItemList } from "@/Components/cart/CartItemList";
+import { OrderSummary } from "@/Components/cart/OrderSummary";
 import { useI18n } from "@/hooks/use-i18n";
 import useCart from "@/hooks/use-cart";
 import { App } from "@/types";
