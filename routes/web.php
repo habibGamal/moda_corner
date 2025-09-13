@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReturnOrderController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\WishlistController;
@@ -105,9 +106,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show')->where('order', '[0-9]+'); // Ensure order ID is numeric
     Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel')->where('order', '[0-9]+'); // Ensure order ID is numeric
 
-    // Order return routes
+    // Order return routes (Legacy - redirects to new system)
     Route::post('/orders/{order}/return', [OrderReturnController::class, 'requestReturn'])->name('orders.return.request')->where('order', '[0-9]+');
     Route::get('/orders/returns/history', [OrderReturnController::class, 'history'])->name('orders.returns.history');
+
+    // New Return Management System
+    Route::prefix('returns')->name('returns.')->group(function () {
+        Route::get('/', [ReturnOrderController::class, 'index'])->name('index');
+        Route::get('/create/{order}', [ReturnOrderController::class, 'create'])->name('create')->where('order', '[0-9]+');
+        Route::post('/create/{order}', [ReturnOrderController::class, 'store'])->name('store')->where('order', '[0-9]+');
+        Route::get('/{returnNumber}', [ReturnOrderController::class, 'show'])->name('show');
+        Route::get('/history', [ReturnOrderController::class, 'history'])->name('history'); // Legacy support
+    });
 
     // Payment routes - updated to use new PaymentController
     Route::get('/payments/initiate', [PaymentController::class, 'initiatePayment'])->name('payment.initiate');

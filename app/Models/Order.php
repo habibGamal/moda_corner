@@ -106,6 +106,14 @@ class Order extends Model
     }
 
     /**
+     * Get the return orders for this order.
+     */
+    public function returnOrders(): HasMany
+    {
+        return $this->hasMany(ReturnOrder::class);
+    }
+
+    /**
      * Check if the order can be cancelled
      */
     public function canBeCancelled(): bool
@@ -136,7 +144,7 @@ class Order extends Model
     {
         return in_array($this->return_status, [
             ReturnStatus::ITEM_RETURNED,
-            ReturnStatus::REFUND_PROCESSED
+            ReturnStatus::REFUND_PROCESSED,
         ]);
     }
 
@@ -147,7 +155,7 @@ class Order extends Model
     {
         return $this->order_status === OrderStatus::CANCELLED &&
             $this->payment_status === PaymentStatus::PAID &&
-            !$this->payment_method->isCOD();
+            ! $this->payment_method->isCOD();
     }
 
     /**

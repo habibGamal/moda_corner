@@ -28,19 +28,43 @@ class RefundService
      */
     public function processRefund(Order $order): bool
     {
+        return $this->processPartialRefund($order, (float) $order->total);
+    }
+
+    /**
+     * Process partial refund for an order with specific amount
+     *
+     * @throws Exception
+     */
+    public function processPartialRefund(Order $order, float $refundAmount): bool
+    {
         try {
+            // Validate refund amount
+            if ($refundAmount <= 0) {
+                throw new Exception('Refund amount must be greater than zero');
+            }
+
+            if ($refundAmount > (float) $order->total) {
+                throw new Exception('Refund amount cannot exceed order total');
+            }
+
             // Check if the payment method requires online gateway processing
             if ($order->payment_method->requiresOnlineGateway()) {
-                return $this->processOnlinePaymentRefund($order);
+                return $this->processOnlinePaymentRefund($order, $refundAmount);
             } else {
                 // COD orders don't need refund processing
-                Log::info('COD order - no refund needed', ['order_id' => $order->id]);
+                Log::info('COD order - no refund needed', [
+                    'order_id' => $order->id,
+                    'refund_amount' => $refundAmount,
+                ]);
+
                 return true;
             }
         } catch (Exception $e) {
             Log::error('Refund processing failed', [
                 'order_id' => $order->id,
                 'payment_method' => $order->payment_method->value,
+                'refund_amount' => $refundAmount,
                 'error' => $e->getMessage(),
             ]);
             throw $e;
@@ -52,14 +76,19 @@ class RefundService
      *
      * @throws Exception
      */
-    protected function processOnlinePaymentRefund(Order $order): bool
+    protected function processOnlinePaymentRefund(Order $order, ?float $refundAmount = null): bool
     {
         try {
+            // Use order total if no specific amount provided
+            $amount = $refundAmount ?? (float) $order->total;
+
             // Create refund request DTO
             $refundRequest = new RefundRequestData(
                 orderId: $order->id,
-                amount: (float) $order->total,
-                reason: 'Order return refund'
+                amount: $amount,
+                reason: $refundAmount === (float) $order->total
+                    ? 'Order return refund'
+                    : 'Partial order return refund'
             );
 
             // Call payment processor refund using new system
@@ -70,6 +99,8 @@ class RefundService
                     'order_id' => $order->id,
                     'payment_method' => $order->payment_method->value,
                     'payment_id' => $order->payment_id,
+                    'refund_amount' => $amount,
+                    'is_partial' => $amount < (float) $order->total,
                     'transaction_id' => $refundResult->transactionId,
                     'card_order_id' => $refundResult->cardOrderId,
                     'order_reference' => $refundResult->orderReference,
@@ -86,6 +117,7 @@ class RefundService
             Log::error('Payment refund failed', [
                 'order_id' => $order->id,
                 'payment_id' => $order->payment_id,
+                'refund_amount' => $refundAmount ?? (float) $order->total,
                 'error' => $e->getMessage(),
             ]);
             throw $e;
@@ -113,5 +145,29 @@ class RefundService
         }
 
         return true;
+    }
+
+    /**
+     * Get the maximum refundable amount for an order
+     */
+    public function getMaxRefundableAmount(Order $order): float
+    {
+        if (! $this->canProcessRefund($order)) {
+            return 0.0;
+        }
+
+        // For now, return the full order amount
+        // In a more complex scenario, you might want to track previous refunds
+        return (float) $order->total;
+    }
+
+    /**
+     * Calculate refund amount for specific return items
+     */
+    public function calculateRefundAmountForItems(array $returnItems): float
+    {
+        return array_reduce($returnItems, function ($total, $item) {
+            return $total + ((float) $item['unit_price'] * $item['quantity']);
+        }, 0.0);
     }
 }

@@ -65,7 +65,7 @@ class KashierPaymentGateway extends AbstractPaymentGateway
      */
     protected function createPaymentData(Order $order): PaymentResultData
     {
-        $uniqueRef = config('app.name').'-'.$order->id;
+        $uniqueRef = generateMerchantOrderNumber($order->id);
         $amount = number_format((float) $order->total, 2, '.', '');
         $currency = 'EGP';
 
@@ -120,11 +120,12 @@ class KashierPaymentGateway extends AbstractPaymentGateway
     {
         $baseUrl = $this->getApiBaseUrl();
         $secretKey = config('services.kashier.secret_key');
+        $merchantOrderId = generateMerchantOrderNumber($refundRequest->orderId);
 
         // Use the correct endpoint structure based on Kashier documentation
         $url = $baseUrl === 'https://api.kashier.io'
-            ? "https://fep.kashier.io/v3/orders/{$refundRequest->orderId}/"
-            : "https://test-fep.kashier.io/v3/orders/{$refundRequest->orderId}/";
+            ? "https://fep.kashier.io/v3/orders/{$merchantOrderId}/"
+            : "https://test-fep.kashier.io/v3/orders/{$merchantOrderId}/";
 
         $payload = [
             'apiOperation' => 'REFUND',
@@ -139,7 +140,11 @@ class KashierPaymentGateway extends AbstractPaymentGateway
                 'Authorization' => $secretKey,
                 'accept' => 'application/json',
                 'Content-Type' => 'application/json',
-            ])->put($url, $payload);
+            ])
+                ->withOptions([
+                    'verify' => config('app.env') === 'production',
+                ])
+                ->put($url, $payload);
 
             $responseData = $response->json();
 

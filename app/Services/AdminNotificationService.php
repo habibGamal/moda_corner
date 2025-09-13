@@ -3,34 +3,33 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\ReturnOrder;
 use App\Notifications\OrderPlacedNotification;
 use App\Notifications\OrderReturnRequestNotification;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Notifications\AnonymousNotifiable;
+use App\Notifications\ReturnOrderRequestedNotification;
 use Exception;
+use Illuminate\Notifications\AnonymousNotifiable;
+use Illuminate\Support\Facades\Log;
 
 class AdminNotificationService
 {
     /**
      * Send order placed notification to admin
-     *
-     * @param Order $order
-     * @return void
      */
     public function sendOrderPlacedNotification(Order $order): void
     {
         try {
             $adminEmail = config('mail.admin_email', env('MAIL_TO_ADMIN'));
 
-            if (!$adminEmail) {
+            if (! $adminEmail) {
                 Log::warning('Admin email not configured. Skipping order placed notification.', [
-                    'order_id' => $order->id
+                    'order_id' => $order->id,
                 ]);
+
                 return;
             }
 
-            $anonymousNotifiable = new AnonymousNotifiable();
+            $anonymousNotifiable = new AnonymousNotifiable;
             $anonymousNotifiable->route('mail', $adminEmail);
             $anonymousNotifiable->notify(new OrderPlacedNotification($order));
 
@@ -52,23 +51,21 @@ class AdminNotificationService
 
     /**
      * Send order return request notification to admin
-     *
-     * @param Order $order
-     * @return void
      */
     public function sendOrderReturnRequestNotification(Order $order): void
     {
         try {
             $adminEmail = config('mail.admin_email', env('MAIL_TO_ADMIN'));
 
-            if (!$adminEmail) {
+            if (! $adminEmail) {
                 Log::warning('Admin email not configured. Skipping return request notification.', [
-                    'order_id' => $order->id
+                    'order_id' => $order->id,
                 ]);
+
                 return;
             }
 
-            $anonymousNotifiable = new AnonymousNotifiable();
+            $anonymousNotifiable = new AnonymousNotifiable;
             $anonymousNotifiable->route('mail', $adminEmail);
             $anonymousNotifiable->notify(new OrderReturnRequestNotification($order));
 
@@ -82,6 +79,45 @@ class AdminNotificationService
         } catch (Exception $e) {
             Log::error('Failed to send return request notification to admin', [
                 'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            // Don't throw exception as the return request itself was successful
+        }
+    }
+
+    /**
+     * Send return order request notification to admin (new system)
+     */
+    public function sendReturnRequestNotification(ReturnOrder $returnOrder): void
+    {
+        try {
+            $adminEmail = config('mail.admin_email', env('MAIL_TO_ADMIN'));
+
+            if (! $adminEmail) {
+                Log::warning('Admin email not configured. Skipping return order notification.', [
+                    'return_order_id' => $returnOrder->id,
+                ]);
+
+                return;
+            }
+
+            $anonymousNotifiable = new AnonymousNotifiable;
+            $anonymousNotifiable->route('mail', $adminEmail);
+            $anonymousNotifiable->notify(new ReturnOrderRequestedNotification($returnOrder));
+
+            Log::info('Return order notification sent to admin', [
+                'return_order_id' => $returnOrder->id,
+                'order_id' => $returnOrder->order_id,
+                'admin_email' => $adminEmail,
+                'customer_id' => $returnOrder->order->user_id,
+                'return_reason' => $returnOrder->reason,
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Failed to send return order notification to admin', [
+                'return_order_id' => $returnOrder->id,
+                'order_id' => $returnOrder->order_id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);

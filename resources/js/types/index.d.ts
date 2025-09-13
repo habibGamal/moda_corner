@@ -298,6 +298,41 @@ declare namespace App.Models {
         updated_at?: string;
     }
 
+    // Return-related types
+    export type ReturnOrderStatus =
+        | "requested"
+        | "approved"
+        | "completed"
+        | "rejected";
+
+    export interface ReturnOrder {
+        id: number;
+        order_id: number;
+        status: ReturnOrderStatus;
+        reason: string;
+        admin_notes?: string;
+        refund_amount?: string;
+        refunded_at?: string;
+        processed_by?: number;
+        order?: Order;
+        return_items?: ReturnOrderItem[];
+        created_at: string;
+        updated_at: string;
+    }
+
+    export interface ReturnOrderItem {
+        id: number;
+        return_order_id: number;
+        order_item_id: number;
+        quantity: number;
+        unit_price: string;
+        total_price: string;
+        return_order?: ReturnOrder;
+        order_item?: OrderItem;
+        created_at: string;
+        updated_at: string;
+    }
+
     export interface Setting {
         id: number;
         key: string;

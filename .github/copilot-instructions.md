@@ -7,6 +7,8 @@
 - this project support arabic/english language
 - any name or title or description in db migrations use en , ar postfixs in them for translations purpose
     -- currently we are in the first phase
+- translation files of the frontend in resources/js/translations/*.json
+- always use docs before any implementation to follow the newest practices  
 ===
 
 <laravel-boost-guidelines>

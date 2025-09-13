@@ -9,6 +9,8 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.tsx',
+        './vendor/bezhansalleh/filament-google-analytics/resources/views/**/*',
+        './vendor/bezhansalleh/filament-google-analytics/src/{Widgets,Support}/*',
     ],
 
     theme: {

@@ -53,3 +53,33 @@ if (! function_exists('formatCurrencyEn')) {
         return $formattedAmount;
     }
 }
+
+if (! function_exists('generateMerchantOrderNumber')) {
+    /**
+     * Generate a unique order number
+     *
+     * @return string
+     */
+    function generateMerchantOrderNumber($order_id): string
+    {
+        return config('app.name').'-'.$order_id;
+    }
+}
+if (! function_exists('extractOrderIdFromMerchantOrderNumber')) {
+    /**
+     * Extract the order ID from a merchant order number
+     *
+     * @param string $merchantOrderNumber
+     * @return int|null
+     */
+    function extractOrderIdFromMerchantOrderNumber(string $merchantOrderNumber): ?int
+    {
+        $prefix = config('app.name') . '-';
+        if (str_starts_with($merchantOrderNumber, $prefix)) {
+            $orderId = substr($merchantOrderNumber, strlen($prefix));
+            return is_numeric($orderId) ? (int) $orderId : null;
+        }
+        return null;
+    }
+}
+

@@ -16,6 +16,7 @@
     "require": {
         "php": "^8.2",
         "awcodes/filament-table-repeater": "^3.1",
+        "bezhansalleh/filament-google-analytics": "^2.1",
         "bezhansalleh/filament-language-switch": "^3.1",
         "filament/filament": "^3.2",
         "inertiajs/inertia-laravel": "^2.0",
