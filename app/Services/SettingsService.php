@@ -134,7 +134,7 @@ class SettingsService
             'site_icon' => self::get('site_icon'),
             'maintenance_mode' => (bool) self::get('maintenance_mode', false),
             'contact_email' => self::get('contact_email'),
-            'social_links' => self::get('social_links', []),
+            'social_links' => self::get('social_links', '{}'),
             'facebook_pixel_url' => self::get('facebook_pixel_url'),
             'facebook_pixel_id' => self::get('facebook_pixel_id'),
             'show_privacy_policy' => (bool) self::get('show_privacy_policy', true),

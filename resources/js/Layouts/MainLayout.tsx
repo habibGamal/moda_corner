@@ -8,6 +8,7 @@ import {
     ReactNode,
     useRef,
     useState,
+    useEffect,
 } from "react";
 import { useIsomorphicLayoutEffect } from "@/hooks/use-isomorphic-layout-effect";
 
@@ -42,7 +43,11 @@ export default function MainLayout({
     const section = useRef<HTMLDivElement>(null);
     const animationInjection = useRef<HTMLDivElement>(null);
 
-    useIsomorphicLayoutEffect(() => {
+    // Move DOM manipulation to useEffect to prevent hydration issues
+    useEffect(() => {
+        // Only run on client side
+        if (typeof window === 'undefined') return;
+
         // const html = document.querySelector("html") as HTMLHtmlElement;
         // html.setAttribute("dir", "rtl");
 
@@ -52,11 +57,15 @@ export default function MainLayout({
         logo?.classList.add("disabled");
     }, []);
 
-    useIsomorphicLayoutEffect(() => {
+    useEffect(() => {
+        // Only run on client side
+        if (typeof window === 'undefined') return;
+
         const existingAnimation = document.getElementById(
             "section-logo-animation"
         );
-        router.on("start", (e) => {
+
+        const handleRouterStart = (e: any) => {
             if (
                 e.detail.visit.method !== "get" ||
                 e.detail.visit.url.pathname === window.location.pathname ||
@@ -70,8 +79,9 @@ export default function MainLayout({
                 animationInjection.current.classList.remove("hidden");
                 animationInjection.current.classList.add("block");
             }
-        });
-        router.on("finish", (e) => {
+        };
+
+        const handleRouterFinish = (e: any) => {
             if (
                 e.detail.visit.method !== "get" ||
                 e.detail.visit.only.length !== 0
@@ -83,17 +93,29 @@ export default function MainLayout({
                 animationInjection.current.classList.remove("block");
                 animationInjection.current.classList.add("hidden");
             }
-        });
-        window.addEventListener("popstate", () => {
+        };
+
+        const handlePopState = () => {
             setTimeout(
                 () =>
                     window.scrollTo({
-                        top: window.history.state.documentScrollPosition.top,
+                        top: window.history.state?.documentScrollPosition?.top || 0,
                         behavior: "smooth",
                     }),
                 100
             );
-        });
+        };
+
+        const removeStartListener = router.on("start", handleRouterStart);
+        const removeFinishListener = router.on("finish", handleRouterFinish);
+        window.addEventListener("popstate", handlePopState);
+
+        // Cleanup event listeners
+        return () => {
+            removeStartListener();
+            removeFinishListener();
+            window.removeEventListener("popstate", handlePopState);
+        };
     }, []);
 
     return (

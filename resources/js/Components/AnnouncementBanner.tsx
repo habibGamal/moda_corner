@@ -39,7 +39,7 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="relative rounded-xl overflow-hidden bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 bg-size-200 animate-gradient-x"
+          className="force-ltr relative rounded-xl overflow-hidden bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 bg-size-200 animate-gradient-x"
         >
           {/* Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden">
@@ -185,22 +185,6 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
                 >
                   <Sparkles className="h-4 w-4 text-yellow-200/80" />
                 </motion.div>
-
-                {/* Close Button */}
-                <motion.button
-                  onClick={() => setIsVisible(false)}
-                  className="p-1 rounded-full hover:bg-white/20 transition-colors duration-200"
-                  whileHover={{
-                    scale: 1.1,
-                    rotate: 90
-                  }}
-                  whileTap={{ scale: 0.9 }}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <X className="h-4 w-4 text-white/80 hover:text-white" />
-                </motion.button>
               </div>
             </div>
 
@@ -213,13 +197,20 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
                 transition={{ delay: 0.8 }}
               >
                 {announcements.map((_, index) => (
-                  <motion.div
+                  <motion.button
                     key={index}
-                    className={`h-1 rounded-full transition-all duration-300 ${
+                    className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${
                       index === currentAnnouncementIndex
-                        ? 'w-8 bg-white/90'
-                        : 'w-3 bg-white/40'
+                        ? 'w-8 bg-white/90 shadow-sm shadow-white/20'
+                        : 'w-3 bg-white/40 hover:bg-white/60'
                     }`}
+                    onClick={() => setCurrentAnnouncementIndex(index)}
+                    whileHover={{
+                      scale: 1.3,
+                      y: -1,
+                      backgroundColor: "rgba(255, 255, 255, 0.8)"
+                    }}
+                    whileTap={{ scale: 0.8 }}
                     animate={{
                       scale: index === currentAnnouncementIndex ? [1, 1.2, 1] : 1
                     }}
@@ -228,6 +219,7 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
                       repeat: index === currentAnnouncementIndex ? Infinity : 0,
                       repeatDelay: 2
                     }}
+                    aria-label={`Go to announcement ${index + 1}`}
                   />
                 ))}
               </motion.div>

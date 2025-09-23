@@ -27,9 +27,10 @@ interface HeroSlide {
 
 interface HeroCarouselProps {
     heroSlides: HeroSlide[];
+    onSlideChange?: (slideIndex: number) => void;
 }
 
-export default function HeroCarousel({ heroSlides }: HeroCarouselProps) {
+export default function HeroCarousel({ heroSlides, onSlideChange }: HeroCarouselProps) {
     const { getLocalizedField, direction } = useI18n();
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
@@ -44,23 +45,28 @@ export default function HeroCarousel({ heroSlides }: HeroCarouselProps) {
     const isRtl = direction === "rtl";
 
     // Handle slide changes
-    const onSlideChange = useCallback(() => {
+    const handleSlideChange = useCallback(() => {
         if (!api) return;
         const newCurrent = api.selectedScrollSnap();
         setCurrent(newCurrent);
         setAnimationKey((prev) => prev + 1); // Force re-animation
-    }, [api]);
+
+        // Call parent callback if provided
+        if (onSlideChange) {
+            onSlideChange(newCurrent);
+        }
+    }, [api, onSlideChange]);
 
     useEffect(() => {
         if (!api) return;
 
         // Listen for slide changes
-        api.on("select", onSlideChange);
+        api.on("select", handleSlideChange);
 
         return () => {
-            api.off("select", onSlideChange);
+            api.off("select", handleSlideChange);
         };
-    }, [api, onSlideChange]);
+    }, [api, handleSlideChange]);
 
     // Animation variants - Cinematic Reveal Style
     const containerVariants = {

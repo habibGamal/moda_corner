@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Services\CartService;
+use App\Services\SettingsService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -38,6 +39,7 @@ class HandleInertiaRequests extends Middleware
             'categories' => $this->getTopCategories(),
             'brands' => $this->getTopBrands(),
             'cartInfo' => $this->getCartInfo($request),
+            'settings' => SettingsService::getSiteConfig(),
         ];
     }
 

@@ -1,7 +1,7 @@
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
 import { router, useForm, Head, Link, usePage, WhenVisible, createInertiaApp } from "@inertiajs/react";
 import * as React from "react";
-import React__default, { useEffect, useState, useCallback, useRef, useLayoutEffect } from "react";
+import React__default, { useEffect, useState, useCallback, useRef } from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { clsx } from "clsx";
@@ -9,7 +9,7 @@ import { twMerge } from "tailwind-merge";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { useTranslation, initReactI18next } from "react-i18next";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { Check, Facebook, Chrome, Award, ShoppingBag, Trash2, MinusCircle, PlusCircle, ArrowRight, ArrowLeft, Layers, FolderX, X, ChevronDown, ChevronUp, Receipt, Circle, CreditCard, Banknote, MapPin, Tag, Gift, CircleCheck, Percent, AlertTriangle, Truck, Plus, Megaphone, Sparkles, PackageOpen, LayoutGrid, RotateCcw, Package, CalendarDays, Clock, CheckCircle, AlertCircle, Calendar, Home as Home$2, Building, User, Mail, ExternalLink, Heart, ChevronLeft, ChevronRight, Minus, Languages, UserCog, FilterIcon, ArrowDown01, ArrowDown10, ArrowDownAZ, ArrowDownZA, Loader2, Search, Instagram, Linkedin, Youtube, Music2, ShoppingCart, Menu } from "lucide-react";
+import { Check, Facebook, Chrome, Award, ShoppingBag, Trash2, MinusCircle, PlusCircle, ArrowRight, ArrowLeft, Layers, FolderX, X, ChevronDown, ChevronUp, Receipt, Circle, CreditCard, Banknote, MapPin, Tag, Gift, CircleCheck, Percent, AlertTriangle, Truck, Plus, Megaphone, Sparkles, Star, Heart, PackageOpen, LayoutGrid, Clock, CheckCircle, AlertCircle, Calendar, Home as Home$2, Building, User, Package, RotateCcw, Mail, ExternalLink, ChevronLeft, ChevronRight, Minus, Languages, UserCog, XCircle, CalendarDays, Eye, MessageSquare, FilterIcon, ArrowDown01, ArrowDown10, ArrowDownAZ, ArrowDownZA, Loader2, Search, Instagram, Linkedin, Youtube, Music2, ShoppingCart, Menu } from "lucide-react";
 import axios from "axios";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useFormContext, FormProvider, Controller, useForm as useForm$1 } from "react-hook-form";
@@ -898,7 +898,7 @@ const EmptyState = ({
     action && /* @__PURE__ */ jsx("div", { children: action })
   ] });
 };
-function Index$5({ brands: brands2 }) {
+function Index$6({ brands: brands2 }) {
   const { t, getLocalizedField } = useI18n();
   return /* @__PURE__ */ jsxs("div", { className: "container mt-4", children: [
     /* @__PURE__ */ jsx(Head, { title: t("brands", "Brands") }),
@@ -973,7 +973,7 @@ function Index$5({ brands: brands2 }) {
 }
 const __vite_glob_0_6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Index$5
+  default: Index$6
 }, Symbol.toStringTag, { value: "Module" }));
 const badgeVariants = cva(
   "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
@@ -1383,7 +1383,7 @@ function useCart() {
       toast({
         title: t("added_to_cart", "Added to Cart")
       });
-      router.reload({ only: ["cart_summary"] });
+      router.reload({ only: ["cartInfo"] });
     } catch (error) {
       console.error("Error adding product to cart:", error);
       if (((_a = error.response) == null ? void 0 : _a.status) === 401) {
@@ -1557,7 +1557,7 @@ function PageTitle({
     ] })
   ] });
 }
-function Index$4({ auth, cart: cart2, cartSummary }) {
+function Index$5({ auth, cart: cart2, cartSummary }) {
   const { t } = useI18n();
   const {
     isLoading,
@@ -1566,7 +1566,7 @@ function Index$4({ auth, cart: cart2, cartSummary }) {
     clearCart,
     calculateItemTotal
   } = useCart();
-  return /* @__PURE__ */ jsxs("div", { className: "container mt-4", children: [
+  return /* @__PURE__ */ jsxs("div", { className: "container my-4", children: [
     /* @__PURE__ */ jsx(Head, { title: t("cart", "Shopping Cart") }),
     /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-8", children: [
       /* @__PURE__ */ jsx(
@@ -1613,9 +1613,9 @@ function Index$4({ auth, cart: cart2, cartSummary }) {
 }
 const __vite_glob_0_7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Index$4
+  default: Index$5
 }, Symbol.toStringTag, { value: "Module" }));
-function Index$3({ categories: categories2 }) {
+function Index$4({ categories: categories2 }) {
   const { t, getLocalizedField } = useI18n();
   const isFeatureCategory = (index) => {
     return !(index % 3);
@@ -1700,7 +1700,7 @@ function Index$3({ categories: categories2 }) {
 }
 const __vite_glob_0_8 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Index$3
+  default: Index$4
 }, Symbol.toStringTag, { value: "Module" }));
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
@@ -2681,7 +2681,7 @@ const checkoutFormSchema = z.object({
   notes: z.string().optional(),
   coupon_code: z.string().optional()
 });
-function Index$2({
+function Index$3({
   orderSummary: initialOrderSummary,
   cartSummary,
   addresses,
@@ -2917,7 +2917,7 @@ function Index$2({
 }
 const __vite_glob_0_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Index$2
+  default: Index$3
 }, Symbol.toStringTag, { value: "Module" }));
 function AnnouncementBanner({ announcements }) {
   const { getLocalizedField } = useI18n();
@@ -2943,7 +2943,7 @@ function AnnouncementBanner({ announcements }) {
       animate: { height: "auto", opacity: 1 },
       exit: { height: 0, opacity: 0 },
       transition: { duration: 0.5, ease: "easeInOut" },
-      className: "relative rounded-xl overflow-hidden bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 bg-size-200 animate-gradient-x",
+      className: "force-ltr relative rounded-xl overflow-hidden bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 bg-size-200 animate-gradient-x",
       children: [
         /* @__PURE__ */ jsxs("div", { className: "absolute inset-0 overflow-hidden", children: [
           /* @__PURE__ */ jsx(
@@ -3079,39 +3079,21 @@ function AnnouncementBanner({ announcements }) {
               },
               currentAnnouncement.id
             ) }),
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center space-x-2", children: [
-              /* @__PURE__ */ jsx(
-                motion.div,
-                {
-                  animate: {
-                    rotate: [0, 360],
-                    scale: [1, 1.2, 1]
-                  },
-                  transition: {
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "linear"
-                  },
-                  children: /* @__PURE__ */ jsx(Sparkles, { className: "h-4 w-4 text-yellow-200/80" })
-                }
-              ),
-              /* @__PURE__ */ jsx(
-                motion.button,
-                {
-                  onClick: () => setIsVisible(false),
-                  className: "p-1 rounded-full hover:bg-white/20 transition-colors duration-200",
-                  whileHover: {
-                    scale: 1.1,
-                    rotate: 90
-                  },
-                  whileTap: { scale: 0.9 },
-                  initial: { opacity: 0, x: 20 },
-                  animate: { opacity: 1, x: 0 },
-                  transition: { delay: 0.5 },
-                  children: /* @__PURE__ */ jsx(X, { className: "h-4 w-4 text-white/80 hover:text-white" })
-                }
-              )
-            ] })
+            /* @__PURE__ */ jsx("div", { className: "flex items-center space-x-2", children: /* @__PURE__ */ jsx(
+              motion.div,
+              {
+                animate: {
+                  rotate: [0, 360],
+                  scale: [1, 1.2, 1]
+                },
+                transition: {
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "linear"
+                },
+                children: /* @__PURE__ */ jsx(Sparkles, { className: "h-4 w-4 text-yellow-200/80" })
+              }
+            ) })
           ] }),
           announcements.length > 1 && /* @__PURE__ */ jsx(
             motion.div,
@@ -3121,9 +3103,16 @@ function AnnouncementBanner({ announcements }) {
               animate: { opacity: 1, y: 0 },
               transition: { delay: 0.8 },
               children: announcements.map((_, index) => /* @__PURE__ */ jsx(
-                motion.div,
+                motion.button,
                 {
-                  className: `h-1 rounded-full transition-all duration-300 ${index === currentAnnouncementIndex ? "w-8 bg-white/90" : "w-3 bg-white/40"}`,
+                  className: `h-1 rounded-full transition-all duration-300 cursor-pointer ${index === currentAnnouncementIndex ? "w-8 bg-white/90 shadow-sm shadow-white/20" : "w-3 bg-white/40 hover:bg-white/60"}`,
+                  onClick: () => setCurrentAnnouncementIndex(index),
+                  whileHover: {
+                    scale: 1.3,
+                    y: -1,
+                    backgroundColor: "rgba(255, 255, 255, 0.8)"
+                  },
+                  whileTap: { scale: 0.8 },
                   animate: {
                     scale: index === currentAnnouncementIndex ? [1, 1.2, 1] : 1
                   },
@@ -3131,7 +3120,8 @@ function AnnouncementBanner({ announcements }) {
                     duration: 0.5,
                     repeat: index === currentAnnouncementIndex ? Infinity : 0,
                     repeatDelay: 2
-                  }
+                  },
+                  "aria-label": `Go to announcement ${index + 1}`
                 },
                 index
               ))
@@ -3387,24 +3377,27 @@ const CarouselNext = React.forwardRef(({ className, variant: variant2 = "outline
   );
 });
 CarouselNext.displayName = "CarouselNext";
-function HeroCarousel({ heroSlides }) {
+function HeroCarousel({ heroSlides, onSlideChange }) {
   useI18n();
   const [api, setApi] = useState();
   const [current, setCurrent] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
-  const onSlideChange = useCallback(() => {
+  const handleSlideChange = useCallback(() => {
     if (!api) return;
     const newCurrent = api.selectedScrollSnap();
     setCurrent(newCurrent);
     setAnimationKey((prev) => prev + 1);
-  }, [api]);
+    if (onSlideChange) {
+      onSlideChange(newCurrent);
+    }
+  }, [api, onSlideChange]);
   useEffect(() => {
     if (!api) return;
-    api.on("select", onSlideChange);
+    api.on("select", handleSlideChange);
     return () => {
-      api.off("select", onSlideChange);
+      api.off("select", handleSlideChange);
     };
-  }, [api, onSlideChange]);
+  }, [api, handleSlideChange]);
   if (!heroSlides || heroSlides.length === 0) {
     return null;
   }
@@ -3461,6 +3454,87 @@ function HeroCarousel({ heroSlides }) {
     }
   );
 }
+function HeroSection({ announcements, heroSlides }) {
+  const { t, getLocalizedField, direction } = useI18n();
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const currentSlide = heroSlides[currentSlideIndex] || heroSlides[0];
+  const handleSlideChange = (slideIndex) => {
+    setCurrentSlideIndex(slideIndex);
+  };
+  return /* @__PURE__ */ jsxs("div", { className: "relative bg-[#fdfbf7] overflow-hidden min-h-[calc(100vh-65px)]", children: [
+    /* @__PURE__ */ jsx(AnimatedBackground, {}),
+    /* @__PURE__ */ jsxs("div", { className: "container pt-8", children: [
+      /* @__PURE__ */ jsx(AnnouncementBanner, { announcements }),
+      /* @__PURE__ */ jsxs("div", { className: "flex flex-col lg:flex-row items-center justify-between min-h-[calc(100vh-120px)] py-12 lg:py-16", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex-1 ltr:lg:pr-12 rtl:lg:pl-12 text-center ltr:lg:text-left rtl:lg:text-right mb-12 lg:mb-0 ", children: [
+          /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: /* @__PURE__ */ jsxs(
+            motion.div,
+            {
+              initial: { opacity: 0, y: 30, scale: 0.9 },
+              animate: { opacity: 1, y: 0, scale: 1 },
+              exit: { opacity: 0, y: -30, scale: 0.9 },
+              transition: { duration: 0.6 },
+              className: "space-y-6",
+              children: [
+                /* @__PURE__ */ jsx("h1", { className: "text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight", children: currentSlide ? getLocalizedField(currentSlide, "title") : /* @__PURE__ */ jsxs(Fragment, { children: [
+                  t("hero_title_part1"),
+                  " ",
+                  /* @__PURE__ */ jsx(
+                    "span",
+                    {
+                      className: "text-transparent bg-clip-text ",
+                      style: {
+                        WebkitTextStroke: "2px #10b981",
+                        color: "transparent"
+                      },
+                      children: t("hero_title_electric")
+                    }
+                  ),
+                  " ",
+                  t("hero_title_part2")
+                ] }) }),
+                /* @__PURE__ */ jsx("p", { className: "text-lg md:text-xl text-gray-600 max-w-lg mx-auto ltr:lg:mx-0 ltr:lg:mr-auto rtl:lg:mx-0 rtl:lg:ml-auto", children: currentSlide ? getLocalizedField(currentSlide, "description") : t("hero_description") })
+              ]
+            },
+            currentSlideIndex
+          ) }),
+          /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row gap-4 justify-center ltr:lg:justify-start rtl:lg:justify-end mt-8", children: [
+            /* @__PURE__ */ jsx(
+              Button,
+              {
+                asChild: true,
+                size: "lg",
+                className: "bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 text-lg font-semibold",
+                children: /* @__PURE__ */ jsxs(Link, { href: "/sections/4", className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsx(Star, { className: "h-5 w-5" }),
+                  t("best_sellers")
+                ] })
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              Button,
+              {
+                asChild: true,
+                variant: "secondary",
+                size: "lg",
+                className: "bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-4 text-lg font-semibold",
+                children: /* @__PURE__ */ jsxs(Link, { href: "/sections/2", className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsx(Tag, { className: "h-5 w-5" }),
+                  t("special_offers")
+                ] })
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "mt-8", children: /* @__PURE__ */ jsxs("p", { className: "text-gray-500 flex items-center justify-center ltr:lg:justify-start rtl:lg:justify-end gap-2", children: [
+            /* @__PURE__ */ jsx("span", { className: "w-2 h-2 bg-emerald-400 rounded-full" }),
+            t("hero_question")
+          ] }) })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "flex-1 relative ltr:lg:pl-12 rtl:lg:pr-12", children: /* @__PURE__ */ jsx("div", { className: "relative z-10 text-center", children: /* @__PURE__ */ jsx(HeroCarousel, { heroSlides, onSlideChange: handleSlideChange }) }) })
+      ] })
+    ] })
+  ] });
+}
 function ProductCard({ product }) {
   const { getLocalizedField, t } = useI18n();
   const { addToCart, addingToCart } = useCart();
@@ -3468,6 +3542,20 @@ function ProductCard({ product }) {
   const discountPercentage = hasDiscount ? Math.round(
     (product.price - product.sale_price) / product.price * 100
   ) : 0;
+  const addToWishlist = () => {
+    router.post(
+      route("wishlist.add"),
+      { product_id: product.id },
+      {
+        preserveScroll: true
+      }
+    );
+  };
+  const removeFromWishlist = () => {
+    router.delete(route("wishlist.remove", product.id), {
+      preserveScroll: true
+    });
+  };
   return /* @__PURE__ */ jsxs(Card, { className: "group overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col border-0 shadow-sm bg-card/50 backdrop-blur-sm", children: [
     /* @__PURE__ */ jsxs(
       Link,
@@ -3499,7 +3587,8 @@ function ProductCard({ product }) {
               /* @__PURE__ */ jsx("div", { className: "flex items-center gap-2", children: hasDiscount ? /* @__PURE__ */ jsxs("div", { className: "flex flex-col", children: [
                 /* @__PURE__ */ jsxs("span", { className: "text-xl font-bold text-primary", children: [
                   Number(product.sale_price).toFixed(2),
-                  " EGP"
+                  " ",
+                  "EGP"
                 ] }),
                 /* @__PURE__ */ jsxs("span", { className: "text-muted-foreground text-sm line-through", children: [
                   Number(product.price).toFixed(2),
@@ -3514,14 +3603,20 @@ function ProductCard({ product }) {
                 {
                   variant: "ghost",
                   size: "icon",
-                  className: "rounded-full h-10 w-10 bg-primary/10 hover:bg-primary hover:text-primary-foreground transition-all duration-200 opacity-0 group-hover:opacity-100",
+                  className: "rounded-full h-10 w-10 bg-primary/10 hover:bg-primary hover:text-primary-foreground",
                   onClick: (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    addToCart(product.id, 1);
+                    product.is_in_wishlist ? removeFromWishlist() : addToWishlist();
                   },
-                  disabled: addingToCart[product.id] || product.quantity <= 0,
-                  children: /* @__PURE__ */ jsx(ShoppingBag, { className: "h-4 w-4" })
+                  children: /* @__PURE__ */ jsx(
+                    Heart,
+                    {
+                      className: "h-4 w-4",
+                      fill: product.is_in_wishlist ? "red" : "none",
+                      stroke: product.is_in_wishlist ? "red" : "currentColor"
+                    }
+                  )
                 }
               )
             ] })
@@ -3533,7 +3628,7 @@ function ProductCard({ product }) {
       Button,
       {
         variant: product.quantity <= 0 ? "secondary" : "default",
-        className: "w-full font-medium transition-all duration-200 hover:shadow-md",
+        className: "flex-1 font-medium transition-all duration-200 hover:shadow-md",
         size: "lg",
         onClick: () => addToCart(product.id, 1),
         disabled: addingToCart[product.id] || product.quantity <= 0,
@@ -3676,92 +3771,12 @@ function Home$1({
   brands: brands2,
   sections
 }) {
-  const { t, getLocalizedField } = useI18n();
+  const { t, getLocalizedField, direction } = useI18n();
   const { title } = useSiteBranding();
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
+  return /* @__PURE__ */ jsxs("div", { className: `${direction === "rtl" ? "rtl" : "ltr"}`, children: [
     /* @__PURE__ */ jsx(Head, { title }),
-    /* @__PURE__ */ jsxs("div", { className: "relative bg-[#fdfbf7] overflow-hidden min-h-[calc(100vh-65px)]", children: [
-      /* @__PURE__ */ jsx(AnimatedBackground, {}),
-      /* @__PURE__ */ jsxs("div", { className: "container pt-8", children: [
-        /* @__PURE__ */ jsx(AnnouncementBanner, { announcements }),
-        /* @__PURE__ */ jsxs("div", { className: "flex flex-col lg:flex-row items-center justify-between min-h-[calc(100vh-120px)] py-12 lg:py-16", children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex-1 lg:pr-12 text-center lg:text-left mb-12 lg:mb-0 font-mono", children: [
-            /* @__PURE__ */ jsxs("h1", { className: "text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6", children: [
-              "Play with new",
-              " ",
-              /* @__PURE__ */ jsx(
-                "span",
-                {
-                  className: "text-transparent bg-clip-text ",
-                  style: {
-                    WebkitTextStroke: "2px #10b981",
-                    color: "transparent"
-                  },
-                  children: "electric"
-                }
-              ),
-              " ",
-              "Nike products..."
-            ] }),
-            /* @__PURE__ */ jsx("p", { className: "text-lg md:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0", children: "Find, explore and buy in an awesome place find, explore and buy in great and awesome place an awesome, explore more." }),
-            /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row gap-4 justify-center lg:justify-start", children: [
-              /* @__PURE__ */ jsxs("button", { className: "bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2", children: [
-                "Products",
-                /* @__PURE__ */ jsx(
-                  "svg",
-                  {
-                    width: "20",
-                    height: "20",
-                    viewBox: "0 0 24 24",
-                    fill: "none",
-                    xmlns: "http://www.w3.org/2000/svg",
-                    children: /* @__PURE__ */ jsx(
-                      "path",
-                      {
-                        d: "M5 12H19M19 12L12 5M19 12L12 19",
-                        stroke: "currentColor",
-                        strokeWidth: "2",
-                        strokeLinecap: "round",
-                        strokeLinejoin: "round"
-                      }
-                    )
-                  }
-                )
-              ] }),
-              /* @__PURE__ */ jsxs("button", { className: "bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2", children: [
-                "Shoe blog",
-                /* @__PURE__ */ jsx(
-                  "svg",
-                  {
-                    width: "20",
-                    height: "20",
-                    viewBox: "0 0 24 24",
-                    fill: "none",
-                    xmlns: "http://www.w3.org/2000/svg",
-                    children: /* @__PURE__ */ jsx(
-                      "path",
-                      {
-                        d: "M5 12H19M19 12L12 5M19 12L12 19",
-                        stroke: "currentColor",
-                        strokeWidth: "2",
-                        strokeLinecap: "round",
-                        strokeLinejoin: "round"
-                      }
-                    )
-                  }
-                )
-              ] })
-            ] }),
-            /* @__PURE__ */ jsx("div", { className: "mt-8", children: /* @__PURE__ */ jsxs("p", { className: "text-gray-500 flex items-center justify-center lg:justify-start gap-2", children: [
-              /* @__PURE__ */ jsx("span", { className: "w-2 h-2 bg-emerald-400 rounded-full" }),
-              "Have any question?"
-            ] }) })
-          ] }),
-          /* @__PURE__ */ jsx("div", { className: "flex-1 relative", children: /* @__PURE__ */ jsx("div", { className: "relative z-10 text-center", children: /* @__PURE__ */ jsx(HeroCarousel, { heroSlides }) }) })
-        ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsx("div", { className: "container mt-4", children: sections && sections.map((section) => /* @__PURE__ */ jsx(
+    /* @__PURE__ */ jsx(HeroSection, { announcements, heroSlides }),
+    /* @__PURE__ */ jsx("div", { className: "container mt-8 space-y-8", children: sections && sections.map((section) => /* @__PURE__ */ jsx(
       ProductGrid,
       {
         sectionId: section.id,
@@ -3887,7 +3902,7 @@ function ItemGrid({
     )
   ] });
 }
-function Index$1() {
+function Index$2() {
   const { t, getLocalizedField } = useI18n();
   const getStatusBadgeColor = (status) => {
     switch (status) {
@@ -4050,152 +4065,7 @@ function Index$1() {
 }
 const __vite_glob_0_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Index$1
-}, Symbol.toStringTag, { value: "Module" }));
-function ReturnHistory({ returnHistory }) {
-  const { t, getLocalizedField } = useI18n();
-  const getReturnStatusBadgeColor = (status) => {
-    switch (status) {
-      case "return_requested":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-500";
-      case "return_approved":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-500";
-      case "return_rejected":
-        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-500";
-      case "item_returned":
-      case "refund_processed":
-        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-800/30 dark:text-gray-500";
-    }
-  };
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx(Head, { title: t("return_history", "Return History") }),
-    /* @__PURE__ */ jsx("div", { className: "container mt-4", children: /* @__PURE__ */ jsxs("div", { className: "space-y-6", children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
-        /* @__PURE__ */ jsx(
-          PageTitle,
-          {
-            title: t("return_history", "Return History"),
-            icon: /* @__PURE__ */ jsx(RotateCcw, { className: "h-6 w-6 text-primary" })
-          }
-        ),
-        /* @__PURE__ */ jsx(Link, { href: route("orders.index"), children: /* @__PURE__ */ jsxs(Button, { variant: "outline", className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ jsx(ArrowLeft, { className: "h-4 w-4" }),
-          t("back_to_orders", "Back to Orders")
-        ] }) })
-      ] }),
-      returnHistory.length === 0 ? /* @__PURE__ */ jsx(Card, { children: /* @__PURE__ */ jsxs(CardContent, { className: "flex flex-col items-center justify-center py-12", children: [
-        /* @__PURE__ */ jsx(Package, { className: "h-16 w-16 text-muted-foreground mb-4" }),
-        /* @__PURE__ */ jsx("h2", { className: "text-xl font-semibold text-muted-foreground mb-2", children: t("no_returns", "No Return Requests") }),
-        /* @__PURE__ */ jsx("p", { className: "text-muted-foreground text-center", children: t("no_returns_message", "You haven't requested any returns yet") }),
-        /* @__PURE__ */ jsx(Link, { href: route("orders.index"), className: "mt-4", children: /* @__PURE__ */ jsx(Button, { children: t("view_orders", "View Orders") }) })
-      ] }) }) : /* @__PURE__ */ jsx("div", { className: "space-y-4", children: returnHistory.map((returnItem) => {
-        var _a;
-        return /* @__PURE__ */ jsxs(Card, { className: "overflow-hidden", children: [
-          /* @__PURE__ */ jsx(CardHeader, { className: "bg-muted/30 pb-3", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2", children: [
-            /* @__PURE__ */ jsxs(CardTitle, { className: "text-base font-medium flex items-center gap-2", children: [
-              /* @__PURE__ */ jsx(Package, { className: "h-5 w-5" }),
-              t("order_number", "Order"),
-              " #",
-              returnItem.id
-            ] }),
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm text-muted-foreground flex-wrap", children: [
-              /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-1", children: [
-                /* @__PURE__ */ jsx(CalendarDays, { className: "h-4 w-4" }),
-                formatDate(returnItem.return_requested_at)
-              ] }),
-              /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "•" }),
-              /* @__PURE__ */ jsx(
-                Badge,
-                {
-                  variant: "outline",
-                  className: getReturnStatusBadgeColor(returnItem.return_status),
-                  children: t(`return_status_${returnItem.return_status}`, returnItem.return_status)
-                }
-              )
-            ] })
-          ] }) }),
-          /* @__PURE__ */ jsx(CardContent, { className: "pt-4", children: /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
-            /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row justify-between gap-4", children: [
-              /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
-                /* @__PURE__ */ jsx("p", { className: "text-sm font-medium", children: t("items", "Items") }),
-                /* @__PURE__ */ jsxs("p", { className: "text-sm text-muted-foreground", children: [
-                  ((_a = returnItem.items) == null ? void 0 : _a.length) || 0,
-                  " ",
-                  t("items", "items")
-                ] })
-              ] }),
-              /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
-                /* @__PURE__ */ jsx("p", { className: "text-sm font-medium", children: t("total_amount", "Total Amount") }),
-                /* @__PURE__ */ jsxs("p", { className: "text-sm", children: [
-                  "EGP ",
-                  Number(returnItem.total).toFixed(2)
-                ] })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsxs("h4", { className: "text-sm font-medium mb-2", children: [
-                t("return_reason", "Return Reason"),
-                ":"
-              ] }),
-              /* @__PURE__ */ jsx("p", { className: "text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg", children: returnItem.return_reason })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsxs("h4", { className: "text-sm font-medium mb-3", children: [
-                t("returned_products", "Returned Products"),
-                ":"
-              ] }),
-              /* @__PURE__ */ jsx("div", { className: "space-y-2", children: returnItem.items.map((item) => /* @__PURE__ */ jsxs(
-                "div",
-                {
-                  className: "flex items-center justify-between p-3 bg-muted/50 rounded-lg",
-                  children: [
-                    /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
-                      /* @__PURE__ */ jsx("h5", { className: "text-sm font-medium", children: getLocalizedField(item.product, "name") }),
-                      item.variant && /* @__PURE__ */ jsxs("div", { className: "text-xs text-muted-foreground mt-1 space-x-2", children: [
-                        item.variant.color && /* @__PURE__ */ jsxs("span", { children: [
-                          t("color", "Color"),
-                          ": ",
-                          item.variant.color
-                        ] }),
-                        item.variant.size && /* @__PURE__ */ jsxs("span", { children: [
-                          t("size", "Size"),
-                          ": ",
-                          item.variant.size
-                        ] }),
-                        item.variant.capacity && /* @__PURE__ */ jsxs("span", { children: [
-                          t("capacity", "Capacity"),
-                          ": ",
-                          item.variant.capacity
-                        ] })
-                      ] })
-                    ] }),
-                    /* @__PURE__ */ jsxs("div", { className: "text-right space-y-1", children: [
-                      /* @__PURE__ */ jsxs("div", { className: "text-xs text-muted-foreground", children: [
-                        t("quantity", "Qty"),
-                        ": ",
-                        item.quantity
-                      ] }),
-                      /* @__PURE__ */ jsxs("div", { className: "text-sm font-medium", children: [
-                        "EGP ",
-                        Number(item.price).toFixed(2)
-                      ] })
-                    ] })
-                  ]
-                },
-                item.id
-              )) })
-            ] })
-          ] }) })
-        ] }, returnItem.id);
-      }) })
-    ] }) })
-  ] });
-}
-const __vite_glob_0_12 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  default: ReturnHistory
+  default: Index$2
 }, Symbol.toStringTag, { value: "Module" }));
 const Progress = React.forwardRef(({ className, value, ...props }, ref) => /* @__PURE__ */ jsx(
   ProgressPrimitive.Root,
@@ -4607,73 +4477,10 @@ function OrderThankYou({}) {
     ) })
   ] });
 }
-function ReturnOrderModal({ orderId, canRequestReturn }) {
-  const [open, setOpen] = useState(false);
-  const { t } = useI18n();
-  const { data, setData, post, processing, errors, reset } = useForm({
-    reason: ""
-  });
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    post(route("orders.return.request", orderId), {
-      onSuccess: () => {
-        setOpen(false);
-        reset();
-      }
-    });
-  };
-  if (!canRequestReturn) {
-    return null;
-  }
-  return /* @__PURE__ */ jsxs(Dialog, { open, onOpenChange: setOpen, children: [
-    "      ",
-    /* @__PURE__ */ jsx(DialogTrigger, { asChild: true, children: /* @__PURE__ */ jsxs(Button, { variant: "outline", className: "flex items-center gap-2", children: [
-      /* @__PURE__ */ jsx(RotateCcw, { className: "h-4 w-4" }),
-      t("request_return", "Request Return")
-    ] }) }),
-    /* @__PURE__ */ jsxs(DialogContent, { className: "sm:max-w-[425px]", children: [
-      /* @__PURE__ */ jsxs(DialogHeader, { children: [
-        /* @__PURE__ */ jsx(DialogTitle, { children: t("request_order_return", "Request Order Return") }),
-        /* @__PURE__ */ jsx(DialogDescription, { children: t("return_request_description", "Please specify the reason for the return request. Your request will be reviewed by our customer service team.") })
-      ] }),
-      /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
-        /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
-          /* @__PURE__ */ jsx(Label, { htmlFor: "reason", children: t("return_reason", "Return Reason") }),
-          /* @__PURE__ */ jsx(
-            Textarea,
-            {
-              id: "reason",
-              value: data.reason,
-              onChange: (e) => setData("reason", e.target.value),
-              placeholder: t("return_reason_placeholder", "Write the reason for the return request here..."),
-              rows: 4,
-              className: "resize-none"
-            }
-          ),
-          errors.reason && /* @__PURE__ */ jsx("p", { className: "text-sm text-destructive", children: errors.reason })
-        ] }),
-        /* @__PURE__ */ jsxs(Alert, { children: [
-          /* @__PURE__ */ jsx(AlertCircle, { className: "h-4 w-4" }),
-          /* @__PURE__ */ jsx(AlertDescription, { children: t("return_policy_notice", "Returns can be requested within 14 days of delivery. Your request will be reviewed within 24-48 hours.") })
-        ] }),
-        /* @__PURE__ */ jsxs(DialogFooter, { className: "flex gap-2", children: [
-          /* @__PURE__ */ jsx(
-            Button,
-            {
-              type: "button",
-              variant: "outline",
-              onClick: () => setOpen(false),
-              disabled: processing,
-              children: t("cancel", "Cancel")
-            }
-          ),
-          /* @__PURE__ */ jsx(Button, { type: "submit", disabled: processing || !data.reason.trim(), children: processing ? t("sending", "Sending...") : t("submit_return_request", "Submit Return Request") })
-        ] })
-      ] })
-    ] })
-  ] });
-}
-function Show$1({ order, canRequestReturn = false }) {
+function Show$2({
+  order,
+  canRequestReturn = false
+}) {
   const { t } = useI18n();
   const getPaymentStatusBadgeColor = (status) => {
     switch (status) {
@@ -4745,22 +4552,35 @@ function Show$1({ order, canRequestReturn = false }) {
                 Badge,
                 {
                   variant: "outline",
-                  className: getPaymentStatusBadgeColor(order.payment_status),
-                  children: t(`payment_status_${order.payment_status}`, order.payment_status)
+                  className: getPaymentStatusBadgeColor(
+                    order.payment_status
+                  ),
+                  children: t(
+                    `payment_status_${order.payment_status}`,
+                    order.payment_status
+                  )
                 }
               )
             ] }),
             order.return_status && /* @__PURE__ */ jsxs("div", { className: "flex gap-2 items-center", children: [
               /* @__PURE__ */ jsxs("span", { className: "text-sm font-medium", children: [
-                t("return_status", "Return Status"),
+                t(
+                  "return_status",
+                  "Return Status"
+                ),
                 ":"
               ] }),
               /* @__PURE__ */ jsx(
                 Badge,
                 {
                   variant: "outline",
-                  className: getReturnStatusBadgeColor(order.return_status),
-                  children: t(`return_status_${order.return_status}`, order.return_status)
+                  className: getReturnStatusBadgeColor(
+                    order.return_status
+                  ),
+                  children: t(
+                    `return_status_${order.return_status}`,
+                    order.return_status
+                  )
                 }
               )
             ] })
@@ -4771,17 +4591,34 @@ function Show$1({ order, canRequestReturn = false }) {
               {
                 asChild: true,
                 className: "flex items-center gap-1",
-                children: /* @__PURE__ */ jsxs("a", { href: route("kashier.payment.show", order.id), children: [
-                  /* @__PURE__ */ jsx(CreditCard, { className: "h-4 w-4" }),
-                  t("complete_your_payment", "Complete Your Payment")
-                ] })
+                children: /* @__PURE__ */ jsxs(
+                  "a",
+                  {
+                    href: route(
+                      "kashier.payment.show",
+                      order.id
+                    ),
+                    children: [
+                      /* @__PURE__ */ jsx(CreditCard, { className: "h-4 w-4" }),
+                      t(
+                        "complete_your_payment",
+                        "Complete Your Payment"
+                      )
+                    ]
+                  }
+                )
               }
             ),
             canRequestReturn && !order.return_status && /* @__PURE__ */ jsx(
-              ReturnOrderModal,
+              Link,
               {
-                orderId: order.id,
-                canRequestReturn
+                href: route("returns.create", {
+                  order: order.id
+                }),
+                children: /* @__PURE__ */ jsx(Button, { variant: "destructive", children: t(
+                  "request_return",
+                  "Request Return"
+                ) })
               }
             ),
             /* @__PURE__ */ jsx(Button, { asChild: true, variant: "outline", children: /* @__PURE__ */ jsxs("a", { href: route("orders.returns.history"), children: [
@@ -4796,21 +4633,32 @@ function Show$1({ order, canRequestReturn = false }) {
       order.return_status && order.return_reason && /* @__PURE__ */ jsx("div", { className: "bg-orange-50 border border-orange-200 rounded-lg p-4 dark:bg-orange-900/20 dark:border-orange-800", children: /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3", children: [
         /* @__PURE__ */ jsx(RotateCcw, { className: "h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5" }),
         /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
-          /* @__PURE__ */ jsx("h3", { className: "font-medium text-orange-800 dark:text-orange-200 mb-2", children: t("return_request_information", "Return Request Information") }),
+          /* @__PURE__ */ jsx("h3", { className: "font-medium text-orange-800 dark:text-orange-200 mb-2", children: t(
+            "return_request_information",
+            "Return Request Information"
+          ) }),
           /* @__PURE__ */ jsxs("div", { className: "space-y-2 text-sm", children: [
             /* @__PURE__ */ jsxs("div", { children: [
               /* @__PURE__ */ jsxs("span", { className: "font-medium text-orange-700 dark:text-orange-300", children: [
                 t("return_status", "Status"),
                 ":"
               ] }),
-              /* @__PURE__ */ jsx("span", { className: "ml-2 text-orange-600 dark:text-orange-400", children: t(`return_status_${order.return_status}`, order.return_status) })
+              /* @__PURE__ */ jsx("span", { className: "ml-2 text-orange-600 dark:text-orange-400", children: t(
+                `return_status_${order.return_status}`,
+                order.return_status
+              ) })
             ] }),
             order.return_requested_at && /* @__PURE__ */ jsxs("div", { children: [
               /* @__PURE__ */ jsxs("span", { className: "font-medium text-orange-700 dark:text-orange-300", children: [
-                t("requested_on", "Requested on"),
+                t(
+                  "requested_on",
+                  "Requested on"
+                ),
                 ":"
               ] }),
-              /* @__PURE__ */ jsx("span", { className: "ml-2 text-orange-600 dark:text-orange-400", children: new Date(order.return_requested_at).toLocaleDateString() })
+              /* @__PURE__ */ jsx("span", { className: "ml-2 text-orange-600 dark:text-orange-400", children: new Date(
+                order.return_requested_at
+              ).toLocaleDateString() })
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
               /* @__PURE__ */ jsxs("span", { className: "font-medium text-orange-700 dark:text-orange-300", children: [
@@ -4843,9 +4691,9 @@ function Show$1({ order, canRequestReturn = false }) {
     ] }) })
   ] });
 }
-const __vite_glob_0_13 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_12 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Show$1
+  default: Show$2
 }, Symbol.toStringTag, { value: "Module" }));
 function PolicyPage({ content, title }) {
   const { currentLocale, direction } = useI18n();
@@ -4892,7 +4740,7 @@ function PolicyPage({ content, title }) {
 function Contact({ content, title }) {
   return /* @__PURE__ */ jsx(PolicyPage, { content, title });
 }
-const __vite_glob_0_14 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_13 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Contact
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4955,28 +4803,28 @@ function FacebookDataDeletion() {
     ] }) }) })
   ] });
 }
-const __vite_glob_0_15 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_14 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: FacebookDataDeletion
 }, Symbol.toStringTag, { value: "Module" }));
 function Privacy({ content, title }) {
   return /* @__PURE__ */ jsx(PolicyPage, { content, title });
 }
-const __vite_glob_0_16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_15 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Privacy
 }, Symbol.toStringTag, { value: "Module" }));
 function Returns({ content, title }) {
   return /* @__PURE__ */ jsx(PolicyPage, { content, title });
 }
-const __vite_glob_0_17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Returns
 }, Symbol.toStringTag, { value: "Module" }));
 function Terms({ content, title }) {
   return /* @__PURE__ */ jsx(PolicyPage, { content, title });
 }
-const __vite_glob_0_18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Terms
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5060,7 +4908,7 @@ function Kashier({ kashierParams }) {
     ] })
   ] });
 }
-const __vite_glob_0_19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Kashier
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5094,7 +4942,7 @@ function SectionPage({
     ] })
   ] });
 }
-const __vite_glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: SectionPage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5115,7 +4963,7 @@ function ProductActions({
     }
   };
   const isOutOfStock = selectedVariant ? selectedVariant.quantity <= 0 : Boolean(product.total_quantity && product.total_quantity <= 0);
-  const isInWishlist = product.isInWishlist;
+  const isInWishlist = product.is_in_wishlist;
   const addToWishlist = () => {
     router.post(
       route("wishlist.add"),
@@ -5567,7 +5415,7 @@ function ProductVariantSelector({
     selectedVariant && /* @__PURE__ */ jsx("div", { className: "mt-4", children: /* @__PURE__ */ jsx(Badge, { variant: selectedVariant.quantity > 0 ? "outline" : "destructive", className: "text-sm", children: selectedVariant.quantity > 0 ? `${t("in_stock", "In Stock")} · ${selectedVariant.quantity} ${t("available", "available")}` : t("out_of_stock", "Out of Stock") }) })
   ] });
 }
-function Show({ product }) {
+function Show$1({ product }) {
   const { t, getLocalizedField } = useI18n();
   const [quantity2, setQuantity] = useState(1);
   const getDefaultVariant = () => {
@@ -5647,9 +5495,9 @@ function Show({ product }) {
     ] })
   ] });
 }
-const __vite_glob_0_21 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Show
+  default: Show$1
 }, Symbol.toStringTag, { value: "Module" }));
 function UpdatePasswordForm({
   className = ""
@@ -5793,7 +5641,7 @@ function UpdatePasswordForm({
     ] }) })
   ] });
 }
-const __vite_glob_0_24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_23 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: UpdatePasswordForm
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5924,7 +5772,7 @@ function DeleteUserForm({
     ] }) })
   ] });
 }
-const __vite_glob_0_23 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: DeleteUserForm
 }, Symbol.toStringTag, { value: "Module" }));
@@ -6032,7 +5880,7 @@ function UpdateProfileInformation({
     ] }) })
   ] });
 }
-const __vite_glob_0_25 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: UpdateProfileInformation
 }, Symbol.toStringTag, { value: "Module" }));
@@ -6220,9 +6068,681 @@ function Edit({
     ] })
   ] });
 }
-const __vite_glob_0_22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_21 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Edit
+}, Symbol.toStringTag, { value: "Module" }));
+function ReturnStatusBadge({ status, className }) {
+  const { t } = useI18n();
+  const getReturnStatusDisplay = (status2) => {
+    switch (status2) {
+      case "requested":
+        return {
+          color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-500",
+          icon: /* @__PURE__ */ jsx(Clock, { className: "h-4 w-4" })
+        };
+      case "approved":
+        return {
+          color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-500",
+          icon: /* @__PURE__ */ jsx(CheckCircle, { className: "h-4 w-4" })
+        };
+      case "rejected":
+        return {
+          color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-500",
+          icon: /* @__PURE__ */ jsx(XCircle, { className: "h-4 w-4" })
+        };
+      case "completed":
+        return {
+          color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500",
+          icon: /* @__PURE__ */ jsx(CheckCircle, { className: "h-4 w-4" })
+        };
+      default:
+        return {
+          color: "bg-gray-100 text-gray-800 dark:bg-gray-800/30 dark:text-gray-500",
+          icon: /* @__PURE__ */ jsx(AlertCircle, { className: "h-4 w-4" })
+        };
+    }
+  };
+  const statusDisplay = getReturnStatusDisplay(status);
+  return /* @__PURE__ */ jsxs(
+    Badge,
+    {
+      variant: "outline",
+      className: `${statusDisplay.color} ${className || ""}`,
+      children: [
+        statusDisplay.icon,
+        /* @__PURE__ */ jsx("span", { className: "ltr:ml-1 rtl:mr-1", children: t(`return_status_${status}`, status) })
+      ]
+    }
+  );
+}
+function ReturnOrderCard({ returnOrder }) {
+  var _a;
+  const { t } = useI18n();
+  return /* @__PURE__ */ jsxs(Card, { className: "overflow-hidden", children: [
+    /* @__PURE__ */ jsx(CardHeader, { className: "bg-muted/30 pb-3", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2", children: [
+      /* @__PURE__ */ jsxs(CardTitle, { className: "text-base font-medium flex items-center gap-2", children: [
+        /* @__PURE__ */ jsx(Package, { className: "h-5 w-5" }),
+        t("return_request", "Return Request"),
+        " #",
+        returnOrder.id
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm text-muted-foreground flex-wrap", children: [
+        /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-1", children: [
+          /* @__PURE__ */ jsx(CalendarDays, { className: "h-4 w-4" }),
+          formatDate(returnOrder.created_at)
+        ] }),
+        /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "•" }),
+        /* @__PURE__ */ jsx(ReturnStatusBadge, { status: returnOrder.status })
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsx(CardContent, { className: "pt-4", children: /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row justify-between gap-4", children: [
+        /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
+          /* @__PURE__ */ jsxs("p", { className: "text-sm font-medium", children: [
+            t("order_number", "Order"),
+            " #",
+            returnOrder.order_id
+          ] }),
+          /* @__PURE__ */ jsxs("p", { className: "text-sm text-muted-foreground", children: [
+            ((_a = returnOrder.return_items) == null ? void 0 : _a.length) || 0,
+            " ",
+            t("items", "items")
+          ] })
+        ] }),
+        returnOrder.refund_amount && /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium", children: t("refund_amount", "Refund Amount") }),
+          /* @__PURE__ */ jsxs("p", { className: "text-sm", children: [
+            "EGP ",
+            Number(returnOrder.refund_amount).toFixed(2)
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsxs("h4", { className: "text-sm font-medium mb-2", children: [
+          t("return_reason", "Return Reason"),
+          ":"
+        ] }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg", children: returnOrder.reason })
+      ] }),
+      returnOrder.admin_notes && /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsxs("h4", { className: "text-sm font-medium mb-2", children: [
+          t("admin_notes", "Admin Notes"),
+          ":"
+        ] }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-muted-foreground bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800", children: returnOrder.admin_notes })
+      ] }),
+      returnOrder.refunded_at && /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm text-green-600 dark:text-green-400", children: [
+        /* @__PURE__ */ jsx(CalendarDays, { className: "h-4 w-4" }),
+        t("refunded_on", "Refunded on"),
+        " ",
+        formatDate(returnOrder.refunded_at)
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-end pt-2", children: /* @__PURE__ */ jsx(Link, { href: route("returns.show", returnOrder.id), children: /* @__PURE__ */ jsxs(Button, { variant: "outline", className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsx(Eye, { className: "h-4 w-4" }),
+        t("view_details", "View Details")
+      ] }) }) })
+    ] }) })
+  ] });
+}
+function ReturnOrderDetails({ returnOrder }) {
+  var _a;
+  const { t } = useI18n();
+  const totalItemsCount = ((_a = returnOrder.return_items) == null ? void 0 : _a.reduce((sum, item) => sum + item.quantity, 0)) || 0;
+  return /* @__PURE__ */ jsxs(Card, { children: [
+    /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4", children: [
+      /* @__PURE__ */ jsxs(CardTitle, { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsx(RotateCcw, { className: "h-5 w-5" }),
+        t("return_information", "Return Information")
+      ] }),
+      /* @__PURE__ */ jsx(ReturnStatusBadge, { status: returnOrder.status })
+    ] }) }),
+    /* @__PURE__ */ jsxs(CardContent, { children: [
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4", children: [
+        /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium", children: t("return_id", "Return ID") }),
+          /* @__PURE__ */ jsxs("p", { className: "text-sm text-muted-foreground", children: [
+            "#",
+            returnOrder.id
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium", children: t("order_number", "Order Number") }),
+          /* @__PURE__ */ jsxs(
+            Link,
+            {
+              href: route("orders.show", returnOrder.order_id),
+              className: "text-sm text-primary hover:underline",
+              children: [
+                "#",
+                returnOrder.order_id
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium", children: t("request_date", "Request Date") }),
+          /* @__PURE__ */ jsxs("p", { className: "text-sm text-muted-foreground flex items-center gap-1", children: [
+            /* @__PURE__ */ jsx(CalendarDays, { className: "h-4 w-4" }),
+            formatDate(returnOrder.created_at)
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium", children: t("total_items", "Total Items") }),
+          /* @__PURE__ */ jsxs("p", { className: "text-sm text-muted-foreground", children: [
+            totalItemsCount,
+            " ",
+            t("items", "items")
+          ] })
+        ] })
+      ] }),
+      returnOrder.refund_amount && /* @__PURE__ */ jsxs(Fragment, { children: [
+        /* @__PURE__ */ jsx(Separator, { className: "my-4" }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+          /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
+            /* @__PURE__ */ jsxs("p", { className: "text-sm font-medium flex items-center gap-2", children: [
+              /* @__PURE__ */ jsx(CreditCard, { className: "h-4 w-4" }),
+              t("refund_amount", "Refund Amount")
+            ] }),
+            /* @__PURE__ */ jsxs("p", { className: "text-lg font-semibold text-green-600", children: [
+              "EGP ",
+              Number(returnOrder.refund_amount).toFixed(2)
+            ] })
+          ] }),
+          returnOrder.refunded_at && /* @__PURE__ */ jsxs("div", { className: "text-right space-y-1", children: [
+            /* @__PURE__ */ jsx("p", { className: "text-sm font-medium", children: t("refunded_on", "Refunded On") }),
+            /* @__PURE__ */ jsxs("p", { className: "text-sm text-muted-foreground flex items-center gap-1", children: [
+              /* @__PURE__ */ jsx(CalendarDays, { className: "h-4 w-4" }),
+              formatDate(returnOrder.refunded_at)
+            ] })
+          ] })
+        ] })
+      ] })
+    ] })
+  ] });
+}
+function ReturnReasonCard({ reason }) {
+  const { t } = useI18n();
+  return /* @__PURE__ */ jsxs(Card, { children: [
+    /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsxs(CardTitle, { className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsx(MessageSquare, { className: "h-5 w-5" }),
+      t("return_reason", "Return Reason")
+    ] }) }),
+    /* @__PURE__ */ jsx(CardContent, { children: /* @__PURE__ */ jsx("p", { className: "text-sm text-muted-foreground bg-muted/50 p-4 rounded-lg", children: reason }) })
+  ] });
+}
+function ReturnAdminNotesCard({ adminNotes }) {
+  const { t } = useI18n();
+  if (!adminNotes) {
+    return null;
+  }
+  return /* @__PURE__ */ jsxs(Card, { children: [
+    /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsxs(CardTitle, { className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsx(User, { className: "h-5 w-5" }),
+      t("admin_notes", "Admin Notes")
+    ] }) }),
+    /* @__PURE__ */ jsx(CardContent, { children: /* @__PURE__ */ jsx("p", { className: "text-sm text-muted-foreground bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800", children: adminNotes }) })
+  ] });
+}
+function ReturnItemsList({ returnItems, totalRefundAmount }) {
+  const { t, getLocalizedField } = useI18n();
+  return /* @__PURE__ */ jsxs(Card, { children: [
+    /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsxs(CardTitle, { className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsx(Package, { className: "h-5 w-5" }),
+      t("returned_items", "Returned Items")
+    ] }) }),
+    /* @__PURE__ */ jsx(CardContent, { children: !returnItems || returnItems.length === 0 ? /* @__PURE__ */ jsx("p", { className: "text-muted-foreground text-center py-8", children: t("no_items_found", "No items found for this return.") }) : /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+      returnItems.map((returnItem) => {
+        var _a, _b;
+        return /* @__PURE__ */ jsxs(
+          "div",
+          {
+            className: "flex items-center justify-between p-4 bg-muted/30 rounded-lg",
+            children: [
+              /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
+                /* @__PURE__ */ jsx("h5", { className: "text-sm font-medium", children: getLocalizedField((_a = returnItem.order_item) == null ? void 0 : _a.product, "name") }),
+                ((_b = returnItem.order_item) == null ? void 0 : _b.variant) && /* @__PURE__ */ jsxs("div", { className: "text-xs text-muted-foreground mt-1 space-x-2 rtl:space-x-reverse", children: [
+                  returnItem.order_item.variant.color && /* @__PURE__ */ jsxs("span", { children: [
+                    t("color", "Color"),
+                    ": ",
+                    returnItem.order_item.variant.color
+                  ] }),
+                  returnItem.order_item.variant.size && /* @__PURE__ */ jsxs("span", { children: [
+                    t("size", "Size"),
+                    ": ",
+                    returnItem.order_item.variant.size
+                  ] }),
+                  returnItem.order_item.variant.capacity && /* @__PURE__ */ jsxs("span", { children: [
+                    t("capacity", "Capacity"),
+                    ": ",
+                    returnItem.order_item.variant.capacity
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxs("div", { className: "text-xs text-muted-foreground mt-1", children: [
+                  t("unit_price", "Unit Price"),
+                  ": EGP ",
+                  Number(returnItem.unit_price).toFixed(2)
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxs("div", { className: "text-right space-y-1 ltr:ml-4 rtl:mr-4", children: [
+                /* @__PURE__ */ jsxs("div", { className: "text-sm font-medium", children: [
+                  t("quantity", "Qty"),
+                  ": ",
+                  returnItem.quantity
+                ] }),
+                /* @__PURE__ */ jsxs("div", { className: "text-sm font-semibold", children: [
+                  "EGP ",
+                  Number(returnItem.total_price).toFixed(2)
+                ] })
+              ] })
+            ]
+          },
+          returnItem.id
+        );
+      }),
+      /* @__PURE__ */ jsx(Separator, {}),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between font-semibold", children: [
+        /* @__PURE__ */ jsxs("span", { children: [
+          t("total_refund_amount", "Total Refund Amount"),
+          ":"
+        ] }),
+        /* @__PURE__ */ jsxs("span", { className: "text-lg text-green-600", children: [
+          "EGP ",
+          totalRefundAmount.toFixed(2)
+        ] })
+      ] })
+    ] }) })
+  ] });
+}
+function OriginalOrderCard({ orderId }) {
+  const { t } = useI18n();
+  return /* @__PURE__ */ jsx(Card, { children: /* @__PURE__ */ jsx(CardContent, { className: "pt-6", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("h4", { className: "font-medium", children: t("original_order", "Original Order") }),
+      /* @__PURE__ */ jsx("p", { className: "text-sm text-muted-foreground", children: t("view_original_order_details", "View the details of the original order") })
+    ] }),
+    /* @__PURE__ */ jsx(Link, { href: route("orders.show", orderId), children: /* @__PURE__ */ jsxs(Button, { variant: "outline", className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsx(Package, { className: "h-4 w-4" }),
+      t("view_order", "View Order"),
+      " #",
+      orderId
+    ] }) })
+  ] }) }) });
+}
+function ReturnOrderInfo({ order }) {
+  const { t } = useI18n();
+  return /* @__PURE__ */ jsxs(Card, { children: [
+    /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsxs(CardTitle, { className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsx(Package, { className: "h-5 w-5" }),
+      t("order_details", "Order Details")
+    ] }) }),
+    /* @__PURE__ */ jsx(CardContent, { children: /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx(Label, { className: "text-sm font-medium", children: t("order_number", "Order Number") }),
+        /* @__PURE__ */ jsxs("p", { className: "text-sm mt-1", children: [
+          "#",
+          order.id
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx(Label, { className: "text-sm font-medium", children: t("order_date", "Order Date") }),
+        /* @__PURE__ */ jsxs("p", { className: "text-sm mt-1 flex items-center gap-1", children: [
+          /* @__PURE__ */ jsx(CalendarDays, { className: "h-4 w-4" }),
+          formatDate(order.created_at || "")
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx(Label, { className: "text-sm font-medium", children: t("order_total", "Order Total") }),
+        /* @__PURE__ */ jsxs("p", { className: "text-sm mt-1", children: [
+          "EGP ",
+          Number(order.total).toFixed(2)
+        ] })
+      ] })
+    ] }) })
+  ] });
+}
+function ReturnReasonForm({ reason, onReasonChange, error }) {
+  const { t } = useI18n();
+  return /* @__PURE__ */ jsxs(Card, { children: [
+    /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsx(CardTitle, { children: t("return_reason", "Return Reason") }) }),
+    /* @__PURE__ */ jsx(CardContent, { children: /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
+      /* @__PURE__ */ jsx(Label, { htmlFor: "reason", children: t(
+        "reason_for_return",
+        "Please explain why you want to return these items"
+      ) }),
+      /* @__PURE__ */ jsx(
+        Textarea,
+        {
+          id: "reason",
+          placeholder: t(
+            "return_reason_placeholder",
+            "Please provide a detailed reason for the return..."
+          ),
+          value: reason,
+          onChange: (e) => onReasonChange(e.target.value),
+          rows: 4,
+          className: error ? "border-red-500" : ""
+        }
+      ),
+      error && /* @__PURE__ */ jsx("p", { className: "text-sm text-red-500", children: error })
+    ] }) })
+  ] });
+}
+function ItemSelectionCard({
+  returnableItems,
+  selectedItems,
+  onItemToggle,
+  onQuantityChange,
+  error
+}) {
+  const { t, getLocalizedField } = useI18n();
+  return /* @__PURE__ */ jsxs(Card, { children: [
+    /* @__PURE__ */ jsxs(CardHeader, { children: [
+      /* @__PURE__ */ jsx(CardTitle, { children: t("select_items_to_return", "Select Items to Return") }),
+      /* @__PURE__ */ jsx("p", { className: "text-sm text-muted-foreground", children: t(
+        "select_items_description",
+        "Choose the items you want to return and specify the quantity for each item."
+      ) })
+    ] }),
+    /* @__PURE__ */ jsxs(CardContent, { children: [
+      returnableItems.length === 0 ? /* @__PURE__ */ jsxs(Alert, { children: [
+        /* @__PURE__ */ jsx(AlertCircle, { className: "h-4 w-4" }),
+        /* @__PURE__ */ jsx(AlertDescription, { children: t(
+          "no_eligible_items",
+          "No items in this order are eligible for return."
+        ) })
+      ] }) : /* @__PURE__ */ jsx("div", { className: "space-y-4", children: returnableItems.map((item) => {
+        const returnItem = selectedItems.find(
+          (ri) => ri.order_item_id === item.id
+        );
+        const isSelected = !!returnItem;
+        const selectedQuantity = (returnItem == null ? void 0 : returnItem.quantity) || 0;
+        return /* @__PURE__ */ jsx(
+          "div",
+          {
+            className: `p-4 border rounded-lg transition-colors ${isSelected ? "border-primary bg-primary/5" : "border-gray-200"}`,
+            children: /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3", children: [
+              /* @__PURE__ */ jsx(
+                Checkbox,
+                {
+                  checked: isSelected,
+                  onCheckedChange: () => onItemToggle(item.id, item.quantity)
+                }
+              ),
+              /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
+                /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+                  /* @__PURE__ */ jsx("h4", { className: "font-medium", children: getLocalizedField(item.product, "name") }),
+                  /* @__PURE__ */ jsxs(Badge, { variant: "outline", children: [
+                    "EGP ",
+                    Number(item.unit_price).toFixed(2)
+                  ] })
+                ] }),
+                item.variant && /* @__PURE__ */ jsxs("div", { className: "text-sm text-muted-foreground mt-1 space-x-2 rtl:space-x-reverse", children: [
+                  item.variant.color && /* @__PURE__ */ jsxs("span", { children: [
+                    t("color", "Color"),
+                    ": ",
+                    item.variant.color
+                  ] }),
+                  item.variant.size && /* @__PURE__ */ jsxs("span", { children: [
+                    t("size", "Size"),
+                    ": ",
+                    item.variant.size
+                  ] }),
+                  item.variant.capacity && /* @__PURE__ */ jsxs("span", { children: [
+                    t("capacity", "Capacity"),
+                    ": ",
+                    item.variant.capacity
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mt-2", children: [
+                  /* @__PURE__ */ jsxs("span", { className: "text-sm text-muted-foreground", children: [
+                    t("ordered_quantity", "Ordered"),
+                    ": ",
+                    item.quantity
+                  ] }),
+                  isSelected && /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+                    /* @__PURE__ */ jsxs(Label, { className: "text-sm", children: [
+                      t("return_quantity", "Return Qty"),
+                      ":"
+                    ] }),
+                    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
+                      /* @__PURE__ */ jsx(
+                        Button,
+                        {
+                          type: "button",
+                          variant: "outline",
+                          size: "sm",
+                          className: "h-8 w-8 p-0",
+                          onClick: () => onQuantityChange(
+                            item.id,
+                            selectedQuantity - 1
+                          ),
+                          disabled: selectedQuantity <= 1,
+                          children: /* @__PURE__ */ jsx(Minus, { className: "h-3 w-3" })
+                        }
+                      ),
+                      /* @__PURE__ */ jsx("span", { className: "min-w-[3rem] text-center text-sm font-medium px-2", children: selectedQuantity }),
+                      /* @__PURE__ */ jsx(
+                        Button,
+                        {
+                          type: "button",
+                          variant: "outline",
+                          size: "sm",
+                          className: "h-8 w-8 p-0",
+                          onClick: () => onQuantityChange(
+                            item.id,
+                            selectedQuantity + 1
+                          ),
+                          disabled: selectedQuantity >= item.quantity,
+                          children: /* @__PURE__ */ jsx(Plus, { className: "h-3 w-3" })
+                        }
+                      )
+                    ] })
+                  ] })
+                ] })
+              ] })
+            ] })
+          },
+          item.id
+        );
+      }) }),
+      error && /* @__PURE__ */ jsxs(Alert, { className: "mt-4", children: [
+        /* @__PURE__ */ jsx(AlertCircle, { className: "h-4 w-4" }),
+        /* @__PURE__ */ jsx(AlertDescription, { children: error })
+      ] })
+    ] })
+  ] });
+}
+function Create({ order, returnableItems }) {
+  const { t } = useI18n();
+  const { data, setData, post, processing, errors } = useForm(
+    {
+      order_id: order.id,
+      reason: "",
+      return_items: []
+    }
+  );
+  const handleItemToggle = (itemId, maxQuantity) => {
+    const existingItem = data.return_items.find(
+      (item) => item.order_item_id === itemId
+    );
+    if (existingItem) {
+      setData(
+        "return_items",
+        data.return_items.filter(
+          (item) => item.order_item_id !== itemId
+        )
+      );
+    } else {
+      setData("return_items", [
+        ...data.return_items,
+        { order_item_id: itemId, quantity: 1 }
+      ]);
+    }
+  };
+  const handleQuantityChange = (itemId, quantity2) => {
+    const newQuantity = Math.max(0, quantity2);
+    if (newQuantity === 0) {
+      setData(
+        "return_items",
+        data.return_items.filter(
+          (item) => item.order_item_id !== itemId
+        )
+      );
+    } else {
+      setData(
+        "return_items",
+        data.return_items.map(
+          (item) => item.order_item_id === itemId ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    }
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (data.return_items.length === 0) {
+      return;
+    }
+    post(route("returns.store", { order: order.id }));
+  };
+  data.return_items.length;
+  data.return_items.reduce((total2, returnItem) => {
+    const item = returnableItems.find(
+      (i) => i.id === returnItem.order_item_id
+    );
+    return total2 + (item ? item.unit_price * returnItem.quantity : 0);
+  }, 0);
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(Head, { title: t("request_return", "Request Return") }),
+    /* @__PURE__ */ jsx("div", { className: "container mt-4", children: /* @__PURE__ */ jsxs("div", { className: "space-y-6", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+        /* @__PURE__ */ jsx(
+          PageTitle,
+          {
+            title: t("request_return", "Request Return"),
+            icon: /* @__PURE__ */ jsx(RotateCcw, { className: "h-6 w-6 text-primary" })
+          }
+        ),
+        /* @__PURE__ */ jsx(Link, { href: route("returns.index"), children: /* @__PURE__ */ jsxs(
+          Button,
+          {
+            variant: "outline",
+            className: "flex items-center gap-2",
+            children: [
+              /* @__PURE__ */ jsx(ArrowLeft, { className: "h-4 w-4" }),
+              t("back_to_returns", "Back to Returns")
+            ]
+          }
+        ) })
+      ] }),
+      /* @__PURE__ */ jsx(ReturnOrderInfo, { order }),
+      /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: "space-y-6", children: [
+        /* @__PURE__ */ jsx(
+          ItemSelectionCard,
+          {
+            returnableItems,
+            selectedItems: data.return_items,
+            onItemToggle: handleItemToggle,
+            onQuantityChange: handleQuantityChange,
+            error: errors.items
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          ReturnReasonForm,
+          {
+            reason: data.reason,
+            onReasonChange: (reason) => setData("reason", reason),
+            error: errors.reason
+          }
+        )
+      ] })
+    ] }) })
+  ] });
+}
+const __vite_glob_0_25 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: Create
+}, Symbol.toStringTag, { value: "Module" }));
+function Index$1({ returns }) {
+  const { t } = useI18n();
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(Head, { title: t("my_returns", "My Returns") }),
+    /* @__PURE__ */ jsx("div", { className: "container mt-4", children: /* @__PURE__ */ jsxs("div", { className: "space-y-6", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+        /* @__PURE__ */ jsx(
+          PageTitle,
+          {
+            title: t("my_returns", "My Returns"),
+            icon: /* @__PURE__ */ jsx(RotateCcw, { className: "h-6 w-6 text-primary" })
+          }
+        ),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx(Link, { href: route("returns.create"), children: /* @__PURE__ */ jsxs(Button, { className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsx(Plus, { className: "h-4 w-4" }),
+            t("request_return", "Request Return")
+          ] }) }),
+          /* @__PURE__ */ jsx(Link, { href: route("orders.index"), children: /* @__PURE__ */ jsxs(Button, { variant: "outline", className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsx(ArrowLeft, { className: "h-4 w-4 ltr:mr-0 ltr:rotate-0 rtl:ml-0 rtl:rotate-180" }),
+            t("back_to_orders", "Back to Orders")
+          ] }) })
+        ] })
+      ] }),
+      returns.length === 0 ? /* @__PURE__ */ jsx(
+        EmptyState,
+        {
+          icon: /* @__PURE__ */ jsx(Package, { className: "h-16 w-16 text-muted-foreground" }),
+          title: t("no_returns", "No Return Requests"),
+          description: t("no_returns_message", "You haven't requested any returns yet"),
+          action: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+            /* @__PURE__ */ jsx(Link, { href: route("returns.create"), children: /* @__PURE__ */ jsx(Button, { children: t("request_return", "Request Return") }) }),
+            /* @__PURE__ */ jsx(Link, { href: route("orders.index"), children: /* @__PURE__ */ jsx(Button, { variant: "outline", children: t("view_orders", "View Orders") }) })
+          ] })
+        }
+      ) : /* @__PURE__ */ jsx("div", { className: "space-y-4", children: returns.map((returnOrder) => /* @__PURE__ */ jsx(ReturnOrderCard, { returnOrder }, returnOrder.id)) })
+    ] }) })
+  ] });
+}
+const __vite_glob_0_26 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: Index$1
+}, Symbol.toStringTag, { value: "Module" }));
+function Show({ returnOrder }) {
+  var _a;
+  const { t, getLocalizedField } = useI18n();
+  const totalRefundAmount = ((_a = returnOrder.return_items) == null ? void 0 : _a.reduce((sum, item) => sum + parseFloat(item.total_price), 0)) || 0;
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(Head, { title: t("return_details", "Return Details") }),
+    /* @__PURE__ */ jsx("div", { className: "container mt-4", children: /* @__PURE__ */ jsxs("div", { className: "space-y-6", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+        /* @__PURE__ */ jsx(
+          PageTitle,
+          {
+            title: `${t("return_request", "Return Request")} #${returnOrder.id}`,
+            icon: /* @__PURE__ */ jsx(RotateCcw, { className: "h-6 w-6 text-primary" })
+          }
+        ),
+        /* @__PURE__ */ jsx(Link, { href: route("returns.index"), children: /* @__PURE__ */ jsxs(Button, { variant: "outline", className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsx(ArrowLeft, { className: "h-4 w-4 ltr:mr-0 ltr:rotate-0 rtl:ml-0 rtl:rotate-180" }),
+          t("back_to_returns", "Back to Returns")
+        ] }) })
+      ] }),
+      /* @__PURE__ */ jsx(ReturnOrderDetails, { returnOrder }),
+      /* @__PURE__ */ jsx(ReturnReasonCard, { reason: returnOrder.reason }),
+      /* @__PURE__ */ jsx(ReturnAdminNotesCard, { adminNotes: returnOrder.admin_notes }),
+      /* @__PURE__ */ jsx(
+        ReturnItemsList,
+        {
+          returnItems: returnOrder.return_items || [],
+          totalRefundAmount
+        }
+      ),
+      /* @__PURE__ */ jsx(OriginalOrderCard, { orderId: returnOrder.order_id })
+    ] }) })
+  ] });
+}
+const __vite_glob_0_27 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: Show
 }, Symbol.toStringTag, { value: "Module" }));
 const Sheet = DialogPrimitive.Root;
 const SheetTrigger = DialogPrimitive.Trigger;
@@ -6996,7 +7516,7 @@ function Results({
     ] })
   ] });
 }
-const __vite_glob_0_26 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_28 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Results
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7077,7 +7597,7 @@ function Index({ items: items2 }) {
     ] })
   ] });
 }
-const __vite_glob_0_27 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_29 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Index
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7507,7 +8027,6 @@ function Footer() {
     ] })
   ] }) });
 }
-const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 const NavigationMenu = React.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   NavigationMenuPrimitive.Root,
   {
@@ -7860,17 +8379,19 @@ function MainLayout({
   };
   const section = useRef(null);
   const animationInjection = useRef(null);
-  useIsomorphicLayoutEffect(() => {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     const logo = document.querySelector(
       ".loading-container"
     );
     logo == null ? void 0 : logo.classList.add("disabled");
   }, []);
-  useIsomorphicLayoutEffect(() => {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     const existingAnimation = document.getElementById(
       "section-logo-animation"
     );
-    router.on("start", (e) => {
+    const handleRouterStart = (e) => {
       var _a, _b;
       if (e.detail.visit.method !== "get" || e.detail.visit.url.pathname === window.location.pathname || e.detail.visit.only.length !== 0)
         return;
@@ -7881,8 +8402,8 @@ function MainLayout({
         animationInjection.current.classList.remove("hidden");
         animationInjection.current.classList.add("block");
       }
-    });
-    router.on("finish", (e) => {
+    };
+    const handleRouterFinish = (e) => {
       var _a, _b;
       if (e.detail.visit.method !== "get" || e.detail.visit.only.length !== 0)
         return;
@@ -7892,16 +8413,27 @@ function MainLayout({
         animationInjection.current.classList.remove("block");
         animationInjection.current.classList.add("hidden");
       }
-    });
-    window.addEventListener("popstate", () => {
+    };
+    const handlePopState = () => {
       setTimeout(
-        () => window.scrollTo({
-          top: window.history.state.documentScrollPosition.top,
-          behavior: "smooth"
-        }),
+        () => {
+          var _a, _b;
+          return window.scrollTo({
+            top: ((_b = (_a = window.history.state) == null ? void 0 : _a.documentScrollPosition) == null ? void 0 : _b.top) || 0,
+            behavior: "smooth"
+          });
+        },
         100
       );
-    });
+    };
+    const removeStartListener = router.on("start", handleRouterStart);
+    const removeFinishListener = router.on("finish", handleRouterFinish);
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      removeStartListener();
+      removeFinishListener();
+      window.removeEventListener("popstate", handlePopState);
+    };
   }, []);
   return /* @__PURE__ */ jsx(MaintenanceWrapper, { children: /* @__PURE__ */ jsxs(
     "div",
@@ -8216,7 +8748,48 @@ const language_preferences$1 = "Language Preferences";
 const language_preferences_description$1 = "Choose your preferred language for the interface.";
 const select_language$1 = "Select Language";
 const or_continue_with$1 = "Or continue with";
-const return_history$1 = "Return to History";
+const return_history$1 = "Returns to History";
+const request_return$1 = "Request Return";
+const hero_title_part1$1 = "Play with new";
+const hero_title_electric$1 = "electric";
+const hero_title_part2$1 = "Nike products...";
+const hero_description$1 = "Find, explore and buy in an awesome place find, explore and buy in great and awesome place an awesome, explore more.";
+const hero_products_button$1 = "Products";
+const hero_blog_button$1 = "Shoe blog";
+const hero_question$1 = "Have any question?";
+const my_returns$1 = "My Returns";
+const return_details$1 = "Return Details";
+const return_request$1 = "Request Return";
+const back_to_returns$1 = "Back to Returns";
+const return_information$1 = "Return Information";
+const return_id$1 = "Return ID";
+const request_date$1 = "Request Date";
+const total_items$1 = "Total Items";
+const refund_amount$1 = "Refund Amount";
+const refunded_on$1 = "Refunded On";
+const admin_notes$1 = "Admin Notes";
+const returned_items$1 = "Returned Items";
+const no_items_found$1 = "No items found for this return.";
+const unit_price$1 = "Unit Price";
+const total_refund_amount$1 = "Total Refund Amount";
+const original_order$1 = "Original Order";
+const view_original_order_details$1 = "View the details of the original order";
+const view_order$1 = "View Order";
+const select_items_to_return$1 = "Select Items to Return";
+const select_items_description$1 = "Choose the items you want to return and specify the quantity for each item.";
+const no_eligible_items$1 = "No items in this order are eligible for return.";
+const reason_for_return$1 = "Please explain why you want to return these items";
+const return_reason_placeholder$1 = "Please provide a detailed reason for the return...";
+const return_summary$1 = "Return Summary";
+const selected_items$1 = "Selected Items";
+const estimated_refund$1 = "Estimated Refund Amount";
+const submitting$1 = "Submitting...";
+const submit_return_request$1 = "Submit Return Request";
+const return_status_requested$1 = "Requested";
+const return_status_approved$1 = "Approved";
+const return_status_rejected$1 = "Rejected";
+const return_status_completed$1 = "Completed";
+const max_returnable_quantity$1 = "Maximum returnable quantity";
 const enTranslations = {
   phone: phone$1,
   phone_number: phone_number$1,
@@ -8480,7 +9053,48 @@ const enTranslations = {
   language_preferences_description: language_preferences_description$1,
   select_language: select_language$1,
   or_continue_with: or_continue_with$1,
-  return_history: return_history$1
+  return_history: return_history$1,
+  request_return: request_return$1,
+  hero_title_part1: hero_title_part1$1,
+  hero_title_electric: hero_title_electric$1,
+  hero_title_part2: hero_title_part2$1,
+  hero_description: hero_description$1,
+  hero_products_button: hero_products_button$1,
+  hero_blog_button: hero_blog_button$1,
+  hero_question: hero_question$1,
+  my_returns: my_returns$1,
+  return_details: return_details$1,
+  return_request: return_request$1,
+  back_to_returns: back_to_returns$1,
+  return_information: return_information$1,
+  return_id: return_id$1,
+  request_date: request_date$1,
+  total_items: total_items$1,
+  refund_amount: refund_amount$1,
+  refunded_on: refunded_on$1,
+  admin_notes: admin_notes$1,
+  returned_items: returned_items$1,
+  no_items_found: no_items_found$1,
+  unit_price: unit_price$1,
+  total_refund_amount: total_refund_amount$1,
+  original_order: original_order$1,
+  view_original_order_details: view_original_order_details$1,
+  view_order: view_order$1,
+  select_items_to_return: select_items_to_return$1,
+  select_items_description: select_items_description$1,
+  no_eligible_items: no_eligible_items$1,
+  reason_for_return: reason_for_return$1,
+  return_reason_placeholder: return_reason_placeholder$1,
+  return_summary: return_summary$1,
+  selected_items: selected_items$1,
+  estimated_refund: estimated_refund$1,
+  submitting: submitting$1,
+  submit_return_request: submit_return_request$1,
+  return_status_requested: return_status_requested$1,
+  return_status_approved: return_status_approved$1,
+  return_status_rejected: return_status_rejected$1,
+  return_status_completed: return_status_completed$1,
+  max_returnable_quantity: max_returnable_quantity$1
 };
 const phone = "رقم الهاتف";
 const phone_number = "رقم الهاتف";
@@ -8776,7 +9390,48 @@ const language_preferences = "تفضيلات اللغة";
 const language_preferences_description = "اختر لغتك المفضلة لواجهة الموقع.";
 const select_language = "اختر اللغة";
 const or_continue_with = "أو المتابعة باستخدام";
-const return_history = "العودة إلى السجل";
+const return_history = "المرتجعات";
+const request_return = "طلب إرجاع";
+const hero_title_part1 = "العب مع منتجات";
+const hero_title_electric = "كهربائية";
+const hero_title_part2 = "نايك جديدة...";
+const hero_description = "اعثر، استكشف واشتر في مكان رائع، اعثر، استكشف واشتر في مكان عظيم ورائع، استكشف أكثر.";
+const hero_products_button = "المنتجات";
+const hero_blog_button = "مدونة الأحذية";
+const hero_question = "هل لديك أي سؤال؟";
+const my_returns = "المرتجعات";
+const return_details = "تفاصيل الإرجاع";
+const return_request = "طلب إرجاع";
+const back_to_returns = "العودة إلى المرتجعات";
+const return_information = "معلومات الإرجاع";
+const return_id = "رقم الإرجاع";
+const request_date = "تاريخ الطلب";
+const total_items = "إجمالي العناصر";
+const refund_amount = "مبلغ الاسترداد";
+const refunded_on = "تم الاسترداد في";
+const admin_notes = "ملاحظات الإدارة";
+const returned_items = "العناصر المُرجعة";
+const no_items_found = "لم يتم العثور على عناصر لهذا الإرجاع.";
+const unit_price = "سعر الوحدة";
+const total_refund_amount = "إجمالي مبلغ الاسترداد";
+const original_order = "الطلب الأصلي";
+const view_original_order_details = "عرض تفاصيل الطلب الأصلي";
+const view_order = "عرض الطلب";
+const select_items_to_return = "حدد العناصر للإرجاع";
+const select_items_description = "اختر العناصر التي تريد إرجاعها وحدد الكمية لكل عنصر.";
+const no_eligible_items = "لا توجد عناصر في هذا الطلب مؤهلة للإرجاع.";
+const reason_for_return = "يرجى توضيح سبب إرجاع هذه العناصر";
+const return_reason_placeholder = "يرجى تقديم سبب مفصل للإرجاع...";
+const return_summary = "ملخص الإرجاع";
+const selected_items = "العناصر المحددة";
+const estimated_refund = "مبلغ الاسترداد المقدر";
+const submitting = "جارٍ الإرسال...";
+const submit_return_request = "إرسال طلب الإرجاع";
+const return_status_requested = "مطلوب";
+const return_status_approved = "موافق عليه";
+const return_status_rejected = "مرفوض";
+const return_status_completed = "مكتمل";
+const max_returnable_quantity = "الحد الأقصى للكمية القابلة للإرجاع";
 const arTranslations = {
   phone,
   phone_number,
@@ -9076,7 +9731,48 @@ const arTranslations = {
   language_preferences_description,
   select_language,
   or_continue_with,
-  return_history
+  return_history,
+  request_return,
+  hero_title_part1,
+  hero_title_electric,
+  hero_title_part2,
+  hero_description,
+  hero_products_button,
+  hero_blog_button,
+  hero_question,
+  my_returns,
+  return_details,
+  return_request,
+  back_to_returns,
+  return_information,
+  return_id,
+  request_date,
+  total_items,
+  refund_amount,
+  refunded_on,
+  admin_notes,
+  returned_items,
+  no_items_found,
+  unit_price,
+  total_refund_amount,
+  original_order,
+  view_original_order_details,
+  view_order,
+  select_items_to_return,
+  select_items_description,
+  no_eligible_items,
+  reason_for_return,
+  return_reason_placeholder,
+  return_summary,
+  selected_items,
+  estimated_refund,
+  submitting,
+  submit_return_request,
+  return_status_requested,
+  return_status_approved,
+  return_status_rejected,
+  return_status_completed,
+  max_returnable_quantity
 };
 i18n.use(LanguageDetector).use(initReactI18next).init({
   debug: false,
@@ -9106,14 +9802,14 @@ i18n.on("languageChanged", (lng) => {
   document.documentElement.lang = lng;
   document.documentElement.dir = lng === "ar" ? "rtl" : "ltr";
 });
-const appName = "Moda";
+const appName = "Moda1";
 createServer(
   (page) => createInertiaApp({
     page,
     render: ReactDOMServer.renderToString,
     title: (title) => `${title} - ${appName}`,
     resolve: (name2) => {
-      const pages = /* @__PURE__ */ Object.assign({ "./Pages/Auth/ConfirmPassword.tsx": __vite_glob_0_0, "./Pages/Auth/ForgotPassword.tsx": __vite_glob_0_1, "./Pages/Auth/Login.tsx": __vite_glob_0_2, "./Pages/Auth/Register.tsx": __vite_glob_0_3, "./Pages/Auth/ResetPassword.tsx": __vite_glob_0_4, "./Pages/Auth/VerifyEmail.tsx": __vite_glob_0_5, "./Pages/Brands/Index.tsx": __vite_glob_0_6, "./Pages/Cart/Index.tsx": __vite_glob_0_7, "./Pages/Categories/Index.tsx": __vite_glob_0_8, "./Pages/Checkout/Index.tsx": __vite_glob_0_9, "./Pages/Home.tsx": __vite_glob_0_10, "./Pages/Orders/Index.tsx": __vite_glob_0_11, "./Pages/Orders/ReturnHistory.tsx": __vite_glob_0_12, "./Pages/Orders/Show.tsx": __vite_glob_0_13, "./Pages/Pages/Contact.tsx": __vite_glob_0_14, "./Pages/Pages/FacebookDataDeletion.tsx": __vite_glob_0_15, "./Pages/Pages/Privacy.tsx": __vite_glob_0_16, "./Pages/Pages/Returns.tsx": __vite_glob_0_17, "./Pages/Pages/Terms.tsx": __vite_glob_0_18, "./Pages/Payments/Kashier.tsx": __vite_glob_0_19, "./Pages/Products/Section.tsx": __vite_glob_0_20, "./Pages/Products/Show.tsx": __vite_glob_0_21, "./Pages/Profile/Edit.tsx": __vite_glob_0_22, "./Pages/Profile/Partials/DeleteUserForm.tsx": __vite_glob_0_23, "./Pages/Profile/Partials/UpdatePasswordForm.tsx": __vite_glob_0_24, "./Pages/Profile/Partials/UpdateProfileInformationForm.tsx": __vite_glob_0_25, "./Pages/Search/Results.tsx": __vite_glob_0_26, "./Pages/Wishlist/Index.tsx": __vite_glob_0_27 });
+      const pages = /* @__PURE__ */ Object.assign({ "./Pages/Auth/ConfirmPassword.tsx": __vite_glob_0_0, "./Pages/Auth/ForgotPassword.tsx": __vite_glob_0_1, "./Pages/Auth/Login.tsx": __vite_glob_0_2, "./Pages/Auth/Register.tsx": __vite_glob_0_3, "./Pages/Auth/ResetPassword.tsx": __vite_glob_0_4, "./Pages/Auth/VerifyEmail.tsx": __vite_glob_0_5, "./Pages/Brands/Index.tsx": __vite_glob_0_6, "./Pages/Cart/Index.tsx": __vite_glob_0_7, "./Pages/Categories/Index.tsx": __vite_glob_0_8, "./Pages/Checkout/Index.tsx": __vite_glob_0_9, "./Pages/Home.tsx": __vite_glob_0_10, "./Pages/Orders/Index.tsx": __vite_glob_0_11, "./Pages/Orders/Show.tsx": __vite_glob_0_12, "./Pages/Pages/Contact.tsx": __vite_glob_0_13, "./Pages/Pages/FacebookDataDeletion.tsx": __vite_glob_0_14, "./Pages/Pages/Privacy.tsx": __vite_glob_0_15, "./Pages/Pages/Returns.tsx": __vite_glob_0_16, "./Pages/Pages/Terms.tsx": __vite_glob_0_17, "./Pages/Payments/Kashier.tsx": __vite_glob_0_18, "./Pages/Products/Section.tsx": __vite_glob_0_19, "./Pages/Products/Show.tsx": __vite_glob_0_20, "./Pages/Profile/Edit.tsx": __vite_glob_0_21, "./Pages/Profile/Partials/DeleteUserForm.tsx": __vite_glob_0_22, "./Pages/Profile/Partials/UpdatePasswordForm.tsx": __vite_glob_0_23, "./Pages/Profile/Partials/UpdateProfileInformationForm.tsx": __vite_glob_0_24, "./Pages/Returns/Create.tsx": __vite_glob_0_25, "./Pages/Returns/Index.tsx": __vite_glob_0_26, "./Pages/Returns/Show.tsx": __vite_glob_0_27, "./Pages/Search/Results.tsx": __vite_glob_0_28, "./Pages/Wishlist/Index.tsx": __vite_glob_0_29 });
       const pageComponent = pages[`./Pages/${name2}.tsx`];
       if (pageComponent && !pageComponent.default.layout) {
         pageComponent.default.layout = (page2) => /* @__PURE__ */ jsx(MainLayout, { children: page2 });

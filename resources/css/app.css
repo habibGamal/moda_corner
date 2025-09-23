@@ -66,6 +66,7 @@
     }
     body {
         @apply bg-[#fdfbf7] text-foreground;
+        overflow-x: clip;
     }
 
     .force-rtl * {
