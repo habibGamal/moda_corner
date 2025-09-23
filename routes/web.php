@@ -19,10 +19,6 @@ use App\Notifications\Notify;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return 'HI';
-});
-
 Route::get('/', App\Http\Controllers\HomeController::class)->name('home');
 
 // Product routes

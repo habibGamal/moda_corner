@@ -51,7 +51,8 @@ class Product extends Model
     ];
 
     protected $appends = [
-        'featured_image'
+        'featured_image',
+        'is_in_wishlist',
     ];
 
     /**

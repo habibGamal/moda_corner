@@ -73,7 +73,7 @@ declare namespace App.Models {
         variants?: ProductVariant[];
         all_images?: string[];
         total_quantity?: number;
-        isInWishlist?: boolean;
+        is_in_wishlist?: boolean;
         isInStock?: boolean;
         totalQuantity?: number;
         reviews?: ProductReview[];

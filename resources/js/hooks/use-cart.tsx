@@ -35,7 +35,7 @@ export default function useCart() {
             });
             // Refresh to update cart state in the navbar/header
             // Alternative: use a global state manager to update the cart badge only
-            router.reload({ only: ["cart_summary"] });
+            router.reload({ only: ["cartInfo"] });
         } catch (error: any) {
             console.error("Error adding product to cart:", error);
 

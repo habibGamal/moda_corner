@@ -2,9 +2,10 @@ import { Button } from "@/Components/ui/button";
 import { Card, CardContent, CardFooter } from "@/Components/ui/card";
 import { useI18n } from "@/hooks/use-i18n";
 import useCart from "@/hooks/use-cart";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Heart } from "lucide-react";
 import { Image } from "@/Components/ui/Image";
 import { Link } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { App } from "@/types";
 
 interface ProductCardProps {
@@ -14,12 +15,30 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
     const { getLocalizedField, t } = useI18n();
     const { addToCart, addingToCart } = useCart();
-    const hasDiscount = product.sale_price && product.sale_price !== product.price;
+    const hasDiscount =
+        product.sale_price && product.sale_price !== product.price;
     const discountPercentage = hasDiscount
         ? Math.round(
               ((product.price - product.sale_price!) / product.price) * 100
           )
         : 0;
+
+    const addToWishlist = () => {
+        router.post(
+            route("wishlist.add"),
+            { product_id: product.id },
+            {
+                preserveScroll: true,
+            }
+        );
+    };
+
+    const removeFromWishlist = () => {
+        router.delete(route("wishlist.remove", product.id), {
+            preserveScroll: true,
+        });
+    };
+
     return (
         <Card className="group overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col border-0 shadow-sm bg-card/50 backdrop-blur-sm">
             <Link
@@ -71,7 +90,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                             {hasDiscount ? (
                                 <div className="flex flex-col">
                                     <span className="text-xl font-bold text-primary">
-                                        {Number(product.sale_price).toFixed(2)} EGP
+                                        {Number(product.sale_price).toFixed(2)}{" "}
+                                        EGP
                                     </span>
                                     <span className="text-muted-foreground text-sm line-through">
                                         {Number(product.price).toFixed(2)} EGP
@@ -88,25 +108,30 @@ export default function ProductCard({ product }: ProductCardProps) {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="rounded-full h-10 w-10 bg-primary/10 hover:bg-primary hover:text-primary-foreground transition-all duration-200 opacity-0 group-hover:opacity-100"
+                            className="rounded-full h-10 w-10 bg-primary/10 hover:bg-primary hover:text-primary-foreground"
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                addToCart(product.id, 1);
+                                product.is_in_wishlist
+                                    ? removeFromWishlist()
+                                    : addToWishlist();
                             }}
-                            disabled={addingToCart[product.id] || product.quantity <= 0}
                         >
-                            <ShoppingBag className="h-4 w-4" />
+                            <Heart
+                                className="h-4 w-4"
+                                fill={product.is_in_wishlist ? "red" : "none"}
+                                stroke={product.is_in_wishlist ? "red" : "currentColor"}
+                            />
                         </Button>
                     </div>
                 </CardContent>
             </Link>
 
-            {/* Main Action Button */}
+            {/* Main Action Buttons */}
             <CardFooter className="p-5 pt-0">
                 <Button
                     variant={product.quantity <= 0 ? "secondary" : "default"}
-                    className="w-full font-medium transition-all duration-200 hover:shadow-md"
+                    className="flex-1 font-medium transition-all duration-200 hover:shadow-md"
                     size="lg"
                     onClick={() => addToCart(product.id, 1)}
                     disabled={addingToCart[product.id] || product.quantity <= 0}

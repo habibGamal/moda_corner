@@ -35,7 +35,7 @@ export default function ProductActions({
         ? selectedVariant.quantity <= 0
         : Boolean(product.total_quantity && product.total_quantity <= 0);
 
-    const isInWishlist = product.isInWishlist;
+    const isInWishlist = product.is_in_wishlist;
 
     const addToWishlist = () => {
         router.post(
