@@ -34,7 +34,8 @@
     .dark {
         --background: 0 0% 6%;
         --foreground: 151 55% 91.2%;
-        --card: 154 64% 8%;
+        /* Previously very saturated green; use a darker, more muted tone for card background */
+        --card: 150 20% 6%;
         --card-foreground: 151 55% 91.2%;
         --popover: 154 64% 8%;
         --popover-foreground: 151 55% 91.2%;
