@@ -4,9 +4,9 @@ namespace App\Filament\Resources\GovResource\Pages;
 
 use App\Filament\Resources\GovResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ViewRecord;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
+use Filament\Resources\Pages\ViewRecord;
 
 class ViewGov extends ViewRecord
 {

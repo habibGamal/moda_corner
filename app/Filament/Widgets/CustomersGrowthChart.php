@@ -37,7 +37,7 @@ class CustomersGrowthChart extends ChartWidget
                 $dayNewCustomers = \App\Models\User::whereDate('created_at', $date)->count();
 
                 $dayActiveCustomers = \App\Models\User::query()
-                    ->whereHas('orders', function($query) use ($date) {
+                    ->whereHas('orders', function ($query) use ($date) {
                         $query->whereDate('created_at', $date);
                     })
                     ->count();
@@ -54,12 +54,12 @@ class CustomersGrowthChart extends ChartWidget
                     $weekEnd = $end;
                 }
 
-                $labels[] = $date->format('M d') . ' - ' . $weekEnd->format('M d');
+                $labels[] = $date->format('M d').' - '.$weekEnd->format('M d');
 
                 $weekNewCustomers = \App\Models\User::whereBetween('created_at', [$date, $weekEnd])->count();
 
                 $weekActiveCustomers = \App\Models\User::query()
-                    ->whereHas('orders', function($query) use ($date, $weekEnd) {
+                    ->whereHas('orders', function ($query) use ($date, $weekEnd) {
                         $query->whereBetween('created_at', [$date, $weekEnd]);
                     })
                     ->count();

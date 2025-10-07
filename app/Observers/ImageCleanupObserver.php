@@ -19,7 +19,7 @@ class ImageCleanupObserver
     {
         $imageAttributeName = method_exists($model, 'getImageAttributeName') ? $model->getImageAttributeName() : 'image';
 
-        if (!is_null($model->getOriginal($imageAttributeName))) {
+        if (! is_null($model->getOriginal($imageAttributeName))) {
             Storage::disk('public')->delete($model->getOriginal($imageAttributeName));
         }
     }

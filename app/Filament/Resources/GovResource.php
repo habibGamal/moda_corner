@@ -20,6 +20,7 @@ class GovResource extends Resource
     protected static ?string $recordTitleAttribute = 'name_ar';
 
     protected static ?string $label = 'المحافظة';
+
     protected static ?string $pluralLabel = 'المحافظات';
 
     protected static ?string $navigationGroup = 'إدارة المناطق';

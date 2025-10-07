@@ -2,9 +2,9 @@
 
 namespace App\Filament\Widgets;
 
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class ProductsInsightsOverview extends BaseWidget
 {
@@ -19,10 +19,10 @@ class ProductsInsightsOverview extends BaseWidget
 
         // Base query for products
         $productsQuery = \App\Models\Product::query();        // Apply filters
-        if (!empty($category)) {
+        if (! empty($category)) {
             $productsQuery->whereIn('category_id', $category);
         }
-        if (!empty($status)) {
+        if (! empty($status)) {
             // Convert status to is_active boolean
             if (in_array('active', $status)) {
                 $productsQuery->where('is_active', true);
@@ -46,10 +46,10 @@ class ProductsInsightsOverview extends BaseWidget
 
         // Calculate conversion rate (views to sales)
         $totalSales = \App\Models\OrderItem::query()
-            ->whereHas('product', function($query) use ($productsQuery) {
+            ->whereHas('product', function ($query) use ($productsQuery) {
                 $query->whereIn('id', $productsQuery->pluck('id'));
             })
-            ->whereHas('order', function($query) use ($startDate, $endDate) {
+            ->whereHas('order', function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             })
             ->sum('quantity');
@@ -57,23 +57,23 @@ class ProductsInsightsOverview extends BaseWidget
         $conversionRate = $totalViews > 0 ? round(($totalSales / $totalViews) * 100, 2) : 0;
 
         return [
-            Stat::make('متوسط سعر المنتج', number_format(round($avgPrice, 2)) . ' ج.م')
-                ->description("متوسط أسعار المنتجات")
+            Stat::make('متوسط سعر المنتج', number_format(round($avgPrice, 2)).' ج.م')
+                ->description('متوسط أسعار المنتجات')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('success'),
 
             Stat::make('إجمالي المشاهدات', number_format($totalViews))
-                ->description("مشاهدات المنتجات")
+                ->description('مشاهدات المنتجات')
                 ->descriptionIcon('heroicon-m-eye')
                 ->color('info'),
 
             Stat::make('منتجات جديدة', number_format($newProducts))
-                ->description("أضيفت خلال الفترة المحددة")
+                ->description('أضيفت خلال الفترة المحددة')
                 ->descriptionIcon('heroicon-m-plus-circle')
                 ->color('primary'),
 
-            Stat::make('متوسط التقييم', number_format(round($avgRating, 1), 1) . '/5')
-                ->description("تقييم المنتجات")
+            Stat::make('متوسط التقييم', number_format(round($avgRating, 1), 1).'/5')
+                ->description('تقييم المنتجات')
                 ->descriptionIcon('heroicon-m-star')
                 ->color('warning'),
         ];

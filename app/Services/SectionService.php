@@ -9,29 +9,21 @@ use App\Models\Section;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class SectionService
 {
     /**
      * The feed scroll service for handling product pagination
-     *
-     * @var FeedScrollService
      */
     protected FeedScrollService $feedScrollService;
 
     /**
      * The recommendation section service for personalized product recommendations
-     *
-     * @var RecommendationSectionService
      */
     protected RecommendationSectionService $recommendationSectionService;
 
     /**
      * Create a new section service instance.
-     *
-     * @param FeedScrollService $feedScrollService
-     * @param RecommendationSectionService $recommendationSectionService
      */
     public function __construct(
         FeedScrollService $feedScrollService,
@@ -44,7 +36,7 @@ class SectionService
     /**
      * Get all sections with their products for the home page.
      *
-     * @param int $perPage Number of products per page
+     * @param  int  $perPage  Number of products per page
      * @return array{sections: Collection, sectionsData: Collection} Data structure with sections and their paginated products
      */
     public function getHomeSections(int $perPage = 10): array
@@ -53,7 +45,7 @@ class SectionService
         $realSections = $this->getRealSections();
         $virtualSections = $this->getVirtualSections();
         $allSections = $realSections->merge($virtualSections)->sortBy(
-            fn($section) => $section->sort_order
+            fn ($section) => $section->sort_order
         )->values();
 
         // Load products for each active section with pagination
@@ -67,11 +59,6 @@ class SectionService
 
     /**
      * Load products for all sections with pagination
-     *
-     * @param Collection $realSections
-     * @param Collection $virtualSections
-     * @param int $perPage
-     * @return Collection
      */
     private function loadSectionProducts(Collection $realSections, Collection $virtualSections, int $perPage): Collection
     {
@@ -123,7 +110,6 @@ class SectionService
     /**
      * Get sections by type
      *
-     * @param SectionType $type
      * @return Collection<int, Section>
      */
     private function getSectionsByType(SectionType $type): Collection
@@ -137,9 +123,8 @@ class SectionService
     /**
      * Get a specific section by ID and its products with pagination.
      *
-     * @param int $id
-     * @param bool $paginate Whether to paginate the products
-     * @param int $perPage Number of products per page if paginated
+     * @param  bool  $paginate  Whether to paginate the products
+     * @param  int  $perPage  Number of products per page if paginated
      * @return array|Section|null Section with products or paginated feed data
      */
     public function getProductsInRealSection(int $id, bool $paginate = false, int $perPage = 10): array|Section|null
@@ -147,13 +132,14 @@ class SectionService
         // First, get the section
         $section = $this->findActiveSection($id);
 
-        if (!$section) {
+        if (! $section) {
             return null;
         }
 
         // If pagination is requested, use FeedScrollService
         if ($paginate) {
             $query = $section->products()->getQuery()->forCards();
+
             // dd($query->toSql());
             return $this->paginateProducts($query, (string) $section->id, $perPage);
         }
@@ -162,7 +148,7 @@ class SectionService
         $section->load([
             'products' => function ($query) {
                 $query->forCards();
-            }
+            },
         ]);
 
         return $section;
@@ -170,9 +156,6 @@ class SectionService
 
     /**
      * Find an active section by ID
-     *
-     * @param int $id
-     * @return Section|null
      */
     private function findActiveSection(int $id): ?Section
     {
@@ -183,11 +166,6 @@ class SectionService
 
     /**
      * Paginate products query using FeedScrollService
-     *
-     * @param Builder $query
-     * @param string $sectionId
-     * @param int $perPage
-     * @return array
      */
     private function paginateProducts(Builder $query, string $sectionId, int $perPage): array
     {
@@ -202,10 +180,10 @@ class SectionService
     /**
      * Get products for virtual sections with pagination.
      *
-     * @param int $id Section ID
-     * @param string $section_name The virtual section type to fetch
-     * @param bool $paginate Whether to paginate the products
-     * @param int $perPage Number of products per page if paginated
+     * @param  int  $id  Section ID
+     * @param  string  $section_name  The virtual section type to fetch
+     * @param  bool  $paginate  Whether to paginate the products
+     * @param  int  $perPage  Number of products per page if paginated
      * @return array Paginated feed data
      */
     public function getProductsInVirtualSection(int $id, string $section_name, bool $paginate = false, int $perPage = 10): array
@@ -224,9 +202,6 @@ class SectionService
 
     /**
      * Get the appropriate query based on virtual section name
-     *
-     * @param string $section_name
-     * @return Builder
      */
     private function getVirtualSectionQuery(string $section_name): Builder
     {
@@ -242,8 +217,6 @@ class SectionService
 
     /**
      * Get query for featured products
-     *
-     * @return Builder
      */
     protected function getFeaturedProductsSectionQuery(): Builder
     {
@@ -253,8 +226,6 @@ class SectionService
 
     /**
      * Get query for new arrivals products (created in the last 7 days)
-     *
-     * @return Builder
      */
     protected function getNewProductsSectionQuery(): Builder
     {
@@ -264,8 +235,6 @@ class SectionService
 
     /**
      * Get query for products on sale
-     *
-     * @return Builder
      */
     protected function getOnSaleProductsSectionQuery(): Builder
     {
@@ -275,8 +244,6 @@ class SectionService
 
     /**
      * Get query for best selling products (ordered by total sales quantity)
-     *
-     * @return Builder
      */
     protected function getBestSellersProductsSectionQuery(): Builder
     {
@@ -306,8 +273,6 @@ class SectionService
      * - Products related to items in the user's cart
      * - Featured products if no user history available
      * - Recently added products as a fallback
-     *
-     * @return Builder
      */
     protected function getRecommendedProductsSectionQuery(): Builder
     {

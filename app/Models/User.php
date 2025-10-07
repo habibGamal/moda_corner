@@ -13,7 +13,7 @@ use NotificationChannels\WebPush\HasPushSubscriptions;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable , HasPushSubscriptions;
+    use HasFactory, HasPushSubscriptions , Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -80,5 +80,13 @@ class User extends Authenticatable implements FilamentUser
     public function wishlistItems()
     {
         return $this->hasMany(WishlistItem::class);
+    }
+
+    /**
+     * Get the reviews associated with the user.
+     */
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class);
     }
 }

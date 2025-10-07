@@ -37,7 +37,7 @@ class PromotionReward extends Model
      */
     public function getRelatedEntity()
     {
-        return match($this->type) {
+        return match ($this->type) {
             PromotionRewardType::PRODUCT => Product::find($this->entity_id),
             PromotionRewardType::CATEGORY => Category::find($this->entity_id),
             PromotionRewardType::BRAND => Brand::find($this->entity_id),

@@ -35,8 +35,6 @@ class SectionFactory extends Factory
 
     /**
      * Configure the factory to create a REAL section.
-     *
-     * @return static
      */
     public function real(): static
     {
@@ -49,8 +47,6 @@ class SectionFactory extends Factory
 
     /**
      * Configure the factory to create a VIRTUAL section.
-     *
-     * @return static
      */
     public function virtual(): static
     {

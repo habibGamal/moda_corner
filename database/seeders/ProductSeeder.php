@@ -161,7 +161,7 @@ class ProductSeeder extends Seeder
             // Create one variant for each product
             ProductVariant::create([
                 'product_id' => $product->id,
-                'sku' => 'SKU-' . strtoupper(Str::random(8)) . '-' . $product->id,
+                'sku' => 'SKU-'.strtoupper(Str::random(8)).'-'.$product->id,
                 'images' => [$availableImages[$imageIndex]], // Use one image per variant
                 'quantity' => rand(5, 50),
                 'price' => null, // Use product price

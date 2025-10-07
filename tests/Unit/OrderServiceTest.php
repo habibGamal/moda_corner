@@ -1,7 +1,6 @@
 <?php
 
 use App\DTOs\OrderPlacementData;
-use App\DTOs\OrderEvaluationData;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
@@ -14,7 +13,6 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
-use App\Models\Promotion;
 use App\Models\ShippingCost;
 use App\Models\User;
 use App\Services\CartService;
@@ -40,19 +38,19 @@ describe('placeOrderFromCart', function () {
         $product = Product::factory()->create(['price' => 100]);
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $gov = Gov::factory()->create();
         $area = Area::factory()->create(['gov_id' => $gov->id]);
         $address = Address::factory()->create([
             'user_id' => $this->user->id,
-            'area_id' => $area->id
+            'area_id' => $area->id,
         ]);
 
         $shippingCost = ShippingCost::factory()->create([
             'area_id' => $area->id,
-            'value' => 15.0
+            'value' => 15.0,
         ]);
 
         // Add items to cart
@@ -61,7 +59,7 @@ describe('placeOrderFromCart', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => $variant->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $orderData = new OrderPlacementData(
@@ -95,19 +93,19 @@ describe('placeOrderFromCart', function () {
         $product = Product::factory()->create(['price' => 100]);
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $gov = Gov::factory()->create();
         $area = Area::factory()->create(['gov_id' => $gov->id]);
         $address = Address::factory()->create([
             'user_id' => $this->user->id,
-            'area_id' => $area->id
+            'area_id' => $area->id,
         ]);
 
         $shippingCost = ShippingCost::factory()->create([
             'area_id' => $area->id,
-            'value' => 15.0
+            'value' => 15.0,
         ]);
 
         // Add items to cart
@@ -116,7 +114,7 @@ describe('placeOrderFromCart', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => $variant->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $orderData = new OrderPlacementData(
@@ -136,7 +134,7 @@ describe('placeOrderFromCart', function () {
         $area = Area::factory()->create(['gov_id' => $gov->id]);
         $address = Address::factory()->create([
             'user_id' => $this->user->id,
-            'area_id' => $area->id
+            'area_id' => $area->id,
         ]);
 
         $orderData = new OrderPlacementData(
@@ -155,7 +153,7 @@ describe('placeOrderFromCart', function () {
         CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'quantity' => 1
+            'quantity' => 1,
         ]);
 
         $orderData = new OrderPlacementData(
@@ -188,19 +186,19 @@ describe('getOrderById', function () {
         $product = Product::factory()->create(['price' => 150]);
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 5
+            'quantity' => 5,
         ]);
 
         $gov = Gov::factory()->create();
         $area = Area::factory()->create(['gov_id' => $gov->id]);
         $address = Address::factory()->create([
             'user_id' => $this->user->id,
-            'area_id' => $area->id
+            'area_id' => $area->id,
         ]);
 
         $order = Order::factory()->create([
             'user_id' => $this->user->id,
-            'shipping_address_id' => $address->id
+            'shipping_address_id' => $address->id,
         ]);
 
         OrderItem::factory()->create([
@@ -209,7 +207,7 @@ describe('getOrderById', function () {
             'variant_id' => $variant->id,
             'quantity' => 2,
             'unit_price' => 150,
-            'subtotal' => 300
+            'subtotal' => 300,
         ]);
 
         $result = $this->orderService->getOrderById($order->id);
@@ -277,17 +275,17 @@ describe('getUserOrders', function () {
     it('returns orders sorted by creation date descending', function () {
         $order1 = Order::factory()->create([
             'user_id' => $this->user->id,
-            'created_at' => now()->subDays(3)
+            'created_at' => now()->subDays(3),
         ]);
 
         $order2 = Order::factory()->create([
             'user_id' => $this->user->id,
-            'created_at' => now()->subDays(1)
+            'created_at' => now()->subDays(1),
         ]);
 
         $order3 = Order::factory()->create([
             'user_id' => $this->user->id,
-            'created_at' => now()->subDays(2)
+            'created_at' => now()->subDays(2),
         ]);
 
         $result = $this->orderService->getUserOrders();
@@ -320,23 +318,23 @@ describe('Order Service Integration', function () {
 
         $variant1 = ProductVariant::factory()->create([
             'product_id' => $product1->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
         $variant2 = ProductVariant::factory()->create([
             'product_id' => $product2->id,
-            'quantity' => 5
+            'quantity' => 5,
         ]);
 
         $gov = Gov::factory()->create();
         $area = Area::factory()->create(['gov_id' => $gov->id]);
         $address = Address::factory()->create([
             'user_id' => $this->user->id,
-            'area_id' => $area->id
+            'area_id' => $area->id,
         ]);
 
         $shippingCost = ShippingCost::factory()->create([
             'area_id' => $area->id,
-            'value' => 25.0
+            'value' => 25.0,
         ]);
 
         // Add items to cart
@@ -345,14 +343,14 @@ describe('Order Service Integration', function () {
             'cart_id' => $cart->id,
             'product_id' => $product1->id,
             'product_variant_id' => $variant1->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product2->id,
             'product_variant_id' => $variant2->id,
-            'quantity' => 1
+            'quantity' => 1,
         ]);
 
         // Place order

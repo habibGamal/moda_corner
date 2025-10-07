@@ -17,7 +17,8 @@ class PromotionFactory extends Factory
      * Define the model's default state.
      *
      * @return array<string, mixed>
-     */    public function definition(): array
+     */
+    public function definition(): array
     {
         return [
             'name_en' => $this->faker->words(3, true),
@@ -73,32 +74,39 @@ class PromotionFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $usageLimit = $this->faker->numberBetween(1, 10);
+
             return [
                 'usage_limit' => $usageLimit,
                 'usage_count' => $usageLimit,
             ];
         });
-    }    /**
+    }
+
+    /**
      * Create a percentage promotion.
      */
-    public function percentage(float $percentage = null): static
+    public function percentage(?float $percentage = null): static
     {
         return $this->state(fn (array $attributes) => [
             'type' => PromotionType::PERCENTAGE,
             'value' => $percentage ?? $this->faker->numberBetween(10, 50),
             'min_order_value' => null,
         ]);
-    }    /**
+    }
+
+    /**
      * Create a fixed amount promotion.
      */
-    public function fixed(float $amount = null): static
+    public function fixed(?float $amount = null): static
     {
         return $this->state(fn (array $attributes) => [
             'type' => PromotionType::FIXED,
             'value' => $amount ?? $this->faker->numberBetween(10, 100),
             'min_order_value' => null,
         ]);
-    }    /**
+    }
+
+    /**
      * Create a free shipping promotion.
      */
     public function freeShipping(): static
@@ -108,7 +116,9 @@ class PromotionFactory extends Factory
             'value' => null,
             'min_order_value' => null,
         ]);
-    }    /**
+    }
+
+    /**
      * Create a buy X get Y promotion.
      */
     public function buyXGetY(): static
@@ -118,7 +128,9 @@ class PromotionFactory extends Factory
             'value' => null,
             'min_order_value' => null,
         ]);
-    }    /**
+    }
+
+    /**
      * Create a promotion without a code (automatic promotion).
      */
     public function automatic(): static

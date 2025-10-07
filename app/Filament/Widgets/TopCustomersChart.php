@@ -19,9 +19,9 @@ class TopCustomersChart extends ChartWidget
         $endDate = $this->filters['endDate'] ?? now();
 
         $topCustomers = \App\Models\User::query()
-            ->whereHas('orders', function($query) use ($startDate, $endDate) {
+            ->whereHas('orders', function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
-            })            ->withSum(['orders' => function($query) use ($startDate, $endDate) {
+            })->withSum(['orders' => function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             }], 'total')
             ->orderByDesc('orders_sum_total')
@@ -49,7 +49,7 @@ class TopCustomersChart extends ChartWidget
             $customerName = $customer->name ?? 'عميل غير محدد';
             // Truncate long names
             if (strlen($customerName) > 20) {
-                $customerName = substr($customerName, 0, 17) . '...';
+                $customerName = substr($customerName, 0, 17).'...';
             }
 
             $labels[] = $customerName;

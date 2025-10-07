@@ -27,14 +27,16 @@ class RestoreDatabaseSnapshot extends Command
     public function handle()
     {
         $directoryPath = public_path('sqlfiles');
-        if (!file_exists($directoryPath)) {
+        if (! file_exists($directoryPath)) {
             $this->error('The sqlfiles directory does not exist.');
+
             return;
         }
 
         $files = File::files($directoryPath);
         if (empty($files)) {
             $this->error('No SQL files found in the sqlfiles directory.');
+
             return;
         }
 

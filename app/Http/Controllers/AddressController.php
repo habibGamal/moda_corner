@@ -13,7 +13,6 @@ class AddressController extends Controller
     /**
      * Store a newly created address in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -30,7 +29,7 @@ class AddressController extends Controller
             ], 422);
         }
 
-        $address = new Address();
+        $address = new Address;
         $address->area_id = $request->area_id;
         $address->content = $request->content;
         $address->phone = $request->phone;
@@ -53,7 +52,7 @@ class AddressController extends Controller
         $areas = Area::with('gov')->get();
 
         return response()->json([
-            'areas' => $areas
+            'areas' => $areas,
         ]);
     }
 }

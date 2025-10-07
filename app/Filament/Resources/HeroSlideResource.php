@@ -9,7 +9,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
 class HeroSlideResource extends Resource
 {
@@ -22,6 +21,7 @@ class HeroSlideResource extends Resource
     protected static ?int $navigationSort = 80;
 
     protected static ?string $label = 'شريحة العرض';
+
     protected static ?string $pluralLabel = 'شرائح العرض';
 
     protected static ?string $recordTitleAttribute = 'title_ar';

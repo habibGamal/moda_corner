@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Enums\PromotionRewardType;
-use App\Models\PromotionReward;
 use App\Models\Promotion;
+use App\Models\PromotionReward;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -33,7 +33,7 @@ class PromotionRewardFactory extends Factory
     /**
      * Create a product reward.
      */
-    public function product(int $productId = null, int $quantity = null, float $discountPercentage = null): static
+    public function product(?int $productId = null, ?int $quantity = null, ?float $discountPercentage = null): static
     {
         return $this->state(fn (array $attributes) => [
             'type' => PromotionRewardType::PRODUCT,
@@ -46,7 +46,7 @@ class PromotionRewardFactory extends Factory
     /**
      * Create a category reward.
      */
-    public function category(int $categoryId = null, int $quantity = null, float $discountPercentage = null): static
+    public function category(?int $categoryId = null, ?int $quantity = null, ?float $discountPercentage = null): static
     {
         return $this->state(fn (array $attributes) => [
             'type' => PromotionRewardType::CATEGORY,
@@ -59,7 +59,7 @@ class PromotionRewardFactory extends Factory
     /**
      * Create a brand reward.
      */
-    public function brand(int $brandId = null, int $quantity = null, float $discountPercentage = null): static
+    public function brand(?int $brandId = null, ?int $quantity = null, ?float $discountPercentage = null): static
     {
         return $this->state(fn (array $attributes) => [
             'type' => PromotionRewardType::BRAND,

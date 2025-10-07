@@ -2,41 +2,31 @@
 
 namespace App\Services;
 
-use App\DTOs\OrderPlacementData;
 use App\DTOs\OrderEvaluationData;
+use App\DTOs\OrderPlacementData;
 use App\Enums\OrderStatus;
-use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
-use App\Enums\PromotionType;
-use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Address;
-use App\Models\ShippingCost;
+use App\Models\Order;
 use App\Models\Promotion;
-use App\Services\InventoryManagementService;
-use App\Services\AdminNotificationService;
+use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Exception;
 
 class OrderService
 {
     protected CartService $cartService;
+
     protected OrderEvaluationService $orderEvaluationService;
+
     protected InventoryManagementService $inventoryService;
+
     protected AdminNotificationService $adminNotificationService;
 
     /**
      * Create a new service instance.
-     *
-     * @param CartService $cartService
-     * @param OrderEvaluationService $orderEvaluationService
-     * @param InventoryManagementService $inventoryService
-     * @param AdminNotificationService $adminNotificationService
      */
     public function __construct(
         CartService $cartService,
@@ -53,9 +43,9 @@ class OrderService
     /**
      * Place a new order from the user's cart
      *
-     * @param OrderPlacementData $orderData The data for placing an order
-     *
+     * @param  OrderPlacementData  $orderData  The data for placing an order
      * @return Order The created order
+     *
      * @throws ModelNotFoundException If the address doesn't exist
      * @throws Exception If there was an error processing the order
      */
@@ -103,11 +93,11 @@ class OrderService
     /**
      * Create the order record in the database
      *
-     * @param mixed $user The authenticated user
-     * @param Address $address The shipping address
-     * @param OrderEvaluationData $orderEvaluation The order calculation results
-     * @param OrderPlacementData $orderData The order placement data
-     * @param Promotion|null $appliedPromotion The applied promotion
+     * @param  mixed  $user  The authenticated user
+     * @param  Address  $address  The shipping address
+     * @param  OrderEvaluationData  $orderEvaluation  The order calculation results
+     * @param  OrderPlacementData  $orderData  The order placement data
+     * @param  Promotion|null  $appliedPromotion  The applied promotion
      * @return Order The created order
      */
     protected function createOrderRecord(
@@ -138,8 +128,6 @@ class OrderService
     /**
      * Get an order by its ID
      *
-     * @param int $orderId
-     * @return Order
      * @throws ModelNotFoundException If the order doesn't exist
      */
     public function getOrderById(int $orderId): Order
@@ -154,8 +142,7 @@ class OrderService
     /**
      * Get all orders for the current user
      *
-     * @param int|null $limit Optional limit for pagination
-     * @return LengthAwarePaginator
+     * @param  int|null  $limit  Optional limit for pagination
      */
     public function getUserOrders(?int $limit = 10): LengthAwarePaginator
     {
@@ -171,13 +158,14 @@ class OrderService
      * Get authenticated user or throw exception
      *
      * @return mixed The authenticated user
+     *
      * @throws Exception If user is not authenticated
      */
     protected function getAuthenticatedUser()
     {
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             throw new Exception('User must be authenticated to perform this action');
         }
 
@@ -188,6 +176,7 @@ class OrderService
      * Validate that the cart is not empty
      *
      * @return mixed The cart
+     *
      * @throws Exception If cart is empty
      */
     protected function validateCartNotEmpty()

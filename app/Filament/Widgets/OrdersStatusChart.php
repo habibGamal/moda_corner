@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\OrderStatus;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
@@ -21,9 +20,10 @@ class OrdersStatusChart extends ChartWidget
         $orderStatus = $this->filters['orderStatus'] ?? [];
 
         $baseQuery = \App\Models\Order::query()
-            ->when($startDate, fn($query) => $query->where('created_at', '>=', $startDate))
-            ->when($endDate, fn($query) => $query->where('created_at', '<=', $endDate))
-            ->when(!empty($orderStatus), fn($query) => $query->whereIn('order_status', $orderStatus));        $statusCounts = [
+            ->when($startDate, fn ($query) => $query->where('created_at', '>=', $startDate))
+            ->when($endDate, fn ($query) => $query->where('created_at', '<=', $endDate))
+            ->when(! empty($orderStatus), fn ($query) => $query->whereIn('order_status', $orderStatus));
+        $statusCounts = [
             'processing' => $baseQuery->clone()->where('order_status', \App\Enums\OrderStatus::PROCESSING)->count(),
             'shipped' => $baseQuery->clone()->where('order_status', \App\Enums\OrderStatus::SHIPPED)->count(),
             'delivered' => $baseQuery->clone()->where('order_status', \App\Enums\OrderStatus::DELIVERED)->count(),

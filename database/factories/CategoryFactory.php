@@ -19,6 +19,7 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         $name_en = $this->faker->unique()->words(2, true);
+
         return [
             'name_en' => $name_en,
             'name_ar' => $this->faker->unique()->words(2, true),

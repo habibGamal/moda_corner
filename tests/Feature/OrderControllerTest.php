@@ -139,7 +139,7 @@ describe('show', function () {
         $response = $this->get(route('orders.show', 999999));
 
         $response->assertRedirect(route('orders.index'))
-                ->assertSessionHas('error', 'Order not found.');
+            ->assertSessionHas('error', 'Order not found.');
     });
 
     it('allows user to view their own orders only', function () {
@@ -158,7 +158,7 @@ describe('show', function () {
 
         // Should redirect because the order doesn't belong to the current user
         $response->assertRedirect(route('orders.index'))
-                ->assertSessionHas('error', 'Order not found.');
+            ->assertSessionHas('error', 'Order not found.');
     });
 });
 
@@ -187,7 +187,7 @@ describe('checkout', function () {
             ->has('cartSummary')
             ->has('paymentMethods')
             ->where('cartSummary.totalItems', 2)
-            ->where('cartSummary.totalPrice', fn($value) => (float)$value === 200.0)
+            ->where('cartSummary.totalPrice', fn ($value) => (float) $value === 200.0)
             ->where('paymentMethods', ['cash_on_delivery', 'credit_card', 'wallet'])
             ->where('orderSummary', null) // No address selected initially
         );
@@ -216,7 +216,7 @@ describe('checkout', function () {
         $response = $this->get(route('checkout.index'));
 
         $response->assertRedirect(route('cart.index'))
-                ->assertSessionHas('error', 'Your cart is empty. Please add items to your cart before checking out.');
+            ->assertSessionHas('error', 'Your cart is empty. Please add items to your cart before checking out.');
     });
 });
 
@@ -250,7 +250,7 @@ describe('store', function () {
         expect($order->shipping_address_id)->toBe($this->address->id);
 
         $response->assertRedirect(route('orders.show', $order->id))
-                ->assertSessionHas('success', 'Order placed successfully!');
+            ->assertSessionHas('success', 'Order placed successfully!');
     });
 
     it('redirects to payment initiation for credit_card payment', function () {
@@ -364,12 +364,13 @@ describe('cancel', function () {
         expect($order->order_status)->toBe(OrderStatus::CANCELLED);
 
         $response->assertRedirect(route('orders.index'))
-                ->assertSessionHas('success', 'Order cancelled successfully.');
-    });    it('handles order not found error', function () {
+            ->assertSessionHas('success', 'Order cancelled successfully.');
+    });
+    it('handles order not found error', function () {
         $response = $this->patch(route('orders.cancel', 999999));
 
         $response->assertRedirect(route('orders.index'))
-                ->assertSessionHas('error', 'Order not found.');
+            ->assertSessionHas('error', 'Order not found.');
     });
 
     it('prevents cancelling other users orders', function () {
@@ -387,7 +388,7 @@ describe('cancel', function () {
         $response = $this->patch(route('orders.cancel', $otherOrder->id));
 
         $response->assertRedirect(route('orders.index'))
-                ->assertSessionHas('error', 'Order not found.');        // Verify order was not cancelled
+            ->assertSessionHas('error', 'Order not found.');        // Verify order was not cancelled
         $otherOrder->refresh();
         expect($otherOrder->order_status)->toBe(OrderStatus::PROCESSING);
     });
@@ -402,7 +403,7 @@ describe('cancel', function () {
         $response = $this->patch(route('orders.cancel', $order->id));
 
         $response->assertRedirect()
-                ->assertSessionHas('error');
+            ->assertSessionHas('error');
 
         // Verify order status was not changed
         $order->refresh();
@@ -422,7 +423,8 @@ describe('Order Flow Integration', function () {
         ]);
 
         // Step 2: View checkout page
-        $checkoutResponse = $this->get(route('checkout.index', ['address_id' => $this->address->id]));        $checkoutResponse->assertInertia(fn (AssertableInertia $page) => $page
+        $checkoutResponse = $this->get(route('checkout.index', ['address_id' => $this->address->id]));
+        $checkoutResponse->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Checkout/Index')
             ->has('orderSummary')
             ->where('orderSummary.total', function ($value) {
@@ -509,7 +511,7 @@ describe('Order Flow Integration', function () {
         $order = Order::where('user_id', $this->user->id)->first();        // Cancel the order
         $cancelResponse = $this->patch(route('orders.cancel', $order->id));
         $cancelResponse->assertRedirect(route('orders.index'))
-                      ->assertSessionHas('success');
+            ->assertSessionHas('success');
 
         // Verify cancellation
         $order->refresh();

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class BrandController extends Controller
@@ -19,7 +18,7 @@ class BrandController extends Controller
             ->get();
 
         return Inertia::render('Brands/Index', [
-            'brands' => $brands
+            'brands' => $brands,
         ]);
     }
 }

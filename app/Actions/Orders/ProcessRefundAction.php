@@ -19,8 +19,6 @@ class ProcessRefundAction
     /**
      * Process refund for a cancelled order (admin action)
      *
-     * @param Order $order
-     * @return Order
      * @throws \Exception
      */
     public function execute(Order $order): Order

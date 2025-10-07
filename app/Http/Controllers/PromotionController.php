@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Services\CartService;
 use App\Services\PromotionService;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class PromotionController extends Controller
 {
     protected PromotionService $promotionService;
+
     protected CartService $cartService;
 
     public function __construct(PromotionService $promotionService, CartService $cartService)
@@ -22,7 +21,6 @@ class PromotionController extends Controller
     /**
      * Apply a promotion code to the user's cart
      *
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function applyPromotion(Request $request)

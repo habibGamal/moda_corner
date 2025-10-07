@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\HeroSlide;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class HeroSlideSeeder extends Seeder
@@ -47,4 +46,4 @@ class HeroSlideSeeder extends Seeder
             'display_order' => 3,
         ]);
     }
-} 
+}

@@ -76,7 +76,7 @@ class Promotion extends Model
         $now = now();
 
         // Check if promotion is active
-        if (!$this->is_active) {
+        if (! $this->is_active) {
             return false;
         }
 

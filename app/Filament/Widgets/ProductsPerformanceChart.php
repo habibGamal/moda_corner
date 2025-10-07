@@ -32,23 +32,24 @@ class ProductsPerformanceChart extends ChartWidget
         if ($days <= 30) {
             // Daily data for periods up to 30 days
             for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
-                $labels[] = $date->format('M d');                $dayRevenue = \App\Models\OrderItem::query()
-                    ->whereHas('order', function($query) use ($date) {
+                $labels[] = $date->format('M d');
+                $dayRevenue = \App\Models\OrderItem::query()
+                    ->whereHas('order', function ($query) use ($date) {
                         $query->whereDate('created_at', $date);
                     })
-                    ->when(!empty($category), function($query) use ($category) {
-                        $query->whereHas('product', function($productQuery) use ($category) {
+                    ->when(! empty($category), function ($query) use ($category) {
+                        $query->whereHas('product', function ($productQuery) use ($category) {
                             $productQuery->whereIn('category_id', $category);
                         });
                     })
                     ->sum(\DB::raw('quantity * unit_price'));
 
                 $daySales = \App\Models\OrderItem::query()
-                    ->whereHas('order', function($query) use ($date) {
+                    ->whereHas('order', function ($query) use ($date) {
                         $query->whereDate('created_at', $date);
                     })
-                    ->when(!empty($category), function($query) use ($category) {
-                        $query->whereHas('product', function($productQuery) use ($category) {
+                    ->when(! empty($category), function ($query) use ($category) {
+                        $query->whereHas('product', function ($productQuery) use ($category) {
                             $productQuery->whereIn('category_id', $category);
                         });
                     })
@@ -66,23 +67,24 @@ class ProductsPerformanceChart extends ChartWidget
                     $weekEnd = $end;
                 }
 
-                $labels[] = $date->format('M d') . ' - ' . $weekEnd->format('M d');                $weekRevenue = \App\Models\OrderItem::query()
-                    ->whereHas('order', function($query) use ($date, $weekEnd) {
+                $labels[] = $date->format('M d').' - '.$weekEnd->format('M d');
+                $weekRevenue = \App\Models\OrderItem::query()
+                    ->whereHas('order', function ($query) use ($date, $weekEnd) {
                         $query->whereBetween('created_at', [$date, $weekEnd]);
                     })
-                    ->when(!empty($category), function($query) use ($category) {
-                        $query->whereHas('product', function($productQuery) use ($category) {
+                    ->when(! empty($category), function ($query) use ($category) {
+                        $query->whereHas('product', function ($productQuery) use ($category) {
                             $productQuery->whereIn('category_id', $category);
                         });
                     })
                     ->sum(\DB::raw('quantity * unit_price'));
 
                 $weekSales = \App\Models\OrderItem::query()
-                    ->whereHas('order', function($query) use ($date, $weekEnd) {
+                    ->whereHas('order', function ($query) use ($date, $weekEnd) {
                         $query->whereBetween('created_at', [$date, $weekEnd]);
                     })
-                    ->when(!empty($category), function($query) use ($category) {
-                        $query->whereHas('product', function($productQuery) use ($category) {
+                    ->when(! empty($category), function ($query) use ($category) {
+                        $query->whereHas('product', function ($productQuery) use ($category) {
                             $productQuery->whereIn('category_id', $category);
                         });
                     })

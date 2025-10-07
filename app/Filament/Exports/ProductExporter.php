@@ -13,6 +13,7 @@ class ProductExporter extends Exporter
 {
     // Use ProductVariant as base model to export each variant as a row
     protected static ?string $model = ProductVariant::class;
+
     protected static ?string $label = 'تصدير متغيرات المنتجات';
 
     public static function getColumns(): array
@@ -38,18 +39,21 @@ class ProductExporter extends Exporter
             ExportColumn::make('images')
                 ->label('الصور')
                 ->formatStateUsing(function ($state): string {
-                    if (!$state) return '';
+                    if (! $state) {
+                        return '';
+                    }
+
                     return is_array($state) ? implode(',', $state) : (string) $state;
                 }),
             ExportColumn::make('is_default')
                 ->label('افتراضي')
-                ->formatStateUsing(fn(bool $state) => $state ? 'نعم' : 'لا'),
+                ->formatStateUsing(fn (bool $state) => $state ? 'نعم' : 'لا'),
             ExportColumn::make('is_active')
                 ->label('نشط')
-                ->formatStateUsing(fn(bool $state) => $state ? 'نعم' : 'لا'),
+                ->formatStateUsing(fn (bool $state) => $state ? 'نعم' : 'لا'),
             ExportColumn::make('additional_attributes')
                 ->label('خصائص إضافية')
-                ->formatStateUsing(fn($state): string => $state ? json_encode($state, JSON_UNESCAPED_UNICODE) : ''),
+                ->formatStateUsing(fn ($state): string => $state ? json_encode($state, JSON_UNESCAPED_UNICODE) : ''),
             ExportColumn::make('created_at')->label('تاريخ الإنشاء'),
             ExportColumn::make('updated_at')->label('تاريخ التحديث'),
         ];
@@ -65,10 +69,10 @@ class ProductExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'تم تصدير ' . number_format($export->successful_rows) . ' متغير منتج بنجاح.';
+        $body = 'تم تصدير '.number_format($export->successful_rows).' متغير منتج بنجاح.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' عنصر فشل في التصدير.';
+            $body .= ' '.number_format($failedRowsCount).' عنصر فشل في التصدير.';
         }
 
         return $body;

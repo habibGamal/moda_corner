@@ -2,12 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\SectionType;
 use App\Filament\Resources\SectionResource\Pages;
-use App\Models\Section;
-use App\Models\Product;
-use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Section;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -27,6 +26,7 @@ class SectionResource extends Resource
     protected static ?int $navigationSort = 50;
 
     protected static ?string $label = 'قسم';
+
     protected static ?string $pluralLabel = 'أقسام';
 
     protected static ?string $recordTitleAttribute = 'title_ar';
@@ -59,7 +59,7 @@ class SectionResource extends Resource
                         Forms\Components\Select::make('category_filter')
                             ->label('تصفية حسب الفئة')
                             ->options(Category::where('is_active', true)
-                                ->pluck('name_' . app()->getLocale(), 'id'))
+                                ->pluck('name_'.app()->getLocale(), 'id'))
                             ->searchable()
                             ->dehydrated(false)
                             ->preload()
@@ -80,7 +80,7 @@ class SectionResource extends Resource
                                     $query->whereIn('id', $productsInCategory);
                                 }
 
-                                return $query->pluck('name_' . app()->getLocale(), 'id');
+                                return $query->pluck('name_'.app()->getLocale(), 'id');
                             })
                             ->searchable()
                             ->dehydrated(false)
@@ -91,11 +91,11 @@ class SectionResource extends Resource
                             ->label('المنتجات')
                             ->relationship(
                                 'products',
-                                'name_' . app()->getLocale(),
-                                fn(Builder $query, callable $get) => $query
+                                'name_'.app()->getLocale(),
+                                fn (Builder $query, callable $get) => $query
                                     ->where('is_active', true)
-                                    ->when($get('category_filter'), fn($q, $category) => $q->where('category_id', $category))
-                                    ->when($get('brand_filter'), fn($q, $brand) => $q->where('brand_id', $brand))
+                                    ->when($get('category_filter'), fn ($q, $category) => $q->where('category_id', $category))
+                                    ->when($get('brand_filter'), fn ($q, $brand) => $q->where('brand_id', $brand))
                             )
                             ->searchable()
                             ->bulkToggleable()
@@ -149,25 +149,24 @@ class SectionResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->hidden(fn(Section $record) => $record->isVirtual),
+                    ->hidden(fn (Section $record) => $record->isVirtual),
                 Tables\Actions\DeleteAction::make()
-                    ->hidden(fn(Section $record) => $record->isVirtual),
+                    ->hidden(fn (Section $record) => $record->isVirtual),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                    ,
+                    Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\BulkAction::make('toggleActive')
                         ->label('تبديل النشاط')
                         ->action(function (Collection $records): void {
                             foreach ($records as $record) {
-                                $record->update(['active' => !$record->active]);
+                                $record->update(['active' => ! $record->active]);
                             }
                         })
                         ->icon('heroicon-o-arrow-path'),
                 ]),
             ])
-            ->checkIfRecordIsSelectableUsing(fn(Section $record) => $record->isReal);
+            ->checkIfRecordIsSelectableUsing(fn (Section $record) => $record->isReal);
     }
 
     public static function getRelations(): array

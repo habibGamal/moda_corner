@@ -9,7 +9,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
 class AnnouncementResource extends Resource
 {
@@ -22,6 +21,7 @@ class AnnouncementResource extends Resource
     protected static ?int $navigationSort = 70;
 
     protected static ?string $label = 'إعلان';
+
     protected static ?string $pluralLabel = 'إعلانات';
 
     protected static ?string $recordTitleAttribute = 'title_ar';
@@ -124,4 +124,4 @@ class AnnouncementResource extends Resource
             'edit' => Pages\EditAnnouncement::route('/{record}/edit'),
         ];
     }
-} 
+}

@@ -2,18 +2,15 @@
 
 namespace App\Services;
 
-use App\Models\WishlistItem;
-use App\Models\User;
 use App\Models\Product;
+use App\Models\User;
+use App\Models\WishlistItem;
 use Illuminate\Database\Eloquent\Collection;
 
 class WishlistService
 {
     /**
      * Get a user's wishlist items with products.
-     *
-     * @param User $user
-     * @return Collection
      */
     public function getUserList(User $user): Collection
     {
@@ -22,16 +19,12 @@ class WishlistService
 
     /**
      * Add an item to the user's wishlist.
-     *
-     * @param User $user
-     * @param int $productId
-     * @return WishlistItem|null
      */
     public function addItem(User $user, int $productId): ?WishlistItem
     {
         // Check if the product exists
         $product = Product::find($productId);
-        if (!$product) {
+        if (! $product) {
             return null;
         }
 
@@ -53,10 +46,6 @@ class WishlistService
 
     /**
      * Remove an item from the user's wishlist.
-     *
-     * @param User $user
-     * @param int $productId
-     * @return bool
      */
     public function removeItem(User $user, int $productId): bool
     {
@@ -69,13 +58,11 @@ class WishlistService
 
     /**
      * Clear a user's wishlist.
-     *
-     * @param User $user
-     * @return bool
      */
     public function clearList(User $user): bool
     {
         $user->wishlistItems()->delete();
+
         return true;
     }
 }

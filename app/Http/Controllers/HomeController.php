@@ -6,13 +6,8 @@ use App\Models\Announcement;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\HeroSlide;
-use App\Models\Product;
 use App\Models\Section;
-use App\Services\FeedScrollService;
 use App\Services\SectionService;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 class HomeController extends Controller

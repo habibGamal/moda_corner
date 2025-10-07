@@ -9,6 +9,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { Heart, Search, ShoppingCart, User } from "lucide-react";
 import LanguageSwitcher from "@/Components/LanguageSwitcher";
+import ThemeToggle from "@/Components/ThemeToggle";
 import { useI18n } from "@/hooks/use-i18n";
 import { App } from "@/types";
 
@@ -25,6 +26,9 @@ export default function UserActions({ user, cartItemsCount = 0, onSearchClick }:
     <div className="flex items-center gap-2 ltr:ml-auto rtl:mr-auto">
         {/* Language Switcher */}
         <LanguageSwitcher className="hidden sm:flex" />
+
+        {/* Theme Toggle */}
+        <ThemeToggle />
 
         {/* Search Button */}
         <Button

@@ -23,9 +23,10 @@ class ProductResource extends Resource
     protected static ?int $navigationSort = 0;
 
     protected static ?string $label = 'المنتج';
+
     protected static ?string $pluralLabel = 'المنتجات';
 
-    protected static ?string $recordTitleAttribute = 'name_' . 'ar';
+    protected static ?string $recordTitleAttribute = 'name_'.'ar';
 
     public static function getGloballySearchableAttributes(): array
     {
@@ -55,13 +56,13 @@ class ProductResource extends Resource
                                     ->maxLength(255),
                                 Forms\Components\Select::make('category_id')
                                     ->label('الفئة')
-                                    ->relationship('category', 'name_' . app()->getLocale())
+                                    ->relationship('category', 'name_'.app()->getLocale())
                                     ->searchable()
                                     ->preload()
                                     ->required(),
                                 Forms\Components\Select::make('brand_id')
                                     ->label('العلامة التجارية')
-                                    ->relationship('brand', 'name_' . app()->getLocale())
+                                    ->relationship('brand', 'name_'.app()->getLocale())
                                     ->searchable()
                                     ->preload()
                                     ->required(),
@@ -101,7 +102,7 @@ class ProductResource extends Resource
                                     ->prefix('ج.م'),
                             ]),
                     ])
-                    ->columnSpanFull()
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -109,7 +110,7 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name_' . app()->getLocale())
+                Tables\Columns\TextColumn::make('name_'.app()->getLocale())
                     ->label('الاسم')
                     ->sortable()
                     ->searchable(),
@@ -124,10 +125,10 @@ class ProductResource extends Resource
                     ->label('سعر العرض')
                     ->money('EGP')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('category.name_' . app()->getLocale())
+                Tables\Columns\TextColumn::make('category.name_'.app()->getLocale())
                     ->label('الفئة')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('brand.name_' . app()->getLocale())
+                Tables\Columns\TextColumn::make('brand.name_'.app()->getLocale())
                     ->label('العلامة التجارية')
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_active')
@@ -141,7 +142,7 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('total_quantity')
                     ->label('المخزون')
                     ->badge()
-                    ->color(fn(Product $record): string => $record->is_in_stock ? 'success' : 'danger'),
+                    ->color(fn (Product $record): string => $record->is_in_stock ? 'success' : 'danger'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('تاريخ الإنشاء')
                     ->dateTime()
@@ -156,13 +157,13 @@ class ProductResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('category_id')
                     ->label('الفئة')
-                    ->relationship('category', 'name_' . app()->getLocale())
+                    ->relationship('category', 'name_'.app()->getLocale())
                     ->searchable()
                     ->multiple()
                     ->preload(),
                 Tables\Filters\SelectFilter::make('brand_id')
                     ->label('العلامة التجارية')
-                    ->relationship('brand', 'name_' . app()->getLocale())
+                    ->relationship('brand', 'name_'.app()->getLocale())
                     ->searchable()
                     ->multiple()
                     ->preload(),
@@ -194,28 +195,28 @@ class ProductResource extends Resource
                         ->label('تفعيل')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
-                        ->action(fn(Collection $records) => $records->each->update(['is_active' => true]))
+                        ->action(fn (Collection $records) => $records->each->update(['is_active' => true]))
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                     Tables\Actions\BulkAction::make('deactivate')
                         ->label('إلغاء التفعيل')
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
-                        ->action(fn(Collection $records) => $records->each->update(['is_active' => false]))
+                        ->action(fn (Collection $records) => $records->each->update(['is_active' => false]))
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                     Tables\Actions\BulkAction::make('feature')
                         ->label('تمييز')
                         ->icon('heroicon-o-star')
                         ->color('warning')
-                        ->action(fn(Collection $records) => $records->each->update(['is_featured' => true]))
+                        ->action(fn (Collection $records) => $records->each->update(['is_featured' => true]))
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                     Tables\Actions\BulkAction::make('unfeature')
                         ->label('إلغاء التمييز')
                         ->icon('heroicon-o-no-symbol')
                         ->color('gray')
-                        ->action(fn(Collection $records) => $records->each->update(['is_featured' => false]))
+                        ->action(fn (Collection $records) => $records->each->update(['is_featured' => false]))
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                 ]),

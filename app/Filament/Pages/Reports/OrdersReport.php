@@ -2,7 +2,6 @@
 
 namespace App\Filament\Pages\Reports;
 
-use Filament\Pages\Page;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
@@ -67,5 +66,4 @@ class OrdersReport extends BaseDashboard
             \App\Filament\Widgets\LatestOrders::class,
         ];
     }
-
 }

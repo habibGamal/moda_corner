@@ -41,4 +41,4 @@ class Announcement extends Model
 
         return $this->{$column};
     }
-} 
+}

@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\GovResource\Pages;
 
 use App\Filament\Resources\GovResource;
-use Filament\Resources\Pages\ListRecords;
 use Filament\Actions;
+use Filament\Resources\Pages\ListRecords;
 
 class ListGovs extends ListRecords
 {

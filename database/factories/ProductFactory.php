@@ -24,6 +24,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         $name_en = $this->faker->unique()->words(3, true);
+
         return [
             'name_en' => $name_en,
             'name_ar' => $this->faker->unique()->words(3, true),
@@ -65,7 +66,7 @@ class ProductFactory extends Factory
                 ->default()
                 ->create([
                     'product_id' => $product->id,
-                    'sku' => 'SKU-' . $product->id . '-DEFAULT',
+                    'sku' => 'SKU-'.$product->id.'-DEFAULT',
                     'quantity' => rand(0, 30),
                 ]);
 
@@ -74,7 +75,7 @@ class ProductFactory extends Factory
             for ($i = 1; $i <= $variantCount; $i++) {
                 ProductVariant::factory()->create([
                     'product_id' => $product->id,
-                    'sku' => 'SKU-' . $product->id . '-' . $i,
+                    'sku' => 'SKU-'.$product->id.'-'.$i,
                     'quantity' => rand(0, 20),
                 ]);
             }
@@ -84,13 +85,13 @@ class ProductFactory extends Factory
     /**
      * Create a product with a sale price.
      *
-     * @param float|null $salePrice
      * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    public function withSalePrice(float $salePrice = null): static
+    public function withSalePrice(?float $salePrice = null): static
     {
         return $this->state(function (array $attributes) use ($salePrice) {
             $price = $attributes['price'] ?? $this->faker->randomFloat(2, 10, 500);
+
             return [
                 'sale_price' => $salePrice ?? ($price * 0.8), // 20% discount by default
             ];
@@ -106,6 +107,7 @@ class ProductFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $price = $attributes['price'] ?? $this->faker->randomFloat(2, 10, 500);
+
             return [
                 'sale_price' => $this->faker->randomFloat(2, 5, $price * 0.9),
             ];

@@ -7,8 +7,6 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class VariantsRelationManager extends RelationManager
 {
@@ -21,7 +19,6 @@ class VariantsRelationManager extends RelationManager
     protected static ?string $label = 'متغير';
 
     protected static ?string $title = 'متغيرات المنتج';
-
 
     public function form(Form $form): Form
     {
@@ -119,7 +116,7 @@ class VariantsRelationManager extends RelationManager
                     ->label('الكمية')
                     ->sortable()
                     ->badge()
-                    ->color(fn($record) => $record->quantity > 0 ? 'success' : 'danger'),
+                    ->color(fn ($record) => $record->quantity > 0 ? 'success' : 'danger'),
 
                 Tables\Columns\TextColumn::make('color')
                     ->label('اللون')

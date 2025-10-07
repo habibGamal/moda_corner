@@ -13,9 +13,6 @@ class SocialAuthController extends Controller
 {
     /**
      * Redirect the user to the provider authentication page.
-     *
-     * @param string $provider
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function redirectToProvider(string $provider): RedirectResponse
     {
@@ -24,9 +21,6 @@ class SocialAuthController extends Controller
 
     /**
      * Handle provider callback and authenticate user.
-     *
-     * @param string $provider
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function handleProviderCallback(string $provider): RedirectResponse
     {
@@ -36,7 +30,7 @@ class SocialAuthController extends Controller
             // Check if user already exists with this provider ID
             $user = User::where("{$provider}_id", $socialUser->getId())->first();
             // If user doesn't exist with provider ID, check by email
-            if (!$user) {
+            if (! $user) {
                 $user = User::where('email', $socialUser->getEmail())->first();
 
                 // If user exists with email, update their provider ID
@@ -62,9 +56,10 @@ class SocialAuthController extends Controller
 
             return redirect()->intended(route('home', absolute: false));
         } catch (\Exception $e) {
-            logger()->error('Social login error: ' . $e->getMessage());
+            logger()->error('Social login error: '.$e->getMessage());
+
             return redirect()->route('login')->withErrors([
-                'email' => 'Unable to login with ' . ucfirst($provider) . '. Please try again.',
+                'email' => 'Unable to login with '.ucfirst($provider).'. Please try again.',
             ]);
         }
     }

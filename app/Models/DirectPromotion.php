@@ -65,7 +65,7 @@ class DirectPromotion extends Model
      */
     public function isValid(): bool
     {
-        if (!$this->is_active) {
+        if (! $this->is_active) {
             return false;
         }
 
@@ -104,6 +104,7 @@ class DirectPromotion extends Model
     public function getDisplayNameAttribute(): string
     {
         $locale = app()->getLocale();
+
         return $locale === 'ar' ? $this->name_ar : ($this->name_en ?? $this->name_ar);
     }
 
@@ -113,6 +114,7 @@ class DirectPromotion extends Model
     public function getDisplayDescriptionAttribute(): ?string
     {
         $locale = app()->getLocale();
+
         return $locale === 'ar' ? $this->description_ar : $this->description_en;
     }
 

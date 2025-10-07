@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Services\SettingsService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PagesController extends Controller
-{    /**
+{
+    /**
      * Display the privacy policy page.
      */
     public function privacy(): Response
@@ -23,7 +23,9 @@ class PagesController extends Controller
                 'ar' => 'سياسة الخصوصية',
             ],
         ]);
-    }    /**
+    }
+
+    /**
      * Display the return policy page.
      */
     public function returns(): Response
@@ -38,7 +40,9 @@ class PagesController extends Controller
                 'ar' => 'سياسة الإرجاع',
             ],
         ]);
-    }    /**
+    }
+
+    /**
      * Display the terms of service page.
      */
     public function terms(): Response

@@ -99,7 +99,7 @@ class RewardsRelationManager extends RelationManager
 
                 Tables\Columns\TextColumn::make('discount_percentage')
                     ->label('نسبة الخصم')
-                    ->formatStateUsing(fn ($state) => $state ? "{$state}%" : "100% (مجاني)")
+                    ->formatStateUsing(fn ($state) => $state ? "{$state}%" : '100% (مجاني)')
                     ->placeholder('100% (مجاني)'),
             ])
             ->filters([

@@ -12,9 +12,9 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\ShippingCost;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
-use Carbon\Carbon;
 
 uses(RefreshDatabase::class);
 
@@ -299,7 +299,7 @@ describe('history', function () {
         $response = $this->get(route('orders.returns.history'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Orders/ReturnHistory')
                 ->has('returnHistory', 2)
                 ->where('returnHistory.0.id', $returnedOrder1->id) // Most recent first
@@ -318,7 +318,7 @@ describe('history', function () {
         $response = $this->get(route('orders.returns.history'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Orders/ReturnHistory')
                 ->has('returnHistory', 0)
         );
@@ -348,7 +348,7 @@ describe('history', function () {
         $response = $this->get(route('orders.returns.history'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Orders/ReturnHistory')
                 ->has('returnHistory', 3)
                 ->where('returnHistory.0.id', $thirdReturn->id) // Most recent first
@@ -372,7 +372,7 @@ describe('history', function () {
         $response = $this->get(route('orders.returns.history'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Orders/ReturnHistory')
                 ->has('returnHistory', 1)
                 ->has('returnHistory.0.items', 1)

@@ -2,16 +2,15 @@
 
 namespace App\Services;
 
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\Order;
-use App\Models\OrderItem;
+use App\Exceptions\InsufficientStockException;
 use App\Exceptions\ProductNotFoundException;
 use App\Exceptions\ProductVariantNotFoundException;
-use App\Exceptions\InsufficientStockException;
-use App\Services\InventoryManagementService;
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\ProductVariant;
 
 class CartItemResolverService
 {
@@ -21,16 +20,14 @@ class CartItemResolverService
     {
         $this->inventoryService = $inventoryService;
     }
+
     /**
      * Resolve and prepare a CartItem for adding to cart.
      * Verifies product & variant existence, checks stock availability,
      * and determines if the item already exists in the cart.
      *
-     * @param Cart $cart
-     * @param int $productId
-     * @param int $quantity
-     * @param int|null $variantId
-     * @return CartItem
+     * @param  int  $quantity
+     *
      * @throws ProductNotFoundException
      * @throws ProductVariantNotFoundException
      * @throws InsufficientStockException
@@ -65,8 +62,6 @@ class CartItemResolverService
     /**
      * Verify that the product exists and is active.
      *
-     * @param int $productId
-     * @return Product
      * @throws ProductNotFoundException
      */
     protected function verifyProduct(int $productId): Product
@@ -75,7 +70,7 @@ class CartItemResolverService
             ->where('is_active', true)
             ->first();
 
-        if (!$product) {
+        if (! $product) {
             throw new ProductNotFoundException($productId);
         }
 
@@ -85,9 +80,6 @@ class CartItemResolverService
     /**
      * Resolve the appropriate variant for the product.
      *
-     * @param Product $product
-     * @param int|null $variantId
-     * @return ProductVariant
      * @throws ProductVariantNotFoundException
      */
     protected function resolveVariant(Product $product, ?int $variantId = null): ProductVariant
@@ -99,7 +91,7 @@ class CartItemResolverService
                 ->where('is_active', true)
                 ->first();
 
-            if (!$variant) {
+            if (! $variant) {
                 throw new ProductVariantNotFoundException($variantId);
             }
 
@@ -112,14 +104,14 @@ class CartItemResolverService
             ->where('is_default', true)
             ->first();
 
-        if (!$variant) {
+        if (! $variant) {
             // Fallback to first active variant if no default is set
             $variant = $product->variants()
                 ->where('is_active', true)
                 ->first();
         }
 
-        if (!$variant) {
+        if (! $variant) {
             throw new ProductVariantNotFoundException(0);
         }
 
@@ -128,11 +120,6 @@ class CartItemResolverService
 
     /**
      * Find existing cart item with the same product and variant.
-     *
-     * @param Cart $cart
-     * @param int $productId
-     * @param int $variantId
-     * @return CartItem|null
      */
     protected function findExistingCartItem(Cart $cart, int $productId, int $variantId): ?CartItem
     {
@@ -146,9 +133,10 @@ class CartItemResolverService
      * Convert a CartItem to an OrderItem for a given order
      * Requires that the cart item has a valid variant assigned
      *
-     * @param CartItem $cartItem The cart item to convert
-     * @param Order $order The order to associate the item with
+     * @param  CartItem  $cartItem  The cart item to convert
+     * @param  Order  $order  The order to associate the item with
      * @return OrderItem The created order item
+     *
      * @throws \Exception If the cart item has no variant
      */
     public function toOrderItem(CartItem $cartItem, Order $order): OrderItem
@@ -157,15 +145,15 @@ class CartItemResolverService
         $variant = $cartItem->variant;
 
         // Ensure variant is always defined
-        if (!$variant) {
-            throw new \Exception('Cart item must have a variant to be converted to order item. Product: ' . $product->name_en);
+        if (! $variant) {
+            throw new \Exception('Cart item must have a variant to be converted to order item. Product: '.$product->name_en);
         }
 
         // Ensure we have the actual variant model, not just the relationship
-        if (!$variant instanceof ProductVariant) {
+        if (! $variant instanceof ProductVariant) {
             $variant = ProductVariant::find($cartItem->product_variant_id);
-            if (!$variant) {
-                throw new \Exception('Product variant not found for cart item. Variant ID: ' . $cartItem->product_variant_id);
+            if (! $variant) {
+                throw new \Exception('Product variant not found for cart item. Variant ID: '.$cartItem->product_variant_id);
             }
         }
 

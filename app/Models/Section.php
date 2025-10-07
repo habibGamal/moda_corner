@@ -22,7 +22,9 @@ class Section extends Model
         'active',
         'sort_order',
         'section_type',
-    ];    /**
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
@@ -31,12 +33,14 @@ class Section extends Model
         'active' => 'boolean',
         'sort_order' => 'integer',
         'section_type' => SectionType::class,
-    ];    /**
+    ];
+
+    /**
      * Get the products for the section.
      */
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class,'section_product')
+        return $this->belongsToMany(Product::class, 'section_product')
             ->withTimestamps();
     }
 
@@ -53,8 +57,6 @@ class Section extends Model
 
     /**
      * Determine if the section is a virtual type.
-     *
-     * @return bool
      */
     public function getIsVirtualAttribute(): bool
     {
@@ -63,8 +65,6 @@ class Section extends Model
 
     /**
      * Determine if the section is a real type.
-     *
-     * @return bool
      */
     public function getIsRealAttribute(): bool
     {

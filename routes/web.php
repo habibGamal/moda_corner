@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderReturnController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReturnOrderController;
 use App\Http\Controllers\SearchController;
@@ -24,6 +25,9 @@ Route::get('/', App\Http\Controllers\HomeController::class)->name('home');
 // Product routes
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+
+// Product Review routes (public)
+Route::get('/products/{product}/reviews', [ProductReviewController::class, 'index'])->name('products.reviews.index');
 
 // Brand routes
 Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
@@ -120,6 +124,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/payments/success', [PaymentController::class, 'handleSuccess'])->name('payment.success');
     Route::get('/payments/failure', [PaymentController::class, 'handleFailure'])->name('payment.failure');
     Route::get('/payments/{order}', [PaymentController::class, 'showPayment'])->name('payment.show');
+
+    // Product Review routes (authenticated)
+    Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store'])->name('products.reviews.store');
+    Route::put('/reviews/{review}', [ProductReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [ProductReviewController::class, 'destroy'])->name('reviews.destroy');
+    Route::get('/products/{product}/reviews/can-review', [ProductReviewController::class, 'canReview'])->name('products.reviews.can-review');
 
     // Legacy Kashier payment routes for backward compatibility
     Route::get('/payments/kashier/initiate', [PaymentController::class, 'initiatePayment'])->name('kashier.payment.initiate');

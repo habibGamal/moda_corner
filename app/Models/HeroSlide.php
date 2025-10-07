@@ -56,4 +56,4 @@ class HeroSlide extends Model
 
         return $this->{$column};
     }
-} 
+}

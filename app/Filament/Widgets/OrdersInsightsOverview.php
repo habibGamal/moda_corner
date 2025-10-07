@@ -22,9 +22,9 @@ class OrdersInsightsOverview extends BaseWidget
         $orderStatus = $this->filters['orderStatus'] ?? [];
 
         $baseQuery = \App\Models\Order::query()
-            ->when($startDate, fn($query) => $query->where('created_at', '>=', $startDate))
-            ->when($endDate, fn($query) => $query->where('created_at', '<=', $endDate))
-            ->when(!empty($orderStatus), fn($query) => $query->whereIn('order_status', $orderStatus));
+            ->when($startDate, fn ($query) => $query->where('created_at', '>=', $startDate))
+            ->when($endDate, fn ($query) => $query->where('created_at', '<=', $endDate))
+            ->when(! empty($orderStatus), fn ($query) => $query->whereIn('order_status', $orderStatus));
 
         // Get period length for calculations
         $periodDays = Carbon::parse($startDate)->diffInDays(Carbon::parse($endDate)) ?: 1;
@@ -50,14 +50,16 @@ class OrdersInsightsOverview extends BaseWidget
 
         // Return rate
         $returnedOrders = \App\Models\Order::query()
-            ->when($startDate, fn($query) => $query->where('created_at', '>=', $startDate))
-            ->when($endDate, fn($query) => $query->where('created_at', '<=', $endDate))
+            ->when($startDate, fn ($query) => $query->where('created_at', '>=', $startDate))
+            ->when($endDate, fn ($query) => $query->where('created_at', '<=', $endDate))
             ->whereNotNull('return_status')
             ->count();
         $returnRate = $totalOrders > 0 ? round(($returnedOrders / $totalOrders) * 100, 1) : 0;
 
         // Average shipping cost
-        $avgShippingCost = $baseQuery->clone()->avg('shipping_cost') ?: 0;        return [
+        $avgShippingCost = $baseQuery->clone()->avg('shipping_cost') ?: 0;
+
+        return [
             Stat::make('العملاء النشطين', number_format($uniqueCustomers))
                 ->description('عدد العملاء الذين قاموا بطلبات')
                 ->descriptionIcon('heroicon-m-users')
@@ -68,22 +70,22 @@ class OrdersInsightsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-calendar-days')
                 ->color('warning'),
 
-            Stat::make('متوسط الإيرادات يومياً', 'ج.م ' . number_format(round($revenuePerDay)))
-                ->description("إجمالي ج.م " . number_format(round($totalRevenue)))
+            Stat::make('متوسط الإيرادات يومياً', 'ج.م '.number_format(round($revenuePerDay)))
+                ->description('إجمالي ج.م '.number_format(round($totalRevenue)))
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('success'),
 
-            Stat::make('معدل إتمام الطلبات', $conversionRate . '%')
-                ->description($deliveredOrders . ' من ' . $totalOrders . ' طلب')
+            Stat::make('معدل إتمام الطلبات', $conversionRate.'%')
+                ->description($deliveredOrders.' من '.$totalOrders.' طلب')
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color($conversionRate >= 80 ? 'success' : ($conversionRate >= 60 ? 'warning' : 'danger')),
 
-            Stat::make('معدل الإرجاع', $returnRate . '%')
-                ->description($returnedOrders . ' طلب مرتجع')
+            Stat::make('معدل الإرجاع', $returnRate.'%')
+                ->description($returnedOrders.' طلب مرتجع')
                 ->descriptionIcon('heroicon-m-arrow-uturn-left')
                 ->color($returnRate <= 5 ? 'success' : ($returnRate <= 10 ? 'warning' : 'danger')),
 
-            Stat::make('متوسط تكلفة الشحن', 'ج.م ' . number_format(round($avgShippingCost)))
+            Stat::make('متوسط تكلفة الشحن', 'ج.م '.number_format(round($avgShippingCost)))
                 ->description('لكل طلب')
                 ->descriptionIcon('heroicon-m-truck')
                 ->color('gray'),

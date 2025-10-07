@@ -10,7 +10,8 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {        Schema::create('sections', function (Blueprint $table) {
+    {
+        Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->string('title_en');
             $table->string('title_ar');
@@ -18,7 +19,8 @@ return new class extends Migration
             $table->integer('sort_order')->default(0);
             $table->string('section_type')->default('REAL');
             $table->timestamps();
-        });        Schema::create('section_product', function (Blueprint $table) {
+        });
+        Schema::create('section_product', function (Blueprint $table) {
             $table->id();
             $table->foreignId('section_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');

@@ -17,13 +17,13 @@ export default function Footer() {
     const hasPolicyLinks = showPrivacyPolicy || showReturnPolicy || showTermsOfService;
 
     return (
-        <footer className="bg-muted/50 border-t mt-auto mb-12 lg:mb-0">
+        <footer className="bg-muted/50 dark:bg-muted/30 border-t dark:border-border/50 mt-auto mb-12 lg:mb-0">
             <div className="container px-4 py-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* Logo & Description */}
                     <div className="space-y-4">
                         <SiteLogo showTitle={true} />
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground/80">
                             {t('footer_description', 'Your trusted online shopping destination')}
                         </p>
                         <ContactInfo />

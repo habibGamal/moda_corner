@@ -3,17 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BrandResource\Pages;
-use App\Filament\Resources\BrandResource\RelationManagers;
 use App\Models\Brand;
 use Filament\Forms;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\FileUpload;
 
 class BrandResource extends Resource
 {
@@ -26,9 +21,10 @@ class BrandResource extends Resource
     protected static ?int $navigationSort = 2;
 
     protected static ?string $label = 'العلامة التجارية';
+
     protected static ?string $pluralLabel = 'العلامات التجارية';
 
-    protected static ?string $recordTitleAttribute = 'name_' . 'ar';
+    protected static ?string $recordTitleAttribute = 'name_'.'ar';
 
     public static function getGloballySearchableAttributes(): array
     {
@@ -74,7 +70,7 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name_' . app()->getLocale())
+                Tables\Columns\TextColumn::make('name_'.app()->getLocale())
                     ->label('الاسم')
                     ->sortable()
                     ->searchable(),

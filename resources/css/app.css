@@ -32,7 +32,7 @@
     }
 
     .dark {
-        --background: 154 64% 8%;
+        --background: 0 0% 6%;
         --foreground: 151 55% 91.2%;
         --card: 154 64% 8%;
         --card-foreground: 151 55% 91.2%;
@@ -65,8 +65,43 @@
         @apply border-border;
     }
     body {
-        @apply bg-[#fdfbf7] text-foreground;
+        @apply bg-[#fdfbf7] dark:bg-background text-foreground;
         overflow-x: clip;
+    }
+
+    /* Scrollbar styling (WebKit + Firefox) - uses project CSS variables so it adapts to dark mode */
+    /* WebKit browsers (Chrome, Edge, Safari) */
+    *::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: hsl(var(--background));
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: hsl(var(--muted));
+        border-radius: 999px;
+        border: 2px solid hsl(var(--background));
+        transition: background-color 150ms ease, border-color 150ms ease;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background-color: hsl(var(--muted-foreground));
+        border-color: hsl(var(--background));
+    }
+
+    /* Firefox */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: hsl(var(--muted)) hsl(var(--background));
+    }
+
+    /* For elements that use overflow auto/scroll, provide a slightly darker thumb on hover */
+    .overflow-auto:hover::-webkit-scrollbar-thumb,
+    .overflow-scroll:hover::-webkit-scrollbar-thumb {
+        background-color: hsl(var(--muted-foreground));
     }
 
     .force-rtl * {

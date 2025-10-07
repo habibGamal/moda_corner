@@ -29,7 +29,7 @@ it('handles payment success when payment already processed via webhook', functio
 
     // Simulate success URL redirect with parameters
     $response = $this->get(route('payment.success', [
-        'merchantOrderId' => 'Moda-' . $order->id,
+        'merchantOrderId' => 'Moda-'.$order->id,
         'transactionId' => 'TX-12345',
         'status' => 'SUCCESS',
     ]));
@@ -56,7 +56,7 @@ it('handles payment success when payment not yet processed', function () {
 
     // Simulate success URL redirect with parameters
     $response = $this->get(route('payment.success', [
-        'merchantOrderId' => 'Moda-' . $order->id,
+        'merchantOrderId' => 'Moda-'.$order->id,
         'transactionId' => 'TX-12345',
         'status' => 'SUCCESS',
     ]));

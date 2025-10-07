@@ -6,7 +6,6 @@ use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Models\Order;
 use App\Models\User;
-use App\Services\OrderCancellationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -53,7 +52,7 @@ describe('ProcessRefundAction', function () {
         ]);
 
         // Act & Assert
-        expect(fn() => $this->processRefundAction->execute($order))
+        expect(fn () => $this->processRefundAction->execute($order))
             ->toThrow(Exception::class, 'Only cancelled orders can be refunded.');
     });
 
@@ -67,7 +66,7 @@ describe('ProcessRefundAction', function () {
         ]);
 
         // Act & Assert
-        expect(fn() => $this->processRefundAction->execute($order))
+        expect(fn () => $this->processRefundAction->execute($order))
             ->toThrow(Exception::class, 'Only paid orders can be refunded.');
     });
 
@@ -81,7 +80,7 @@ describe('ProcessRefundAction', function () {
         ]);
 
         // Act & Assert
-        expect(fn() => $this->processRefundAction->execute($order))
+        expect(fn () => $this->processRefundAction->execute($order))
             ->toThrow(Exception::class, 'Cash on delivery orders do not require refunds.');
     });
 
@@ -95,7 +94,7 @@ describe('ProcessRefundAction', function () {
         ]);
 
         // Act & Assert
-        expect(fn() => $this->processRefundAction->execute($order))
+        expect(fn () => $this->processRefundAction->execute($order))
             ->toThrow(Exception::class, 'This order has already been refunded.');
     });
 

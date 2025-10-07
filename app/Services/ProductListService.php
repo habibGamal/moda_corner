@@ -16,7 +16,7 @@ class ProductListService
     public function getFilteredProducts(array $filters = [])
     {
         // If there's a search query, use TNTSearch and then apply filters
-        if (!empty($filters['query'])) {
+        if (! empty($filters['query'])) {
             $searchQuery = $filters['query'];
 
             // Get search results as IDs first
@@ -41,12 +41,12 @@ class ProductListService
         }
 
         // Apply brand filter if provided
-        if (!empty($filters['brands'])) {
+        if (! empty($filters['brands'])) {
             $query->whereIn('brand_id', $filters['brands']);
         }
 
         // Apply category filter if provided
-        if (!empty($filters['categories'])) {
+        if (! empty($filters['categories'])) {
             // Get all descendant categories for the selected categories
             $allCategoryIds = $filters['categories'];
             foreach ($filters['categories'] as $categoryId) {
@@ -153,8 +153,8 @@ class ProductListService
     /**
      * Recursively add all child categories to the array
      *
-     * @param int $categoryId
-     * @param array &$categoryArray
+     * @param  int  $categoryId
+     * @param  array  &$categoryArray
      * @return void
      */
     private function addChildCategories($categoryId, &$categoryArray)

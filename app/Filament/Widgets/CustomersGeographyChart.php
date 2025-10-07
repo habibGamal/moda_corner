@@ -20,7 +20,7 @@ class CustomersGeographyChart extends ChartWidget
 
         // Get customers with orders in the specified date range
         $customers = \App\Models\User::query()
-            ->whereHas('orders', function($query) use ($startDate, $endDate) {
+            ->whereHas('orders', function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             })
             ->get();
@@ -34,7 +34,7 @@ class CustomersGeographyChart extends ChartWidget
             $city = $this->getCustomerCity($customer);
 
             if ($city) {
-                if (!isset($geographyData[$city])) {
+                if (! isset($geographyData[$city])) {
                     $geographyData[$city] = 0;
                 }
                 $geographyData[$city]++;
@@ -142,7 +142,7 @@ class CustomersGeographyChart extends ChartWidget
         // Option 4: Default cities for demo purposes (Egyptian cities)
         $defaultCities = [
             'القاهرة', 'الإسكندرية', 'الجيزة', 'شبرا الخيمة', 'بورسعيد',
-            'السويس', 'الأقصر', 'المنصورة', 'المحلة الكبرى', 'طنطا'
+            'السويس', 'الأقصر', 'المنصورة', 'المحلة الكبرى', 'طنطا',
         ];
 
         return $defaultCities[array_rand($defaultCities)];

@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\DirectPromotion;
-use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Category;
+use App\Models\DirectPromotion;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

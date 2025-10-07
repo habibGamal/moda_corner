@@ -42,13 +42,13 @@ class ProductImporter extends Importer
                 ->requiredMapping()
                 ->numeric()
                 ->rules(['nullable', 'numeric', 'min:0'])
-                ->guess(["Unit price before sale"]),
+                ->guess(['Unit price before sale']),
 
             ImportColumn::make('sale_price')
                 ->label('سعر الوحدة بعد الخصم')
                 ->numeric()
                 ->rules(['nullable', 'numeric', 'min:0'])
-                ->guess(["unit price after sale"]),
+                ->guess(['unit price after sale']),
 
             ImportColumn::make('category')
                 ->label('الفئة')
@@ -62,7 +62,7 @@ class ProductImporter extends Importer
                         ->orWhere('name_ar', $state)
                         ->first();
 
-                    if (!$category) {
+                    if (! $category) {
                         // Create the category if it doesn't exist
                         $category = Category::create([
                             'name_en' => $state,
@@ -87,7 +87,7 @@ class ProductImporter extends Importer
                         ->orWhere('name_ar', $state)
                         ->first();
 
-                    if (!$brand) {
+                    if (! $brand) {
                         // Create the brand if it doesn't exist
                         $brand = Brand::create([
                             'name_en' => $state,
@@ -103,36 +103,37 @@ class ProductImporter extends Importer
             ImportColumn::make('quantity')
                 ->label('الكمية في المخزون')
                 ->numeric()
-                ->guess(["Quantity in stock"]),
+                ->guess(['Quantity in stock']),
 
             ImportColumn::make('images')
                 ->label('رابط الصورة')
                 ->array(',')
-                ->guess(["photo link"]),
+                ->guess(['photo link']),
 
             ImportColumn::make('color')
                 ->label('اللون')
-                ->guess(["color"]),
+                ->guess(['color']),
 
             ImportColumn::make('size')
                 ->label('الحجم')
-                ->guess(["size"]),
+                ->guess(['size']),
 
             ImportColumn::make('capacity')
                 ->label('السعة')
-                ->guess(["capacity"]),
+                ->guess(['capacity']),
 
             ImportColumn::make('is_featured')
                 ->label('مميز')
                 ->boolean(),
         ];
     }
+
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'تم استيراد ' . number_format($import->successful_rows) . ' منتج بنجاح.';
+        $body = 'تم استيراد '.number_format($import->successful_rows).' منتج بنجاح.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' منتج فشل في الاستيراد.';
+            $body .= ' '.number_format($failedRowsCount).' منتج فشل في الاستيراد.';
         }
 
         return $body;
@@ -162,12 +163,12 @@ class ProductImporter extends Importer
 
         // varient
         $this->variantData = [
-            'sku' => $this->data['sku'] ? $this->data['sku'] . '-' . Str::random(8) : Str::random(8),
+            'sku' => $this->data['sku'] ? $this->data['sku'].'-'.Str::random(8) : Str::random(8),
             'quantity' => $this->data['quantity'] ?? 0,
             'color' => $this->data['color'] ?? null,
             'size' => $this->data['size'] ?? null,
             'capacity' => $this->data['capacity'] ?? null,
-            'images' => !empty($this->data['images']) ? $this->data['images'] : [],
+            'images' => ! empty($this->data['images']) ? $this->data['images'] : [],
         ];
 
         // Remove id from data if it's null to prevent database issues
@@ -193,7 +194,7 @@ class ProductImporter extends Importer
         $this->resolveData();
 
         // Only search by ID if it's provided and not null
-        if (!empty($this->data['id'])) {
+        if (! empty($this->data['id'])) {
             $product = Product::where('id', $this->data['id'])->first();
             if ($product) {
                 return $product;
@@ -203,7 +204,6 @@ class ProductImporter extends Importer
         // Search by slug if no ID match found
         return Product::where('slug', $this->data['slug'])->first() ?? new Product;
     }
-
 
     protected function beforeFill(): void
     {
@@ -220,7 +220,6 @@ class ProductImporter extends Importer
         ]);
     }
 
-
     protected function afterCreate(): void
     {
         $this->createOrUpdateVariant($this->record);
@@ -234,18 +233,18 @@ class ProductImporter extends Importer
     protected function createOrUpdateVariant(Product $record): void
     {
         try {
-            if (!empty($this->variantData)) {
+            if (! empty($this->variantData)) {
                 // Check if a variant with this SKU already exists
                 $variant = null;
 
-                if (!empty($this->variantData['sku'])) {
+                if (! empty($this->variantData['sku'])) {
                     $variant = ProductVariant::where('product_id', $record->id)
                         ->where('sku', $this->variantData['sku'])
                         ->first();
                 }
 
                 // If no variant exists with this SKU, check by color, size, and capacity
-                if (!$variant && !empty($this->variantData['color']) && !empty($this->variantData['size'])) {
+                if (! $variant && ! empty($this->variantData['color']) && ! empty($this->variantData['size'])) {
                     $variant = ProductVariant::where('product_id', $record->id)
                         ->where('color', $this->variantData['color'])
                         ->where('size', $this->variantData['size'])
@@ -254,7 +253,7 @@ class ProductImporter extends Importer
                 }
 
                 // If no existing variant found, create a new one
-                if (!$variant) {
+                if (! $variant) {
                     $record->variants()->create($this->variantData);
                 } else {
                     // Update existing variant

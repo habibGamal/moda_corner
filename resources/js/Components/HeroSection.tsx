@@ -35,7 +35,7 @@ export default function HeroSection({ announcements, heroSlides }: HeroSectionPr
     };
 
     return (
-        <div className="relative bg-[#fdfbf7] overflow-hidden min-h-[calc(100vh-65px)]">
+        <div className="relative bg-[#fdfbf7] dark:bg-background overflow-hidden min-h-[calc(100vh-65px)]">
             {/* Animated Background Shapes */}
             <AnimatedBackground />
 
@@ -55,7 +55,7 @@ export default function HeroSection({ announcements, heroSlides }: HeroSectionPr
                                 className="space-y-6"
                             >
                                 {/* Dynamic Title from heroSlides */}
-                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 leading-tight">
                                     {currentSlide ? getLocalizedField(currentSlide, "title") : (
                                         <>
                                             {t("hero_title_part1")}{" "}
@@ -74,7 +74,7 @@ export default function HeroSection({ announcements, heroSlides }: HeroSectionPr
                                 </h1>
 
                                 {/* Dynamic Description from heroSlides */}
-                                <p className="text-lg md:text-xl text-gray-600 max-w-lg mx-auto ltr:lg:mx-0 ltr:lg:mr-auto rtl:lg:mx-0 rtl:lg:ml-auto">
+                                <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-lg mx-auto ltr:lg:mx-0 ltr:lg:mr-auto rtl:lg:mx-0 rtl:lg:ml-auto">
                                     {currentSlide ? getLocalizedField(currentSlide, "description") : t("hero_description")}
                                 </p>
                             </motion.div>
@@ -97,7 +97,7 @@ export default function HeroSection({ announcements, heroSlides }: HeroSectionPr
                                 asChild
                                 variant="secondary"
                                 size="lg"
-                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-4 text-lg font-semibold"
+                                className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 px-8 py-4 text-lg font-semibold"
                             >
                                 <Link href="/sections/2" className="flex items-center gap-2">
                                     <Tag className="h-5 w-5" />
@@ -108,8 +108,8 @@ export default function HeroSection({ announcements, heroSlides }: HeroSectionPr
 
                         {/* Question Text */}
                         <div className="mt-8">
-                            <p className="text-gray-500 flex items-center justify-center ltr:lg:justify-start rtl:lg:justify-end gap-2">
-                                <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
+                            <p className="text-gray-500 dark:text-gray-400 flex items-center justify-center ltr:lg:justify-start rtl:lg:justify-end gap-2">
+                                <span className="w-2 h-2 bg-emerald-400 dark:bg-emerald-500 rounded-full"></span>
                                 {t("hero_question")}
                             </p>
                         </div>

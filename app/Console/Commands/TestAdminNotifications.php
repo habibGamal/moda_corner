@@ -34,22 +34,23 @@ class TestAdminNotifications extends Command
             $adminNotificationService = app(AdminNotificationService::class);
 
             $this->info("Testing notifications for Order #{$order->id}");
-            $this->info("Admin email: " . config('mail.admin_email'));
+            $this->info('Admin email: '.config('mail.admin_email'));
 
             // Test order placed notification
-            $this->info("Sending order placed notification...");
+            $this->info('Sending order placed notification...');
             $adminNotificationService->sendOrderPlacedNotification($order);
-            $this->info("✓ Order placed notification sent");
+            $this->info('✓ Order placed notification sent');
 
             // Test return request notification
-            $this->info("Sending return request notification...");
+            $this->info('Sending return request notification...');
             $adminNotificationService->sendOrderReturnRequestNotification($order);
-            $this->info("✓ Return request notification sent");
+            $this->info('✓ Return request notification sent');
 
-            $this->info("All notifications sent successfully!");
+            $this->info('All notifications sent successfully!');
 
         } catch (\Exception $e) {
-            $this->error("Error: " . $e->getMessage());
+            $this->error('Error: '.$e->getMessage());
+
             return 1;
         }
 

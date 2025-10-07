@@ -3,10 +3,6 @@
 use App\Models\Order;
 use App\Models\User;
 use App\Services\AdminNotificationService;
-use App\Notifications\OrderPlacedNotification;
-use App\Notifications\OrderReturnRequestNotification;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Notifications\AnonymousNotifiable;
 
 // Test script to verify admin notifications work
 // Run with: php artisan tinker

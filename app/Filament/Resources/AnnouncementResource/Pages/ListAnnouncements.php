@@ -16,4 +16,4 @@ class ListAnnouncements extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
-} 
+}

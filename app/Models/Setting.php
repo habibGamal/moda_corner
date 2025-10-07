@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Setting extends Model
 {
@@ -59,6 +59,7 @@ class Setting extends Model
     public static function getValue(string $key, $default = null)
     {
         $setting = static::where('key', $key)->first();
+
         return $setting ? $setting->value : $default;
     }
 
@@ -71,6 +72,7 @@ class Setting extends Model
 
         if ($setting) {
             $setting->update(['value' => $value]);
+
             return true;
         }
 
@@ -97,6 +99,7 @@ class Setting extends Model
     public function getLocalizedLabel(): string
     {
         $locale = app()->getLocale();
+
         return $this->{"label_{$locale}"} ?? $this->label_en;
     }
 
@@ -106,6 +109,7 @@ class Setting extends Model
     public function getLocalizedDescription(): ?string
     {
         $locale = app()->getLocale();
+
         return $this->{"description_{$locale}"} ?? $this->description_en;
     }
 

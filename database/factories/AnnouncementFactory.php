@@ -23,7 +23,7 @@ class AnnouncementFactory extends Factory
     {
         return [
             'title_en' => $this->faker->sentence(4),
-            'title_ar' => 'عربي ' . $this->faker->sentence(4),
+            'title_ar' => 'عربي '.$this->faker->sentence(4),
             'is_active' => $this->faker->boolean(80),
             'display_order' => $this->faker->numberBetween(0, 100),
             'created_at' => now(),
@@ -33,8 +33,6 @@ class AnnouncementFactory extends Factory
 
     /**
      * Indicate that the announcement is active.
-     *
-     * @return static
      */
     public function active(): static
     {
@@ -44,4 +42,4 @@ class AnnouncementFactory extends Factory
             ];
         });
     }
-} 
+}

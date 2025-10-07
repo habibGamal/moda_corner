@@ -3,27 +3,24 @@
 namespace App\Services;
 
 use App\DTOs\OrderEvaluationData;
-use App\DTOs\CartSummaryData;
 use App\Models\Address;
 use App\Models\Cart;
-use App\Models\ShippingCost;
 use App\Models\Promotion;
+use App\Models\ShippingCost;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
-use Exception;
 
 class OrderEvaluationService
 {
     protected CartService $cartService;
+
     protected PromotionService $promotionService;
+
     protected DirectPromotionService $directPromotionService;
 
     /**
      * Create a new service instance.
-     *
-     * @param CartService $cartService
-     * @param PromotionService $promotionService
-     * @param DirectPromotionService $directPromotionService
      */
     public function __construct(
         CartService $cartService,
@@ -38,10 +35,11 @@ class OrderEvaluationService
     /**
      * Calculate the total for an order based on address and optional coupon
      *
-     * @param int $addressId The shipping address ID
-     * @param string|null $couponCode Optional coupon code
-     * @param int|null $promotionId Optional promotion ID
+     * @param  int  $addressId  The shipping address ID
+     * @param  string|null  $couponCode  Optional coupon code
+     * @param  int|null  $promotionId  Optional promotion ID
      * @return OrderEvaluationData Order calculation result with subtotal, shipping, discount and total
+     *
      * @throws ModelNotFoundException If the address doesn't exist
      * @throws Exception If there was an error calculating the order
      */
@@ -51,13 +49,13 @@ class OrderEvaluationService
         ?int $promotionId = null
     ): OrderEvaluationData {
         $user = Auth::user();
-        if (!$user) {
+        if (! $user) {
             throw new Exception('User not authenticated');
         }
 
         // Get cart from the service
         $cart = $this->cartService->getCart();
-        if (!$cart || $cart->items->isEmpty()) {
+        if (! $cart || $cart->items->isEmpty()) {
             throw new Exception('Cart is empty');
         }
 
@@ -82,7 +80,7 @@ class OrderEvaluationService
         $finalShippingCost = $shippingDiscount ? 0 : $shippingCost->value;
 
         // Check for direct promotion free shipping
-        if (!$shippingDiscount && $this->directPromotionService->qualifiesForFreeShipping($subtotal)) {
+        if (! $shippingDiscount && $this->directPromotionService->qualifiesForFreeShipping($subtotal)) {
             $finalShippingCost = 0;
             $shippingDiscount = true;
         }
@@ -106,15 +104,13 @@ class OrderEvaluationService
     /**
      * Get shipping cost for an address
      *
-     * @param Address $address
-     * @return ShippingCost
      * @throws Exception If no shipping cost is defined for the area
      */
     protected function getShippingCost(Address $address): ShippingCost
     {
         $shippingCost = ShippingCost::where('area_id', $address->area_id)->first();
 
-        if (!$shippingCost) {
+        if (! $shippingCost) {
             throw new Exception('No shipping cost defined for this area');
         }
 
@@ -124,9 +120,7 @@ class OrderEvaluationService
     /**
      * Apply promotions to the cart
      *
-     * @param Cart $cart
-     * @param string|null $couponCode
-     * @param int|null $promotionId
+     * @param  Cart  $cart
      * @return array With discount amount, applied promotion, and shipping discount flag
      */
     protected function applyPromotions($cart, ?string $couponCode = null, ?int $promotionId = null): array
@@ -145,29 +139,23 @@ class OrderEvaluationService
             $this->applyPromotionCode($couponCode, $discount, $appliedPromotion, $shippingDiscount);
         }
         // Apply specific promotion if provided and no coupon was applied
-        elseif ($promotionId && !$appliedPromotion) {
+        elseif ($promotionId && ! $appliedPromotion) {
             $this->applyPromotionById($promotionId, $cart, $discount, $appliedPromotion, $shippingDiscount);
         }
         // Apply best automatic promotion if no specific promotion was applied
-        elseif (!$appliedPromotion) {
+        elseif (! $appliedPromotion) {
             $this->applyAutomaticPromotion($cart, $discount, $appliedPromotion, $shippingDiscount);
         }
 
         return [
             'discount' => $discount,
             'appliedPromotion' => $appliedPromotion,
-            'shippingDiscount' => $shippingDiscount
+            'shippingDiscount' => $shippingDiscount,
         ];
     }
 
     /**
      * Apply promotion by coupon code
-     *
-     * @param string $couponCode
-     * @param float &$discount
-     * @param Promotion|null &$appliedPromotion
-     * @param bool &$shippingDiscount
-     * @return void
      */
     protected function applyPromotionCode(
         string $couponCode,
@@ -178,7 +166,7 @@ class OrderEvaluationService
         $validationResult = $this->promotionService->validatePromotionCode($couponCode);
 
         if ($validationResult) {
-            list($discountAmount, $promotion) = $validationResult;
+            [$discountAmount, $promotion] = $validationResult;
             $discount = $discountAmount;
             $appliedPromotion = $promotion;
 
@@ -191,13 +179,6 @@ class OrderEvaluationService
 
     /**
      * Apply promotion by ID
-     *
-     * @param int $promotionId
-     * @param Cart $cart
-     * @param float &$discount
-     * @param Promotion|null &$appliedPromotion
-     * @param bool &$shippingDiscount
-     * @return void
      */
     protected function applyPromotionById(
         int $promotionId,
@@ -225,12 +206,6 @@ class OrderEvaluationService
 
     /**
      * Apply the best automatic promotion
-     *
-     * @param Cart $cart
-     * @param float &$discount
-     * @param Promotion|null &$appliedPromotion
-     * @param bool &$shippingDiscount
-     * @return void
      */
     protected function applyAutomaticPromotion(
         Cart $cart,
@@ -241,7 +216,7 @@ class OrderEvaluationService
         $bestPromotion = $this->promotionService->applyBestAutomaticPromotion($cart);
 
         if ($bestPromotion) {
-            list($discountAmount, $promotion) = $bestPromotion;
+            [$discountAmount, $promotion] = $bestPromotion;
             $discount = $discountAmount;
             $appliedPromotion = $promotion;
 

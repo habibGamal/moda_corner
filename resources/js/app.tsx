@@ -5,6 +5,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { hydrateRoot } from 'react-dom/client';
 import { Toaster } from './Components/ui/toaster';
 import MainLayout from './Layouts/MainLayout';
+import { ThemeProvider } from './Contexts/ThemeContext';
 import './i18n';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -26,10 +27,10 @@ createInertiaApp({
     },
     setup({ el, App, props }) {
         hydrateRoot(el, (
-            <>
+            <ThemeProvider>
                 <App {...props} />
                 <Toaster />
-            </>
+            </ThemeProvider>
         ));
     },
     progress: {

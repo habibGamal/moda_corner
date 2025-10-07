@@ -5,19 +5,19 @@ namespace App\DTOs;
 class KashierPaymentData extends PaymentResultData
 {
     /**
-     * @param string $merchantId The Kashier merchant ID
-     * @param string $orderId The order reference ID
-     * @param string $amount The payment amount
-     * @param string $currency The payment currency
-     * @param string $hash The payment hash for validation
-     * @param string $mode The payment mode (test/live)
-     * @param string $redirectUrl The URL to redirect to after payment
-     * @param string $failureUrl The URL to redirect to on payment failure
-     * @param string $webhookUrl The URL for payment gateway webhooks
-     * @param string $displayMode The language for display (ar/en)
-     * @param string $paymentRequestId Unique request ID for the payment
-     * @param string $allowedMethods Allowed payment methods (card, wallet, etc.)
-     * @param array|null $additionalParams Additional parameters for the payment
+     * @param  string  $merchantId  The Kashier merchant ID
+     * @param  string  $orderId  The order reference ID
+     * @param  string  $amount  The payment amount
+     * @param  string  $currency  The payment currency
+     * @param  string  $hash  The payment hash for validation
+     * @param  string  $mode  The payment mode (test/live)
+     * @param  string  $redirectUrl  The URL to redirect to after payment
+     * @param  string  $failureUrl  The URL to redirect to on payment failure
+     * @param  string  $webhookUrl  The URL for payment gateway webhooks
+     * @param  string  $displayMode  The language for display (ar/en)
+     * @param  string  $paymentRequestId  Unique request ID for the payment
+     * @param  string  $allowedMethods  Allowed payment methods (card, wallet, etc.)
+     * @param  array|null  $additionalParams  Additional parameters for the payment
      */
     public function __construct(
         string $merchantId,
@@ -50,8 +50,6 @@ class KashierPaymentData extends PaymentResultData
 
     /**
      * Convert the DTO to an array for Kashier form submission
-     *
-     * @return array
      */
     public function toArray(): array
     {

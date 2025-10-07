@@ -28,7 +28,9 @@ class SettingsController extends Controller
         return response()->json([
             'data' => $settings,
         ]);
-    }    /**
+    }
+
+    /**
      * Get a specific setting
      */
     public function show(string $key): JsonResponse

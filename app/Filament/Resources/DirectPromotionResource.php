@@ -3,17 +3,16 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DirectPromotionResource\Pages;
-use App\Models\DirectPromotion;
-use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Category;
+use App\Models\DirectPromotion;
 use App\Services\DirectPromotionService;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Notifications\Notification;
-use Illuminate\Database\Eloquent\Builder;
 
 class DirectPromotionResource extends Resource
 {
@@ -26,6 +25,7 @@ class DirectPromotionResource extends Resource
     protected static ?int $navigationSort = 1;
 
     protected static ?string $label = 'العرض المباشر';
+
     protected static ?string $pluralLabel = 'العروض المباشرة';
 
     public static function form(Form $form): Form
@@ -86,7 +86,7 @@ class DirectPromotionResource extends Resource
                             ->minValue(0.01)
                             ->maxValue(99.99)
                             ->step(0.01)
-                            ->required(fn(Forms\Get $get) => $get('type') === 'price_discount'),
+                            ->required(fn (Forms\Get $get) => $get('type') === 'price_discount'),
 
                         Forms\Components\Select::make('apply_to')
                             ->label('تطبيق الخصم على')
@@ -95,22 +95,22 @@ class DirectPromotionResource extends Resource
                                 'category' => 'فئة محددة',
                                 'brand' => 'علامة تجارية محددة',
                             ])
-                            ->required(fn(Forms\Get $get) => $get('type') === 'price_discount')
+                            ->required(fn (Forms\Get $get) => $get('type') === 'price_discount')
                             ->live(),
 
                         Forms\Components\Select::make('category_id')
                             ->label('الفئة')
                             ->options(Category::where('is_active', true)->pluck('name_ar', 'id'))
                             ->searchable()
-                            ->visible(fn(Forms\Get $get) => $get('apply_to') === 'category')
-                            ->required(fn(Forms\Get $get) => $get('apply_to') === 'category'),
+                            ->visible(fn (Forms\Get $get) => $get('apply_to') === 'category')
+                            ->required(fn (Forms\Get $get) => $get('apply_to') === 'category'),
 
                         Forms\Components\Select::make('brand_id')
                             ->label('العلامة التجارية')
                             ->options(Brand::where('is_active', true)->pluck('name_ar', 'id'))
                             ->searchable()
-                            ->visible(fn(Forms\Get $get) => $get('apply_to') === 'brand')
-                            ->required(fn(Forms\Get $get) => $get('apply_to') === 'brand'),
+                            ->visible(fn (Forms\Get $get) => $get('apply_to') === 'brand')
+                            ->required(fn (Forms\Get $get) => $get('apply_to') === 'brand'),
                     ])
                     ->columns(2),
 
@@ -123,16 +123,16 @@ class DirectPromotionResource extends Resource
                             ->prefix('ج.م')
                             ->minValue(0)
                             ->step(0.01)
-                            ->required(fn(Forms\Get $get) => $get('type') === 'free_shipping'),
+                            ->required(fn (Forms\Get $get) => $get('type') === 'free_shipping'),
                     ])
-                    ->visible(fn(Forms\Get $get) => $get('type') === 'free_shipping'),
+                    ->visible(fn (Forms\Get $get) => $get('type') === 'free_shipping'),
 
                 Forms\Components\Section::make('إعدادات التوقيت والحالة')
                     ->schema([
                         Forms\Components\Toggle::make('is_active')
                             ->label('نشط')
                             ->default(false)
-                            ->visible(fn(Forms\Get $get) => $get('type') !== 'price_discount')
+                            ->visible(fn (Forms\Get $get) => $get('type') !== 'price_discount')
                             ->helperText('تحذير: تفعيل عرض خصم الأسعار سيلغي جميع العروض الأخرى'),
 
                         Forms\Components\DateTimePicker::make('starts_at')
@@ -159,12 +159,12 @@ class DirectPromotionResource extends Resource
 
                 Tables\Columns\BadgeColumn::make('type')
                     ->label('النوع')
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'price_discount' => 'خصم الأسعار',
                         'free_shipping' => 'شحن مجاني',
                         default => $state,
                     })
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'price_discount' => 'success',
                         'free_shipping' => 'info',
                         default => 'gray',
@@ -172,12 +172,12 @@ class DirectPromotionResource extends Resource
 
                 Tables\Columns\TextColumn::make('discount_percentage')
                     ->label('نسبة الخصم')
-                    ->formatStateUsing(fn(?float $state): string => $state ? $state . '%' : '-')
+                    ->formatStateUsing(fn (?float $state): string => $state ? $state.'%' : '-')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('apply_to')
                     ->label('التطبيق على')
-                    ->formatStateUsing(fn(?string $state): string => match ($state) {
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
                         'all_products' => 'جميع المنتجات',
                         'category' => 'فئة محددة',
                         'brand' => 'علامة تجارية',
@@ -194,7 +194,7 @@ class DirectPromotionResource extends Resource
 
                 Tables\Columns\TextColumn::make('minimum_order_amount')
                     ->label('الحد الأدنى للطلب')
-                    ->formatStateUsing(fn(?float $state): string => $state ? '$' . number_format($state, 2) : '-')
+                    ->formatStateUsing(fn (?float $state): string => $state ? '$'.number_format($state, 2) : '-')
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_active')
@@ -239,7 +239,7 @@ class DirectPromotionResource extends Resource
                     ->label('تطبيق الخصم')
                     ->icon('heroicon-o-play')
                     ->color('success')
-                    ->visible(fn(DirectPromotion $record) => $record->isPriceDiscount() && !$record->is_active)
+                    ->visible(fn (DirectPromotion $record) => $record->isPriceDiscount() && ! $record->is_active)
                     ->requiresConfirmation()
                     ->modalHeading('تطبيق خصم الأسعار')
                     ->modalDescription('هذا سيقوم بتطبيق الخصم على أسعار المنتجات وإلغاء أي خصومات أخرى نشطة. هل أنت متأكد؟')
@@ -266,7 +266,7 @@ class DirectPromotionResource extends Resource
                     ->label('إلغاء الخصم')
                     ->icon('heroicon-o-stop')
                     ->color('warning')
-                    ->visible(fn(DirectPromotion $record) => $record->isPriceDiscount() && $record->is_active)
+                    ->visible(fn (DirectPromotion $record) => $record->isPriceDiscount() && $record->is_active)
                     ->requiresConfirmation()
                     ->modalHeading('إلغاء خصم الأسعار')
                     ->modalDescription('هذا سيقوم بإلغاء جميع خصومات الأسعار المطبقة حالياً. هل أنت متأكد؟')

@@ -25,6 +25,7 @@ class UserResource extends Resource
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $label = 'المستخدم';
+
     protected static ?string $pluralLabel = 'المستخدمين';
 
     public static function getGloballySearchableAttributes(): array

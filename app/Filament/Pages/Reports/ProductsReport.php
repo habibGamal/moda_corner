@@ -2,7 +2,6 @@
 
 namespace App\Filament\Pages\Reports;
 
-use Filament\Pages\Page;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
@@ -42,7 +41,7 @@ class ProductsReport extends BaseDashboard
                             ->maxDate(now()),                        \Filament\Forms\Components\Select::make('category')
                             ->label('الفئة')
                             ->multiple()
-                            ->options(function() {
+                            ->options(function () {
                                 return \App\Models\Category::pluck('name_ar', 'id')->toArray();
                             })
                             ->placeholder('جميع الفئات'),

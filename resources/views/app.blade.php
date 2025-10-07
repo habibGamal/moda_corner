@@ -299,6 +299,14 @@
             z-index: 9999;
         }
 
+        .dark .logo-svg {
+            background-color: #0a0f0d;
+        }
+
+        .dark .logo-svg svg path {
+            fill: #fff;
+        }
+
         .loading-container.disabled {
             height: inherit;
             width: inherit;

@@ -17,6 +17,7 @@ class OrderItemsRelationManager extends RelationManager
     protected static ?string $title = 'عناصر الطلب';
 
     protected static ?string $label = 'عنصر الطلب';
+
     protected static ?string $pluralLabel = 'عناصر الطلب';
 
     public function form(Form $form): Form
@@ -35,23 +36,25 @@ class OrderItemsRelationManager extends RelationManager
                     ->label('المتغير')
                     ->visible(fn ($record) => $record->variant_id !== null)
                     ->formatStateUsing(function ($record) {
-                        if (!$record->variant) return null;
+                        if (! $record->variant) {
+                            return null;
+                        }
 
                         $variantDetails = [];
 
                         if ($record->variant->color) {
-                            $variantDetails[] = 'اللون: ' . $record->variant->color;
+                            $variantDetails[] = 'اللون: '.$record->variant->color;
                         }
 
                         if ($record->variant->size) {
-                            $variantDetails[] = 'الحجم: ' . $record->variant->size;
+                            $variantDetails[] = 'الحجم: '.$record->variant->size;
                         }
 
                         if ($record->variant->capacity) {
-                            $variantDetails[] = 'السعة: ' . $record->variant->capacity;
+                            $variantDetails[] = 'السعة: '.$record->variant->capacity;
                         }
 
-                        return !empty($variantDetails) ? implode(' | ', $variantDetails) : null;
+                        return ! empty($variantDetails) ? implode(' | ', $variantDetails) : null;
                     })
                     ->disabled(),
 
@@ -91,23 +94,25 @@ class OrderItemsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('variant')
                     ->label('المتغير')
                     ->getStateUsing(function ($record) {
-                        if (!$record->variant) return null;
+                        if (! $record->variant) {
+                            return null;
+                        }
 
                         $variantDetails = [];
 
                         if ($record->variant->color) {
-                            $variantDetails[] = 'اللون: ' . $record->variant->color;
+                            $variantDetails[] = 'اللون: '.$record->variant->color;
                         }
 
                         if ($record->variant->size) {
-                            $variantDetails[] = 'الحجم: ' . $record->variant->size;
+                            $variantDetails[] = 'الحجم: '.$record->variant->size;
                         }
 
                         if ($record->variant->capacity) {
-                            $variantDetails[] = 'السعة: ' . $record->variant->capacity;
+                            $variantDetails[] = 'السعة: '.$record->variant->capacity;
                         }
 
-                        return !empty($variantDetails) ? implode(' | ', $variantDetails) : null;
+                        return ! empty($variantDetails) ? implode(' | ', $variantDetails) : null;
                     })
                     ->toggleable(isToggledHiddenByDefault: false),
 

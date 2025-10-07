@@ -6,7 +6,6 @@ use App\Enums\PromotionConditionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class PromotionCondition extends Model
 {
@@ -36,7 +35,7 @@ class PromotionCondition extends Model
      */
     public function getRelatedEntity()
     {
-        return match($this->type) {
+        return match ($this->type) {
             PromotionConditionType::PRODUCT => Product::find($this->entity_id),
             PromotionConditionType::CATEGORY => Category::find($this->entity_id),
             PromotionConditionType::BRAND => Brand::find($this->entity_id),

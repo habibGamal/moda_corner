@@ -16,8 +16,6 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
 
     /**
      * Create a new notification instance.
-     *
-     * @param Order $order
      */
     public function __construct(Order $order)
     {
@@ -27,8 +25,7 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
-     * @return array
+     * @param  mixed  $notifiable
      */
     public function via($notifiable): array
     {
@@ -38,48 +35,48 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
-     * @return MailMessage
+     * @param  mixed  $notifiable
      */
     public function toMail($notifiable): MailMessage
     {
         $orderItemsDetails = $this->order->items->map(function ($item) {
             $variant = $item->variant ? " ({$item->variant->name_ar})" : '';
-            return "• {$item->product->name_ar}{$variant} - الكمية: {$item->quantity} - السعر: " . number_format($item->price, 2) . " جنيه";
+
+            return "• {$item->product->name_ar}{$variant} - الكمية: {$item->quantity} - السعر: ".number_format($item->price, 2).' جنيه';
         })->implode("\n");
 
         $message = (new MailMessage)
-            ->subject('طلب جديد تم إستلامه - رقم الطلب #' . $this->order->id)
-            ->greeting('مرحباً إدارة ' . config('app.name'))
+            ->subject('طلب جديد تم إستلامه - رقم الطلب #'.$this->order->id)
+            ->greeting('مرحباً إدارة '.config('app.name'))
             ->line('تم إستلام طلب جديد من أحد العملاء.')
             ->line('')
             ->line('**تفاصيل الطلب:**')
-            ->line('• رقم الطلب: #' . $this->order->id)
-            ->line('• اسم العميل: ' . $this->order->user->name)
-            ->line('• بريد العميل الإلكتروني: ' . $this->order->user->email)
-            ->line('• رقم هاتف العميل: ' . ($this->order->user->phone ?? 'غير محدد'))
-            ->line('• تاريخ الطلب: ' . $this->order->created_at->format('Y-m-d H:i:s'))
+            ->line('• رقم الطلب: #'.$this->order->id)
+            ->line('• اسم العميل: '.$this->order->user->name)
+            ->line('• بريد العميل الإلكتروني: '.$this->order->user->email)
+            ->line('• رقم هاتف العميل: '.($this->order->user->phone ?? 'غير محدد'))
+            ->line('• تاريخ الطلب: '.$this->order->created_at->format('Y-m-d H:i:s'))
             ->line('')
             ->line('**تفاصيل الدفع:**')
-            ->line('• طريقة الدفع: ' . $this->order->payment_method->getLabel())
-            ->line('• حالة الدفع: ' . $this->order->payment_status->getLabel())
-            ->line('• المبلغ الفرعي: ' . number_format((float) $this->order->subtotal, 2) . ' جنيه')
-            ->line('• تكلفة الشحن: ' . number_format((float) $this->order->shipping_cost, 2) . ' جنيه');
+            ->line('• طريقة الدفع: '.$this->order->payment_method->getLabel())
+            ->line('• حالة الدفع: '.$this->order->payment_status->getLabel())
+            ->line('• المبلغ الفرعي: '.number_format((float) $this->order->subtotal, 2).' جنيه')
+            ->line('• تكلفة الشحن: '.number_format((float) $this->order->shipping_cost, 2).' جنيه');
 
         if ($this->order->discount > 0) {
-            $message->line('• الخصم: ' . number_format((float) $this->order->discount, 2) . ' جنيه');
+            $message->line('• الخصم: '.number_format((float) $this->order->discount, 2).' جنيه');
             if ($this->order->coupon_code) {
-                $message->line('• كود الخصم المستخدم: ' . $this->order->coupon_code);
+                $message->line('• كود الخصم المستخدم: '.$this->order->coupon_code);
             }
         }
 
-        $message->line('• **إجمالي المبلغ: ' . number_format((float) $this->order->total, 2) . ' جنيه**')
+        $message->line('• **إجمالي المبلغ: '.number_format((float) $this->order->total, 2).' جنيه**')
             ->line('')
             ->line('**عنوان الشحن:**')
-            ->line('• المحافظة: ' . $this->order->shippingAddress->area->gov->name_ar)
-            ->line('• المنطقة: ' . $this->order->shippingAddress->area->name_ar)
-            ->line('• العنوان التفصيلي: ' . $this->order->shippingAddress->address_line)
-            ->line('• رقم الهاتف: ' . $this->order->shippingAddress->phone_number)
+            ->line('• المحافظة: '.$this->order->shippingAddress->area->gov->name_ar)
+            ->line('• المنطقة: '.$this->order->shippingAddress->area->name_ar)
+            ->line('• العنوان التفصيلي: '.$this->order->shippingAddress->address_line)
+            ->line('• رقم الهاتف: '.$this->order->shippingAddress->phone_number)
             ->line('')
             ->line('**المنتجات المطلوبة:**')
             ->line($orderItemsDetails);
@@ -93,7 +90,7 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
         $message->action('عرض تفاصيل الطلب', route('filament.admin.resources.orders.view', $this->order))
             ->line('')
             ->line('يرجى مراجعة الطلب واتخاذ الإجراءات اللازمة في أقرب وقت ممكن.')
-            ->salutation('مع أطيب التحيات,' . "\n" . 'نظام ' . config('app.name'));
+            ->salutation('مع أطيب التحيات,'."\n".'نظام '.config('app.name'));
 
         return $message;
     }
@@ -101,8 +98,7 @@ class OrderPlacedNotification extends Notification implements ShouldQueue
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
-     * @return array
+     * @param  mixed  $notifiable
      */
     public function toArray($notifiable): array
     {

@@ -23,11 +23,11 @@ class HeroSlideFactory extends Factory
     {
         return [
             'title_en' => $this->faker->words(3, true),
-            'title_ar' => 'عربي ' . $this->faker->words(3, true),
+            'title_ar' => 'عربي '.$this->faker->words(3, true),
             'description_en' => $this->faker->paragraph(2),
-            'description_ar' => 'عربي ' . $this->faker->paragraph(2),
-            'image' => 'https://images.unsplash.com/photo-' . $this->faker->numberBetween(1000000000, 9999999999) . '?q=80&w=1200',
-            'cta_link' => '/products/' . $this->faker->slug(2),
+            'description_ar' => 'عربي '.$this->faker->paragraph(2),
+            'image' => 'https://images.unsplash.com/photo-'.$this->faker->numberBetween(1000000000, 9999999999).'?q=80&w=1200',
+            'cta_link' => '/products/'.$this->faker->slug(2),
             'is_active' => $this->faker->boolean(80),
             'display_order' => $this->faker->numberBetween(0, 100),
             'created_at' => now(),
@@ -37,8 +37,6 @@ class HeroSlideFactory extends Factory
 
     /**
      * Indicate that the hero slide is active.
-     *
-     * @return static
      */
     public function active(): static
     {
@@ -48,4 +46,4 @@ class HeroSlideFactory extends Factory
             ];
         });
     }
-} 
+}

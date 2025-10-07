@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Notifications;
 
 use Illuminate\Notifications\Notification;
-use NotificationChannels\WebPush\WebPushMessage;
 use NotificationChannels\WebPush\WebPushChannel;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class Notify extends Notification
 {
@@ -20,14 +21,14 @@ class Notify extends Notification
             ->body('Your account was approved!')
             ->action('View account', 'view_account')
             ->options(['TTL' => 1000]);
-            // ->data(['id' => $notification->id])
-            // ->badge()
-            // ->dir()
-            // ->image()
-            // ->lang()
-            // ->renotify()
-            // ->requireInteraction()
-            // ->tag()
-            // ->vibrate()
+        // ->data(['id' => $notification->id])
+        // ->badge()
+        // ->dir()
+        // ->image()
+        // ->lang()
+        // ->renotify()
+        // ->requireInteraction()
+        // ->tag()
+        // ->vibrate()
     }
 }

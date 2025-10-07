@@ -16,4 +16,4 @@ class EditHeroSlide extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
-} 
+}

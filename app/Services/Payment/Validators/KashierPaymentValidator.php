@@ -39,12 +39,14 @@ class KashierPaymentValidator implements PaymentValidatorInterface
         if (isset($params['merchantOrderId']) || isset($params['orderReference'])) {
             // This looks like a success URL redirect - basic validation
             Log::info('Treating as URL redirect parameters', ['params' => $params]);
+
             return true; // We'll rely on the payment being processed via webhook
         }
 
         // For direct payment response data with signature
         if (! isset($params['signature'])) {
             Log::warning('No signature found in payment response', ['params' => $params]);
+
             return false;
         }
 
@@ -63,7 +65,7 @@ class KashierPaymentValidator implements PaymentValidatorInterface
 
         $isValid = hash_equals($expectedSignature, $receivedSignature);
 
-        if (!$isValid) {
+        if (! $isValid) {
             Log::warning('Signature validation failed', [
                 'expected' => $expectedSignature,
                 'received' => $receivedSignature,

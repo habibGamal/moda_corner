@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
@@ -19,7 +18,7 @@ class CategoryController extends Controller
             ->get();
 
         return Inertia::render('Categories/Index', [
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 }

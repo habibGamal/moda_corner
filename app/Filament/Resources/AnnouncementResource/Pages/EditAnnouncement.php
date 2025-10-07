@@ -16,4 +16,4 @@ class EditAnnouncement extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
-} 
+}

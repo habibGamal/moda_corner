@@ -23,9 +23,9 @@ class TopProductsChart extends ChartWidget
         $topProducts = \App\Models\OrderItem::query()
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
             ->join('products', 'order_items.product_id', '=', 'products.id')
-            ->when($startDate, fn($query) => $query->where('orders.created_at', '>=', $startDate))
-            ->when($endDate, fn($query) => $query->where('orders.created_at', '<=', $endDate))
-            ->when(!empty($orderStatus), fn($query) => $query->whereIn('orders.order_status', $orderStatus))
+            ->when($startDate, fn ($query) => $query->where('orders.created_at', '>=', $startDate))
+            ->when($endDate, fn ($query) => $query->where('orders.created_at', '<=', $endDate))
+            ->when(! empty($orderStatus), fn ($query) => $query->whereIn('orders.order_status', $orderStatus))
             ->select(
                 'products.name_ar as product_name',
                 DB::raw('SUM(order_items.quantity) as total_quantity'),
@@ -38,7 +38,7 @@ class TopProductsChart extends ChartWidget
 
         $labels = $topProducts->pluck('product_name')->toArray();
         $quantityData = $topProducts->pluck('total_quantity')->toArray();
-        $revenueData = $topProducts->pluck('total_revenue')->map(fn($revenue) => round($revenue, 2))->toArray();
+        $revenueData = $topProducts->pluck('total_revenue')->map(fn ($revenue) => round($revenue, 2))->toArray();
 
         return [
             'datasets' => [

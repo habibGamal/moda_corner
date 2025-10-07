@@ -22,7 +22,7 @@ class SettingsService
      */
     public static function all(): array
     {
-        return Cache::remember(self::CACHE_KEY . '_all', self::CACHE_DURATION, function () {
+        return Cache::remember(self::CACHE_KEY.'_all', self::CACHE_DURATION, function () {
             return Setting::orderBy('group')
                 ->orderBy('display_order')
                 ->get()
@@ -42,6 +42,7 @@ class SettingsService
     public static function get(string $key, $default = null)
     {
         $allSettings = self::getAllFlat();
+
         return $allSettings[$key] ?? $default;
     }
 
@@ -50,7 +51,7 @@ class SettingsService
      */
     public static function getAllFlat(): array
     {
-        return Cache::remember(self::CACHE_KEY . '_flat', self::CACHE_DURATION, function () {
+        return Cache::remember(self::CACHE_KEY.'_flat', self::CACHE_DURATION, function () {
             return Setting::pluck('value', 'key')->toArray();
         });
     }
@@ -60,7 +61,7 @@ class SettingsService
      */
     public static function getByGroup(string $group): array
     {
-        return Cache::remember(self::CACHE_KEY . "_{$group}", self::CACHE_DURATION, function () use ($group) {
+        return Cache::remember(self::CACHE_KEY."_{$group}", self::CACHE_DURATION, function () use ($group) {
             return Setting::byGroup($group)
                 ->ordered()
                 ->get()
@@ -113,13 +114,13 @@ class SettingsService
      */
     public static function clearCache(): void
     {
-        Cache::forget(self::CACHE_KEY . '_all');
-        Cache::forget(self::CACHE_KEY . '_flat');
+        Cache::forget(self::CACHE_KEY.'_all');
+        Cache::forget(self::CACHE_KEY.'_flat');
 
         // Clear group-specific caches
         $groups = ['general', 'appearance', 'seo', 'social', 'analytics', 'contact', 'email', 'payment', 'legal'];
         foreach ($groups as $group) {
-            Cache::forget(self::CACHE_KEY . "_{$group}");
+            Cache::forget(self::CACHE_KEY."_{$group}");
         }
     }
 
@@ -158,6 +159,7 @@ class SettingsService
     public static function getSocialLinks(): array
     {
         $links = self::get('social_links', []);
+
         return is_array($links) ? $links : [];
     }
 

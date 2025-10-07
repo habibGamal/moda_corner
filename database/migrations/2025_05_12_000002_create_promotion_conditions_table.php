@@ -10,7 +10,8 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {        Schema::create('promotion_conditions', function (Blueprint $table) {
+    {
+        Schema::create('promotion_conditions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('promotion_id')->constrained()->onDelete('cascade');
             $table->string('type');  // Will use PHP enum: product, category, brand, customer

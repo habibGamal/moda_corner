@@ -27,7 +27,7 @@ class AreaFactory extends Factory
     {
         return [
             'name_en' => fake()->streetName(),
-            'name_ar' => fake()->streetName() . ' (عربي)',
+            'name_ar' => fake()->streetName().' (عربي)',
             'gov_id' => Gov::factory(),
         ];
     }

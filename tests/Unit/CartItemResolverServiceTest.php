@@ -1,14 +1,13 @@
 <?php
 
+use App\Exceptions\ProductNotFoundException;
+use App\Exceptions\ProductVariantNotFoundException;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
 use App\Services\CartItemResolverService;
-use App\Exceptions\ProductNotFoundException;
-use App\Exceptions\ProductVariantNotFoundException;
-use App\Exceptions\InsufficientStockException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -96,21 +95,21 @@ describe('resolveCartItem', function () {
     });
 
     it('throws ProductNotFoundException when product does not exist', function () {
-        expect(fn() => $this->service->resolveCartItem($this->cart, 99999))
+        expect(fn () => $this->service->resolveCartItem($this->cart, 99999))
             ->toThrow(ProductNotFoundException::class);
     });
 
     it('throws ProductNotFoundException when product is inactive', function () {
         $product = Product::factory()->create(['is_active' => false]);
 
-        expect(fn() => $this->service->resolveCartItem($this->cart, $product->id))
+        expect(fn () => $this->service->resolveCartItem($this->cart, $product->id))
             ->toThrow(ProductNotFoundException::class);
     });
 
     it('throws ProductVariantNotFoundException when specified variant does not exist', function () {
         $product = Product::factory()->create(['is_active' => true]);
 
-        expect(fn() => $this->service->resolveCartItem($this->cart, $product->id, 99999))
+        expect(fn () => $this->service->resolveCartItem($this->cart, $product->id, 99999))
             ->toThrow(ProductVariantNotFoundException::class);
     });
 
@@ -121,7 +120,7 @@ describe('resolveCartItem', function () {
             'is_active' => false,
         ]);
 
-        expect(fn() => $this->service->resolveCartItem($this->cart, $product->id, $variant->id))
+        expect(fn () => $this->service->resolveCartItem($this->cart, $product->id, $variant->id))
             ->toThrow(ProductVariantNotFoundException::class);
     });
 
@@ -133,7 +132,7 @@ describe('resolveCartItem', function () {
             'is_active' => true,
         ]);
 
-        expect(fn() => $this->service->resolveCartItem($this->cart, $product1->id, $variant->id))
+        expect(fn () => $this->service->resolveCartItem($this->cart, $product1->id, $variant->id))
             ->toThrow(ProductVariantNotFoundException::class);
     });
 
@@ -144,7 +143,7 @@ describe('resolveCartItem', function () {
             'is_active' => false,
         ]);
 
-        expect(fn() => $this->service->resolveCartItem($this->cart, $product->id))
+        expect(fn () => $this->service->resolveCartItem($this->cart, $product->id))
             ->toThrow(ProductVariantNotFoundException::class);
     });
 });
@@ -281,7 +280,7 @@ describe('toOrderItem', function () {
             'quantity' => 5,
         ]);
 
-        expect(fn() => $this->service->toOrderItem($cartItem, $this->order))
+        expect(fn () => $this->service->toOrderItem($cartItem, $this->order))
             ->toThrow(\Exception::class, 'Cart item must have a variant to be converted to order item');
     });
 });

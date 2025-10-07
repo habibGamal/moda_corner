@@ -19,6 +19,7 @@ class BrandFactory extends Factory
     public function definition(): array
     {
         $name_en = $this->faker->unique()->company;
+
         return [
             'name_en' => $name_en,
             'name_ar' => $this->faker->unique()->company,

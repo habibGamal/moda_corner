@@ -4,7 +4,7 @@ import ProductDescription from "@/Components/Products/ProductDescription";
 import ProductGallery from "@/Components/Products/ProductGallery";
 import ProductInfo from "@/Components/Products/ProductInfo";
 import ProductQuantitySelector from "@/Components/Products/ProductQuantitySelector";
-
+import ProductReviews from "@/Components/Products/ProductReviews";
 import ProductVariantSelector from "@/Components/Products/ProductVariantSelector";
 import { PageTitle } from "@/Components/ui/page-title";
 import { useI18n } from "@/hooks/use-i18n";
@@ -16,9 +16,12 @@ import { useState, useEffect } from "react";
 interface ShowProps {
     product: App.Models.Product;
     relatedProducts: App.Models.Product[];
+    auth: {
+        user: App.Models.User | null;
+    };
 }
 
-export default function Show({ product }: ShowProps) {
+export default function Show({ product, auth }: ShowProps) {
     const { t, getLocalizedField } = useI18n();
     const [quantity, setQuantity] = useState(1);
 
@@ -107,6 +110,9 @@ export default function Show({ product }: ShowProps) {
                         </div>
                     </div>
                 </div>
+
+                {/* Product Reviews */}
+                <ProductReviews product={product} auth={auth} />
 
                 {/* Related products */}
                 <ProductGrid

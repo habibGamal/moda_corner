@@ -53,6 +53,8 @@ class Product extends Model
     protected $appends = [
         'featured_image',
         'is_in_wishlist',
+        'average_rating',
+        'reviews_count',
     ];
 
     /**
@@ -83,12 +85,14 @@ class Product extends Model
     /**
      * Normalize Arabic letters for search consistency.
      *
-     * @param string|null $text
+     * @param  string|null  $text
      * @return string|null
      */
     protected function normalizeArabic($text)
     {
-        if (!$text) return $text;
+        if (! $text) {
+            return $text;
+        }
         $text = trim($text);
         $text = mb_strtolower($text, 'UTF-8');
         // Normalize common Arabic letter variations
@@ -98,6 +102,7 @@ class Product extends Model
         $replace = [
             'ا', 'ا', 'ا', 'ي', 'ي', 'و', 'ه', 'ا', '',
         ];
+
         return str_replace($search, $replace, $text);
     }
 
@@ -134,14 +139,22 @@ class Product extends Model
     }
 
     /**
+     * Get the reviews for this product.
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
+    /**
      * Check if the product is in the wishlist of the given user.
      *
-     * @param int|null $userId
+     * @param  int|null  $userId
      * @return bool
      */
     public function getIsInWishlistAttribute($userId = null)
     {
-        if (!$userId && !auth()->check()) {
+        if (! $userId && ! auth()->check()) {
             return false;
         }
 
@@ -193,13 +206,13 @@ class Product extends Model
     {
         // Try to get image from default variant
         $defaultVariant = $this->defaultVariant();
-        if ($defaultVariant && !empty($defaultVariant->images)) {
+        if ($defaultVariant && ! empty($defaultVariant->images)) {
             return $defaultVariant->featured_image;
         }
 
         // If no default variant, try the first variant with images
         $variantWithImages = $this->variants->filter(function ($variant) {
-            return !empty($variant->images);
+            return ! empty($variant->images);
         })->first();
 
         return $variantWithImages ? $variantWithImages->featured_image : null;
@@ -212,10 +225,11 @@ class Product extends Model
     {
         $images = [];
         foreach ($this->variants as $variant) {
-            if (!empty($variant->images)) {
+            if (! empty($variant->images)) {
                 $images = array_merge($images, $variant->images);
             }
         }
+
         return array_unique($images);
     }
 
@@ -233,7 +247,23 @@ class Product extends Model
             ->with([
                 'brand' => function ($query) {
                     $query->select('id', 'name_en', 'name_ar', 'slug', 'image');
-                }
+                },
             ]);
+    }
+
+    /**
+     * Get the average rating for the product.
+     */
+    public function getAverageRatingAttribute(): float
+    {
+        return round($this->reviews()->approved()->avg('rating') ?? 0, 1);
+    }
+
+    /**
+     * Get the reviews count for the product.
+     */
+    public function getReviewsCountAttribute(): int
+    {
+        return $this->reviews()->approved()->count();
     }
 }

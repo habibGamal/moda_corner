@@ -26,7 +26,7 @@ class GovFactory extends Factory
     {
         return [
             'name_en' => fake()->city(),
-            'name_ar' => fake()->city() . ' (عربي)',
+            'name_ar' => fake()->city().' (عربي)',
         ];
     }
 }

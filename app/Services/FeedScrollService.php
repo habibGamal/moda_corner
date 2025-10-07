@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Inertia\Response;
 
@@ -52,90 +51,96 @@ class FeedScrollService
     /**
      * Initialize a new feed for a specific model.
      *
-     * @param string $modelClass The fully qualified class name of the model
+     * @param  string  $modelClass  The fully qualified class name of the model
      * @return $this
      */
     public function model(string $modelClass): self
     {
         $this->resetState();
         $this->query = $modelClass::query();
+
         return $this;
     }
 
     /**
      * Initialize a feed from an existing builder query.
      *
-     * @param Builder $query The query builder instance
+     * @param  Builder  $query  The query builder instance
      * @return $this
      */
     public function fromQuery(Builder $query): self
     {
         $this->resetState();
         $this->query = $query;
+
         return $this;
     }
 
     /**
      * Set the section identifier.
      *
-     * @param string $sectionId A unique identifier for this section/feed
+     * @param  string  $sectionId  A unique identifier for this section/feed
      * @return $this
      */
     public function forSection(string $sectionId): self
     {
         $this->sectionId = $sectionId;
+
         return $this;
     }
 
     /**
      * Set relationships to eager load.
      *
-     * @param array $relationships Relationships to eager load
+     * @param  array  $relationships  Relationships to eager load
      * @return $this
      */
     public function with(array $relationships): self
     {
         $this->with = $relationships;
+
         return $this;
     }
 
     /**
      * Set the number of items per page.
      *
-     * @param int $perPage Number of items per page
+     * @param  int  $perPage  Number of items per page
      * @return $this
      */
     public function perPage(int $perPage): self
     {
         $this->perPage = $perPage;
+
         return $this;
     }
 
     /**
      * Set the ordering parameters.
      *
-     * @param string $column Column to order by
-     * @param string $direction Direction to order (asc or desc)
+     * @param  string  $column  Column to order by
+     * @param  string  $direction  Direction to order (asc or desc)
      * @return $this
      */
     public function orderBy(string $column, string $direction = 'desc'): self
     {
         $this->orderBy = [$column, $direction];
+
         return $this;
     }
 
     /**
      * Apply a where condition to the query.
      *
-     * @param string $column The column to filter on
-     * @param mixed $operator The operator or value
-     * @param mixed $value The value (if operator is provided)
+     * @param  string  $column  The column to filter on
+     * @param  mixed  $operator  The operator or value
+     * @param  mixed  $value  The value (if operator is provided)
      * @return $this
      */
     public function where(string $column, $operator, $value = null): self
     {
         if ($this->query === null) {
-            throw new \RuntimeException("Model must be set before applying conditions.");
+            throw new \RuntimeException('Model must be set before applying conditions.');
         }
 
         if ($value === null) {
@@ -150,13 +155,13 @@ class FeedScrollService
     /**
      * Apply multiple where conditions at once.
      *
-     * @param array $conditions Array of conditions to apply
+     * @param  array  $conditions  Array of conditions to apply
      * @return $this
      */
     public function whereConditions(array $conditions): self
     {
         if ($this->query === null) {
-            throw new \RuntimeException("Model must be set before applying conditions.");
+            throw new \RuntimeException('Model must be set before applying conditions.');
         }
 
         foreach ($conditions as $column => $value) {
@@ -180,20 +185,20 @@ class FeedScrollService
     public function get(): array
     {
         if ($this->query === null) {
-            throw new \RuntimeException("Query has not been initialized. Call model() or fromQuery() first.");
+            throw new \RuntimeException('Query has not been initialized. Call model() or fromQuery() first.');
         }
 
         if ($this->sectionId === null) {
-            throw new \RuntimeException("Section ID must be set. Call forSection() first.");
+            throw new \RuntimeException('Section ID must be set. Call forSection() first.');
         }
 
         // Apply ordering if specified
-        if (!empty($this->orderBy) && count($this->orderBy) === 2) {
+        if (! empty($this->orderBy) && count($this->orderBy) === 2) {
             $this->query->orderBy($this->orderBy[0], $this->orderBy[1]);
         }
 
         // If there are relationships to eager load, add them to the query
-        if (!empty($this->with)) {
+        if (! empty($this->with)) {
             $this->query->with($this->with);
         }
 
@@ -215,7 +220,7 @@ class FeedScrollService
     /**
      * Add the feed data directly to an existing Inertia response.
      *
-     * @param Response $response The Inertia response to add data to
+     * @param  Response  $response  The Inertia response to add data to
      * @return Response The updated Inertia response
      */
     public function addToResponse(Response $response): Response
@@ -232,12 +237,12 @@ class FeedScrollService
     /**
      * Create a paginated feed for a specific model instance (legacy method).
      *
-     * @param string $modelClass The fully qualified class name of the model
-     * @param string $sectionId A unique identifier for this section/feed
-     * @param array $conditions Query conditions to apply
-     * @param array $with Relationships to eager load
-     * @param array $orderBy Ordering parameters [column, direction]
-     * @param int $perPage Number of items per page
+     * @param  string  $modelClass  The fully qualified class name of the model
+     * @param  string  $sectionId  A unique identifier for this section/feed
+     * @param  array  $conditions  Query conditions to apply
+     * @param  array  $with  Relationships to eager load
+     * @param  array  $orderBy  Ordering parameters [column, direction]
+     * @param  int  $perPage  Number of items per page
      * @return array The data and pagination keys
      *
      * @deprecated Use the fluent interface instead: model()->forSection()->whereConditions()->with()->orderBy()->perPage()->get()
@@ -262,11 +267,11 @@ class FeedScrollService
     /**
      * Get a feed for a related model through a relationship.
      *
-     * @param Model $model The parent model instance
-     * @param string $relation The name of the relation
-     * @param string $sectionId A unique identifier for this section/feed
-     * @param array $with Additional relationships to eager load
-     * @param int $perPage Number of items per page
+     * @param  Model  $model  The parent model instance
+     * @param  string  $relation  The name of the relation
+     * @param  string  $sectionId  A unique identifier for this section/feed
+     * @param  array  $with  Additional relationships to eager load
+     * @param  int  $perPage  Number of items per page
      * @return array The data and pagination keys
      */
     public function getRelatedModelFeed(
@@ -276,8 +281,8 @@ class FeedScrollService
         array $with = [],
         int $perPage = 5
     ): array {
-        if (!method_exists($model, $relation)) {
-            throw new \InvalidArgumentException("Relation {$relation} does not exist on " . get_class($model));
+        if (! method_exists($model, $relation)) {
+            throw new \InvalidArgumentException("Relation {$relation} does not exist on ".get_class($model));
         }
 
         $query = $model->$relation();

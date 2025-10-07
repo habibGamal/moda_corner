@@ -7,7 +7,6 @@ use App\Services\WishlistService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\JsonResponse;
 
 class WishlistController extends Controller
 {

@@ -2,9 +2,9 @@
 
 namespace App\Filament\Widgets;
 
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class ProductsSalesOverview extends BaseWidget
 {
@@ -19,10 +19,10 @@ class ProductsSalesOverview extends BaseWidget
 
         // Base query for products
         $productsQuery = \App\Models\Product::query();        // Apply filters
-        if (!empty($category)) {
+        if (! empty($category)) {
             $productsQuery->whereIn('category_id', $category);
         }
-        if (!empty($status)) {
+        if (! empty($status)) {
             // Convert status to is_active boolean
             if (in_array('active', $status)) {
                 $productsQuery->where('is_active', true);
@@ -38,8 +38,8 @@ class ProductsSalesOverview extends BaseWidget
 
         // Products with Sales (within date range)
         $productsWithSales = (clone $productsQuery)
-            ->whereHas('orderItems', function($query) use ($startDate, $endDate) {
-                $query->whereHas('order', function($orderQuery) use ($startDate, $endDate) {
+            ->whereHas('orderItems', function ($query) use ($startDate, $endDate) {
+                $query->whereHas('order', function ($orderQuery) use ($startDate, $endDate) {
                     $orderQuery->whereBetween('created_at', [$startDate, $endDate]);
                 });
             })
@@ -57,7 +57,7 @@ class ProductsSalesOverview extends BaseWidget
 
         return [
             Stat::make('إجمالي المنتجات', number_format($totalProducts))
-                ->description("المنتجات المسجلة في النظام")
+                ->description('المنتجات المسجلة في النظام')
                 ->descriptionIcon('heroicon-m-cube')
                 ->color('primary'),
 

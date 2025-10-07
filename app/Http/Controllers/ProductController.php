@@ -13,7 +13,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'brand', 'variants' => function($query) {
+        $query = Product::with(['category', 'brand', 'variants' => function ($query) {
             $query->where('is_active', true);
         }])
             ->where('is_active', true);
@@ -33,7 +33,7 @@ class ProductController extends Controller
 
         return Inertia::render('Products/Index', [
             'products' => $products,
-            'filters' => $request->only(['category_id', 'brand_id'])
+            'filters' => $request->only(['category_id', 'brand_id']),
         ]);
     }
 
@@ -42,7 +42,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product->load(['category', 'brand', 'variants' => function($query) {
+        $product->load(['category', 'brand', 'variants' => function ($query) {
             $query->where('is_active', true);
         }])
             ->append([
@@ -60,9 +60,9 @@ class ProductController extends Controller
                 'brand' => function ($query) {
                     $query->select('id', 'name_en', 'name_ar', 'slug');
                 },
-                'variants' => function($query) {
+                'variants' => function ($query) {
                     $query->where('is_active', true);
-                }
+                },
             ])
             ->where('is_active', true)
             ->paginate(4);

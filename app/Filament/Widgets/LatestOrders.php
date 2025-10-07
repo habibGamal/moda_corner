@@ -4,11 +4,11 @@ namespace App\Filament\Widgets;
 
 use App\Models\Order;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Widgets\TableWidget as BaseWidget;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
+use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
 
 class LatestOrders extends BaseWidget
@@ -19,7 +19,7 @@ class LatestOrders extends BaseWidget
 
     protected static ?int $sort = 7;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public function table(Table $table): Table
     {
@@ -93,7 +93,7 @@ class LatestOrders extends BaseWidget
             ->with(['user'])
             ->when($startDate, fn ($query) => $query->where('created_at', '>=', $startDate))
             ->when($endDate, fn ($query) => $query->where('created_at', '<=', $endDate))
-            ->when(!empty($orderStatus), fn ($query) => $query->whereIn('order_status', $orderStatus))
+            ->when(! empty($orderStatus), fn ($query) => $query->whereIn('order_status', $orderStatus))
             ->latest()
             ->limit(50);
     }

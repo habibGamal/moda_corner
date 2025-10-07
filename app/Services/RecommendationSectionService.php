@@ -21,8 +21,6 @@ class RecommendationSectionService
      * - Products related to items in the user's cart
      * - Featured products if no user history available
      * - Recently added products as a fallback
-     *
-     * @return Builder
      */
     public function getRecommendedProductsQuery(): Builder
     {
@@ -60,8 +58,8 @@ class RecommendationSectionService
     /**
      * Get recommendations based on user's order history
      *
-     * @param \App\Models\User $user
-     * @param array $excludeProductIds Products to exclude
+     * @param  \App\Models\User  $user
+     * @param  array  $excludeProductIds  Products to exclude
      * @return Builder|null Query builder or null if no recommendations
      */
     private function getOrderBasedRecommendations($user, array &$excludeProductIds): ?Builder
@@ -84,12 +82,11 @@ class RecommendationSectionService
     /**
      * Get user's order items with product details
      *
-     * @param \App\Models\User $user
-     * @return Collection
+     * @param  \App\Models\User  $user
      */
     private function getUserOrderItems($user): Collection
     {
-        return OrderItem::whereHas('order', function($query) use ($user) {
+        return OrderItem::whereHas('order', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })->with('product')->get();
     }
@@ -97,13 +94,13 @@ class RecommendationSectionService
     /**
      * Get recommendations based on user's cart contents
      *
-     * @param \App\Models\User $user
-     * @param array $excludeProductIds Products to exclude
+     * @param  \App\Models\User  $user
+     * @param  array  $excludeProductIds  Products to exclude
      * @return Builder|null Query builder or null if no recommendations
      */
     private function getCartBasedRecommendations($user, array $excludeProductIds): ?Builder
     {
-        if (!$user->cart) {
+        if (! $user->cart) {
             return null;
         }
 
@@ -126,8 +123,8 @@ class RecommendationSectionService
     /**
      * Get recommendations based on user's wishlist
      *
-     * @param \App\Models\User $user
-     * @param array $excludeProductIds Products to exclude
+     * @param  \App\Models\User  $user
+     * @param  array  $excludeProductIds  Products to exclude
      * @return Builder|null Query builder or null if no recommendations
      */
     private function getWishlistBasedRecommendations($user, array $excludeProductIds): ?Builder
@@ -151,9 +148,9 @@ class RecommendationSectionService
     /**
      * Build a query for recommendations based on categories and brands
      *
-     * @param array $categoryIds Category IDs to include
-     * @param array $brandIds Brand IDs to include
-     * @param array $excludeProductIds Product IDs to exclude
+     * @param  array  $categoryIds  Category IDs to include
+     * @param  array  $brandIds  Brand IDs to include
+     * @param  array  $excludeProductIds  Product IDs to exclude
      * @return Builder|null Query builder or null if no valid recommendations
      */
     private function buildRecommendationsQuery(array $categoryIds, array $brandIds, array $excludeProductIds): ?Builder
@@ -163,12 +160,12 @@ class RecommendationSectionService
         }
 
         $query = Product::forCards()
-            ->where(function($query) use ($categoryIds, $brandIds) {
-                if (!empty($categoryIds)) {
+            ->where(function ($query) use ($categoryIds, $brandIds) {
+                if (! empty($categoryIds)) {
                     $query->whereIn('category_id', $categoryIds);
                 }
 
-                if (!empty($brandIds)) {
+                if (! empty($brandIds)) {
                     $query->orWhereIn('brand_id', $brandIds);
                 }
             })
@@ -184,8 +181,7 @@ class RecommendationSectionService
     /**
      * Get generic (non-personalized) recommendations
      *
-     * @param Builder $baseQuery Base query to build upon
-     * @return Builder
+     * @param  Builder  $baseQuery  Base query to build upon
      */
     private function getGenericRecommendations(Builder $baseQuery): Builder
     {

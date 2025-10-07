@@ -7,29 +7,23 @@ use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Enums\ReturnStatus;
 use App\Models\Order;
-use App\Models\OrderItem;
-use App\Services\RefundService;
-use App\Services\InventoryManagementService;
-use App\Services\AdminNotificationService;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Carbon\Carbon;
-use Exception;
 
 class OrderReturnService
 {
     protected RefundService $refundService;
+
     protected InventoryManagementService $inventoryService;
+
     protected AdminNotificationService $adminNotificationService;
 
     /**
      * Create a new service instance.
-     *
-     * @param RefundService $refundService
-     * @param InventoryManagementService $inventoryService
-     * @param AdminNotificationService $adminNotificationService
      */
     public function __construct(
         RefundService $refundService,
@@ -43,9 +37,6 @@ class OrderReturnService
 
     /**
      * Check if an order is eligible for return
-     *
-     * @param Order $order
-     * @return bool
      */
     public function isOrderEligibleForReturn(Order $order): bool
     {
@@ -54,38 +45,36 @@ class OrderReturnService
             return false;
         }
         // Check if order has not already been returned
-        if (!is_null($order->return_status)) {
+        if (! is_null($order->return_status)) {
             return false;
         }
 
         // Check if order was delivered within 14 days
-        if (!$order->delivered_at) {
+        if (! $order->delivered_at) {
             return false;
         }
 
         $deliveredDate = Carbon::parse($order->delivered_at);
+
         return $deliveredDate->diffInDays(now()) <= 14;
     }
 
     /**
      * Request return for an order
      *
-     * @param int $orderId
-     * @param string $reason
-     * @return Order
      * @throws ModelNotFoundException
      * @throws Exception
      */
     public function requestReturn(int $orderId, string $reason): Order
     {
         $user = Auth::user();
-        if (!$user) {
+        if (! $user) {
             throw new Exception('User must be authenticated to request return.');
         }
 
         $order = Order::where('user_id', $user->id)->findOrFail($orderId);
 
-        if (!$this->isOrderEligibleForReturn($order)) {
+        if (! $this->isOrderEligibleForReturn($order)) {
             throw new Exception('This order is not eligible for return.');
         }
 
@@ -112,8 +101,6 @@ class OrderReturnService
     /**
      * Approve return request (Admin action)
      *
-     * @param int $orderId
-     * @return Order
      * @throws ModelNotFoundException
      * @throws Exception
      */
@@ -143,9 +130,6 @@ class OrderReturnService
     /**
      * Reject return request (Admin action)
      *
-     * @param int $orderId
-     * @param string|null $rejectionReason
-     * @return Order
      * @throws ModelNotFoundException
      * @throws Exception
      */
@@ -161,7 +145,7 @@ class OrderReturnService
             $updateData = ['return_status' => ReturnStatus::RETURN_REJECTED];
 
             if ($rejectionReason) {
-                $updateData['return_reason'] = $order->return_reason . ' | Rejection: ' . $rejectionReason;
+                $updateData['return_reason'] = $order->return_reason.' | Rejection: '.$rejectionReason;
             }
 
             $order->update($updateData);
@@ -180,8 +164,6 @@ class OrderReturnService
     /**
      * Complete return process (Admin action - when item is physically returned)
      *
-     * @param int $orderId
-     * @return Order
      * @throws ModelNotFoundException
      * @throws Exception
      */
@@ -199,7 +181,7 @@ class OrderReturnService
 
             $updateData = [
                 'payment_status' => PaymentStatus::REFUNDED,
-                'refunded_at' => now()
+                'refunded_at' => now(),
             ];
 
             // Process refund if not Cash on Delivery
@@ -222,11 +204,13 @@ class OrderReturnService
 
             return $order->fresh();
         });
-    }    /**
-         * Get all orders that are pending return approval
-         *
-         * @return \Illuminate\Database\Eloquent\Collection
-         */
+    }
+
+    /**
+     * Get all orders that are pending return approval
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getPendingReturnOrders()
     {
         return Order::where('return_status', ReturnStatus::RETURN_REQUESTED)
@@ -237,8 +221,6 @@ class OrderReturnService
 
     /**
      * Get return statistics
-     *
-     * @return array
      */
     public function getReturnStatistics(): array
     {
@@ -247,7 +229,7 @@ class OrderReturnService
             'approved_returns' => Order::where('return_status', ReturnStatus::RETURN_APPROVED)->count(),
             'completed_returns' => Order::whereIn('return_status', [
                 ReturnStatus::ITEM_RETURNED,
-                ReturnStatus::REFUND_PROCESSED
+                ReturnStatus::REFUND_PROCESSED,
             ])->count(),
             'rejected_returns' => Order::where('return_status', ReturnStatus::RETURN_REJECTED)->count(),
         ];
@@ -256,7 +238,6 @@ class OrderReturnService
     /**
      * Get user's return history
      *
-     * @param int|null $userId
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getUserReturnHistory(?int $userId = null)

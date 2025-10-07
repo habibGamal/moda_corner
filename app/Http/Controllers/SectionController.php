@@ -6,31 +6,25 @@ use App\Models\Section;
 use App\Services\SectionService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Arr;
 
 class SectionController extends Controller
 {
     /**
      * The section service instance.
-     *
-     * @var SectionService
      */
     protected SectionService $sectionService;
 
     /**
      * Create a new controller instance.
-     *
-     * @param SectionService $sectionService
      */
     public function __construct(SectionService $sectionService)
     {
         $this->sectionService = $sectionService;
     }
-      /**
+
+    /**
      * Display the products in a specific section.
      *
-     * @param \App\Models\Section $section
-     * @param Request $request
      * @return \Inertia\Response
      */
     public function show(Section $section, Request $request)
@@ -51,7 +45,7 @@ class SectionController extends Controller
 
         return Inertia::render('Products/Section', [
             'section' => $section,
-            ...$sectionPaginator
+            ...$sectionPaginator,
         ]);
     }
 }

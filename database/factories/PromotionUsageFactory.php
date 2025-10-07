@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\PromotionUsage;
-use App\Models\Promotion;
 use App\Models\Order;
+use App\Models\Promotion;
+use App\Models\PromotionUsage;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

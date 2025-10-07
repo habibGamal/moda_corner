@@ -2,16 +2,17 @@
 
 namespace App\Services;
 
+use App\DTOs\CartSummaryData;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
-use App\DTOs\CartSummaryData;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 
 class CartService
 {
     protected CartItemResolverService $cartItemResolver;
+
     protected InventoryManagementService $inventoryService;
 
     public function __construct(
@@ -21,10 +22,9 @@ class CartService
         $this->inventoryService = $inventoryService;
         $this->cartItemResolver = $cartItemResolver;
     }
+
     /**
      * Get the current user's cart or create one if it doesn't exist
-     *
-     * @return Cart
      */
     public function getOrCreateCart(): Cart
     {
@@ -32,7 +32,7 @@ class CartService
 
         $cart = $user->cart;
 
-        if (!$cart) {
+        if (! $cart) {
             $cart = $user->cart()->create();
         }
 
@@ -41,10 +41,6 @@ class CartService
 
     /**
      * Add a CartItem to the cart
-     *
-     * @param CartItem $item
-     * @param int $quantity
-     * @return CartItem
      */
     public function addToCart(CartItem $item, int $quantity): CartItem
     {
@@ -62,10 +58,6 @@ class CartService
 
     /**
      * Update the quantity of a product in the cart
-     *
-     * @param CartItem $item
-     * @param int $quantity
-     * @return CartItem
      */
     public function updateCartItemQuantity(CartItem $item, int $quantity): CartItem
     {
@@ -81,14 +73,12 @@ class CartService
     /**
      * Remove an item from the cart
      *
-     * @param CartItem $item
-     * @return bool
      * @throws ModelNotFoundException
      */
     public function removeFromCart(CartItem $item): bool
     {
         // Check if the item still exists in the database
-        if (!$item->exists) {
+        if (! $item->exists) {
             throw new ModelNotFoundException("Cart item not found: {$item->id}");
         }
 
@@ -99,20 +89,17 @@ class CartService
 
     /**
      * Clear all items from the cart
-     *
-     * @return bool
      */
     public function clearCart(): bool
     {
         $cart = $this->getOrCreateCart();
         $cart->items()->delete();
+
         return true;
     }
 
     /**
      * Get the current cart with its items and products
-     *
-     * @return Cart
      */
     public function getCart(): Cart
     {
@@ -124,8 +111,6 @@ class CartService
 
     /**
      * Get cart summary (total items, total price)
-     *
-     * @return CartSummaryData
      */
     public function getCartSummary(): CartSummaryData
     {
@@ -142,8 +127,7 @@ class CartService
     /**
      * Convert cart items to order items for a given order
      *
-     * @param Order $order The order to create items for
-     * @return void
+     * @param  Order  $order  The order to create items for
      */
     public function toOrderItems(Order $order): void
     {

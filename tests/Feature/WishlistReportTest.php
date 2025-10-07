@@ -1,10 +1,10 @@
 <?php
 
 use App\Filament\Pages\Reports\WishlistReport;
-use App\Models\User;
-use App\Models\Product;
-use App\Models\WishlistItem;
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\User;
+use App\Models\WishlistItem;
 use Livewire\Livewire;
 
 it('can render wishlist report page', function () {
@@ -60,7 +60,7 @@ it('displays latest wishlist items correctly', function () {
     $category = Category::factory()->create();
     $product = Product::factory()->create([
         'category_id' => $category->id,
-        'name_ar' => 'منتج تجريبي'
+        'name_ar' => 'منتج تجريبي',
     ]);
 
     $wishlistItem = WishlistItem::factory()->create([

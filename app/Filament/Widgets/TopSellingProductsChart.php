@@ -21,11 +21,11 @@ class TopSellingProductsChart extends ChartWidget
 
         $topProducts = \App\Models\OrderItem::query()
             ->with('product')
-            ->whereHas('order', function($query) use ($startDate, $endDate) {
+            ->whereHas('order', function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             })
-            ->when(!empty($category), function($query) use ($category) {
-                $query->whereHas('product', function($productQuery) use ($category) {
+            ->when(! empty($category), function ($query) use ($category) {
+                $query->whereHas('product', function ($productQuery) use ($category) {
                     $productQuery->whereIn('category_id', $category);
                 });
             })
@@ -55,12 +55,12 @@ class TopSellingProductsChart extends ChartWidget
         foreach ($topProducts as $index => $item) {
             // Use English fallback to avoid UTF-8 encoding issues with json_encode
             $productName = $item->product->name_en ?? $item->product->name_ar ?? 'Unknown Product';
-            
+
             // Truncate long names
             if (strlen($productName) > 25) {
-                $productName = substr($productName, 0, 22) . '...';
+                $productName = substr($productName, 0, 22).'...';
             }
-            
+
             $labels[] = $productName;
             $salesData[] = (int) $item->total_sold;
             $backgroundColors[] = $colors[$index % count($colors)];

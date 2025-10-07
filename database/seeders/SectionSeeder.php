@@ -3,9 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\SectionType;
-use App\Models\Product;
 use App\Models\Section;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SectionSeeder extends Seeder
@@ -21,7 +19,7 @@ class SectionSeeder extends Seeder
             'title_ar' => 'منتجات مميزة',
             'active' => true,
             'sort_order' => 1,
-            'section_type' => SectionType::VIRTUAL
+            'section_type' => SectionType::VIRTUAL,
         ]);
 
         // Create a sale products section (VIRTUAL)
@@ -30,7 +28,7 @@ class SectionSeeder extends Seeder
             'title_ar' => 'منتجات في التخفيض',
             'active' => true,
             'sort_order' => 2,
-            'section_type' => SectionType::VIRTUAL
+            'section_type' => SectionType::VIRTUAL,
         ]);
 
         // Create some REAL sections with products
@@ -39,7 +37,7 @@ class SectionSeeder extends Seeder
             'title_ar' => 'وصل حديثاً',
             'active' => true,
             'sort_order' => 3,
-            'section_type' => SectionType::VIRTUAL
+            'section_type' => SectionType::VIRTUAL,
         ]);
 
         // Create a best sellers section (VIRTUAL)
@@ -48,7 +46,7 @@ class SectionSeeder extends Seeder
             'title_ar' => 'الأكثر مبيعاً',
             'active' => true,
             'sort_order' => 4,
-            'section_type' => SectionType::VIRTUAL
+            'section_type' => SectionType::VIRTUAL,
         ]);
 
         // Another REAL section
@@ -57,7 +55,7 @@ class SectionSeeder extends Seeder
             'title_ar' => 'موصى به لك',
             'active' => true,
             'sort_order' => 5,
-            'section_type' => SectionType::VIRTUAL
+            'section_type' => SectionType::VIRTUAL,
         ]);
     }
 }

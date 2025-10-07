@@ -2,40 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\CartSummaryData;
+use App\DTOs\OrderPlacementData;
 use App\Http\Requests\StoreOrderRequest;
+use App\Models\Address;
 use App\Models\Order;
-use App\Services\OrderService;
 use App\Services\CartService;
+use App\Services\OrderCancellationService;
 use App\Services\OrderEvaluationService;
 use App\Services\OrderReturnService;
-use App\Services\OrderCancellationService;
-use App\Models\Address;
-use App\DTOs\OrderPlacementData;
-use App\DTOs\CartSummaryData;
+use App\Services\OrderService;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Exception;
 
 class OrderController extends Controller
 {
     protected OrderService $orderService;
+
     protected CartService $cartService;
+
     protected OrderEvaluationService $orderEvaluationService;
+
     protected OrderReturnService $orderReturnService;
+
     protected OrderCancellationService $orderCancellationService;
 
     /**
      * Create a new controller instance.
-     *
-     * @param OrderService $orderService
-     * @param CartService $cartService
-     * @param OrderEvaluationService $orderEvaluationService
-     * @param OrderReturnService $orderReturnService
-     * @param OrderCancellationService $orderCancellationService
      */
     public function __construct(
         OrderService $orderService,
@@ -55,7 +53,6 @@ class OrderController extends Controller
     /**
      * Display a listing of the user's orders.
      *
-     * @param Request $request
      * @return \Inertia\Response
      */
     public function index(Request $request)
@@ -73,7 +70,6 @@ class OrderController extends Controller
     /**
      * Display the specified order.
      *
-     * @param int $orderId
      * @return \Inertia\Response|\Illuminate\Http\RedirectResponse
      */
     public function show(int $orderId)
@@ -103,7 +99,7 @@ class OrderController extends Controller
         $selectedAddressId = request()->input('address_id');
         $couponCode = request()->input('coupon_code');
         $cart = $this->cartService->getCart();
-        if (!$cart || $cart->items->isEmpty()) {
+        if (! $cart || $cart->items->isEmpty()) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty. Please add items to your cart before checking out.');
         }
 
@@ -139,11 +135,9 @@ class OrderController extends Controller
         ]);
     }
 
-
     /**
      * Handle order submission from checkout
      *
-     * @param StoreOrderRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreOrderRequest $request)
@@ -163,7 +157,7 @@ class OrderController extends Controller
             if ($paymentMethod->requiresOnlineGateway()) {
                 // Create request to pass to initiatePayment
                 return redirect()->route('payment.initiate', [
-                    'order_id' => $order->id
+                    'order_id' => $order->id,
                 ]);
             }
 
@@ -172,9 +166,11 @@ class OrderController extends Controller
 
         } catch (ModelNotFoundException $e) {
             Log::warning('Order placement failed: Address not found.', ['address_id' => $request->validated('address_id'), 'user_id' => Auth::id()]);
+
             return back()->with('error', 'Selected address not found. Please select a valid address.')->withInput();
         } catch (Exception $e) {
-            Log::error('Order placement failed: ' . $e->getMessage(), ['exception' => $e, 'user_id' => Auth::id(), 'request_data' => $request->except(['_token'])]);
+            Log::error('Order placement failed: '.$e->getMessage(), ['exception' => $e, 'user_id' => Auth::id(), 'request_data' => $request->except(['_token'])]);
+
             return back()->with('error', 'Failed to place order. Please try again later or contact support.')->withInput();
         }
     }
@@ -182,7 +178,6 @@ class OrderController extends Controller
     /**
      * Cancel the specified order.
      *
-     * @param int $orderId
      * @return \Illuminate\Http\RedirectResponse
      */
     public function cancel(int $orderId)
@@ -191,13 +186,16 @@ class OrderController extends Controller
             // Ensure the order belongs to the authenticated user
             $order = Order::where('user_id', Auth::id())->findOrFail($orderId);
             $this->orderCancellationService->cancelOrder($order->id);
+
             return redirect()->route('orders.index')->with('success', 'Order cancelled successfully.');
         } catch (ModelNotFoundException $e) {
             Log::warning('Order cancellation failed: Order not found.', ['order_id' => $orderId, 'user_id' => Auth::id()]);
+
             return redirect()->route('orders.index')->with('error', 'Order not found.');
         } catch (Exception $e) {
-            Log::error('Order cancellation failed: ' . $e->getMessage(), ['exception' => $e, 'order_id' => $orderId, 'user_id' => Auth::id()]);
-            return back()->with('error', 'Failed to cancel order: ' . $e->getMessage());
+            Log::error('Order cancellation failed: '.$e->getMessage(), ['exception' => $e, 'order_id' => $orderId, 'user_id' => Auth::id()]);
+
+            return back()->with('error', 'Failed to cancel order: '.$e->getMessage());
         }
     }
 }

@@ -77,6 +77,8 @@ declare namespace App.Models {
         isInStock?: boolean;
         totalQuantity?: number;
         reviews?: ProductReview[];
+        average_rating: number;
+        reviews_count: number;
         created_at?: string;
         updated_at?: string;
     }
@@ -121,9 +123,14 @@ declare namespace App.Models {
         id: number;
         product_id: number;
         user_id: number;
+        order_id?: number;
         rating: number;
-        comment: string;
+        comment?: string;
+        is_verified_purchase: boolean;
+        is_approved: boolean;
+        approved_at?: string;
         created_at: string;
+        updated_at: string;
         user: User;
     }
 

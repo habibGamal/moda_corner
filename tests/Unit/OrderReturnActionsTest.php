@@ -3,7 +3,6 @@
 use App\Actions\Orders\ApproveReturnAction;
 use App\Actions\Orders\CompleteReturnAction;
 use App\Actions\Orders\RejectReturnAction;
-use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Enums\ReturnStatus;
@@ -61,7 +60,7 @@ describe('ApproveReturnAction', function () {
             'return_status' => ReturnStatus::RETURN_APPROVED,
         ]);
 
-        expect(fn() => $this->approveReturnAction->execute($order))
+        expect(fn () => $this->approveReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return request is not in a valid state for approval.');
     });
 
@@ -70,7 +69,7 @@ describe('ApproveReturnAction', function () {
             'return_status' => null,
         ]);
 
-        expect(fn() => $this->approveReturnAction->execute($order))
+        expect(fn () => $this->approveReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return request is not in a valid state for approval.');
     });
 
@@ -79,7 +78,7 @@ describe('ApproveReturnAction', function () {
             'return_status' => ReturnStatus::RETURN_REJECTED,
         ]);
 
-        expect(fn() => $this->approveReturnAction->execute($order))
+        expect(fn () => $this->approveReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return request is not in a valid state for approval.');
     });
 
@@ -88,7 +87,7 @@ describe('ApproveReturnAction', function () {
             'return_status' => ReturnStatus::ITEM_RETURNED,
         ]);
 
-        expect(fn() => $this->approveReturnAction->execute($order))
+        expect(fn () => $this->approveReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return request is not in a valid state for approval.');
     });
 });
@@ -123,7 +122,7 @@ describe('RejectReturnAction', function () {
 
         expect($result)->toBeInstanceOf(Order::class);
         expect($result->return_status)->toBe(ReturnStatus::RETURN_REJECTED);
-        expect($result->return_reason)->toBe($originalReason . ' | Rejection: ' . $rejectionReason);
+        expect($result->return_reason)->toBe($originalReason.' | Rejection: '.$rejectionReason);
         expect($result->id)->toBe($order->id);
     });
 
@@ -132,7 +131,7 @@ describe('RejectReturnAction', function () {
             'return_status' => ReturnStatus::RETURN_APPROVED,
         ]);
 
-        expect(fn() => $this->rejectReturnAction->execute($order))
+        expect(fn () => $this->rejectReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return request is not in a valid state for rejection.');
     });
 
@@ -141,7 +140,7 @@ describe('RejectReturnAction', function () {
             'return_status' => null,
         ]);
 
-        expect(fn() => $this->rejectReturnAction->execute($order))
+        expect(fn () => $this->rejectReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return request is not in a valid state for rejection.');
     });
 
@@ -150,7 +149,7 @@ describe('RejectReturnAction', function () {
             'return_status' => ReturnStatus::RETURN_REJECTED,
         ]);
 
-        expect(fn() => $this->rejectReturnAction->execute($order))
+        expect(fn () => $this->rejectReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return request is not in a valid state for rejection.');
     });
 });
@@ -160,7 +159,7 @@ describe('CompleteReturnAction', function () {
         $product = Product::factory()->create();
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $order = Order::factory()->create([
@@ -202,15 +201,15 @@ describe('CompleteReturnAction', function () {
                     'orderReference' => 'TEST-ORD-37089',
                 ],
                 'messages' => [
-                    'en' => 'Refund successful'
-                ]
-            ], 200)
+                    'en' => 'Refund successful',
+                ],
+            ], 200),
         ]);
 
         $product = Product::factory()->create();
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 5
+            'quantity' => 5,
         ]);
 
         $order = Order::factory()->create([
@@ -244,7 +243,7 @@ describe('CompleteReturnAction', function () {
             'return_status' => ReturnStatus::RETURN_REQUESTED,
         ]);
 
-        expect(fn() => $this->completeReturnAction->execute($order))
+        expect(fn () => $this->completeReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return must be approved before it can be completed.');
     });
 
@@ -253,7 +252,7 @@ describe('CompleteReturnAction', function () {
             'return_status' => null,
         ]);
 
-        expect(fn() => $this->completeReturnAction->execute($order))
+        expect(fn () => $this->completeReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return must be approved before it can be completed.');
     });
 
@@ -262,7 +261,7 @@ describe('CompleteReturnAction', function () {
             'return_status' => ReturnStatus::RETURN_REJECTED,
         ]);
 
-        expect(fn() => $this->completeReturnAction->execute($order))
+        expect(fn () => $this->completeReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return must be approved before it can be completed.');
     });
 
@@ -271,7 +270,7 @@ describe('CompleteReturnAction', function () {
             'return_status' => ReturnStatus::ITEM_RETURNED,
         ]);
 
-        expect(fn() => $this->completeReturnAction->execute($order))
+        expect(fn () => $this->completeReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return must be approved before it can be completed.');
     });
 
@@ -279,13 +278,13 @@ describe('CompleteReturnAction', function () {
         $product1 = Product::factory()->create();
         $variant1 = ProductVariant::factory()->create([
             'product_id' => $product1->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $product2 = Product::factory()->create();
         $variant2 = ProductVariant::factory()->create([
             'product_id' => $product2->id,
-            'quantity' => 20
+            'quantity' => 20,
         ]);
 
         $order = Order::factory()->create([
@@ -326,7 +325,7 @@ describe('Actions Integration', function () {
         $product = Product::factory()->create();
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $order = Order::factory()->create([
@@ -371,7 +370,7 @@ describe('Actions Integration', function () {
         // Reject the return
         $rejectedOrder = $this->rejectReturnAction->execute($order, $rejectionReason);
         expect($rejectedOrder->return_status)->toBe(ReturnStatus::RETURN_REJECTED);
-        expect($rejectedOrder->return_reason)->toBe($originalReason . ' | Rejection: ' . $rejectionReason);
+        expect($rejectedOrder->return_reason)->toBe($originalReason.' | Rejection: '.$rejectionReason);
     });
 
     it('prevents completing return without approval', function () {
@@ -379,7 +378,7 @@ describe('Actions Integration', function () {
             'return_status' => ReturnStatus::RETURN_REQUESTED,
         ]);
 
-        expect(fn() => $this->completeReturnAction->execute($order))
+        expect(fn () => $this->completeReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return must be approved before it can be completed.');
     });
 
@@ -388,7 +387,7 @@ describe('Actions Integration', function () {
             'return_status' => ReturnStatus::REFUND_PROCESSED,
         ]);
 
-        expect(fn() => $this->approveReturnAction->execute($order))
+        expect(fn () => $this->approveReturnAction->execute($order))
             ->toThrow(Exception::class, 'Return request is not in a valid state for approval.');
     });
 });

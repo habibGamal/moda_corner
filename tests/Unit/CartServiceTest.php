@@ -1,12 +1,12 @@
 <?php
 
+use App\Exceptions\InsufficientStockException;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\User;
 use App\Services\CartService;
-use App\Exceptions\InsufficientStockException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +47,7 @@ describe('addToCart', function () {
         $product = Product::factory()->create(['price' => 100]);
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $cart = $this->cartService->getOrCreateCart();
@@ -55,7 +55,7 @@ describe('addToCart', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => $variant->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $result = $this->cartService->addToCart($cartItem, 3);
@@ -68,7 +68,7 @@ describe('addToCart', function () {
         $product = Product::factory()->create(['price' => 100]);
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 3
+            'quantity' => 3,
         ]);
 
         $cart = $this->cartService->getOrCreateCart();
@@ -76,7 +76,7 @@ describe('addToCart', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => $variant->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         expect(function () use ($cartItem) {
@@ -90,7 +90,7 @@ describe('updateCartItemQuantity', function () {
         $product = Product::factory()->create(['price' => 100]);
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $cart = $this->cartService->getOrCreateCart();
@@ -98,7 +98,7 @@ describe('updateCartItemQuantity', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => $variant->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $result = $this->cartService->updateCartItemQuantity($cartItem, 5);
@@ -111,7 +111,7 @@ describe('updateCartItemQuantity', function () {
         $product = Product::factory()->create(['price' => 100]);
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 3
+            'quantity' => 3,
         ]);
 
         $cart = $this->cartService->getOrCreateCart();
@@ -119,7 +119,7 @@ describe('updateCartItemQuantity', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => $variant->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         expect(function () use ($cartItem) {
@@ -135,7 +135,7 @@ describe('removeFromCart', function () {
         $cartItem = CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $result = $this->cartService->removeFromCart($cartItem);
@@ -150,7 +150,7 @@ describe('removeFromCart', function () {
         $cartItem = CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         // Delete the item first
@@ -172,13 +172,13 @@ describe('clearCart', function () {
         CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product1->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product2->id,
-            'quantity' => 3
+            'quantity' => 3,
         ]);
 
         expect($cart->items()->count())->toBe(2);
@@ -194,7 +194,7 @@ describe('getCart', function () {
         $product = Product::factory()->create(['price' => 100]);
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $cart = $this->cartService->getOrCreateCart();
@@ -202,7 +202,7 @@ describe('getCart', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => $variant->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $result = $this->cartService->getCart();
@@ -236,13 +236,13 @@ describe('getCartSummary', function () {
         CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product1->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product2->id,
-            'quantity' => 3
+            'quantity' => 3,
         ]);
 
         $summary = $this->cartService->getCartSummary();
@@ -275,11 +275,11 @@ describe('Cart Service Integration', function () {
 
         $variant1 = ProductVariant::factory()->create([
             'product_id' => $product1->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
         $variant2 = ProductVariant::factory()->create([
             'product_id' => $product2->id,
-            'quantity' => 5
+            'quantity' => 5,
         ]);
 
         // Get cart
@@ -291,14 +291,14 @@ describe('Cart Service Integration', function () {
             'cart_id' => $cart->id,
             'product_id' => $product1->id,
             'product_variant_id' => $variant1->id,
-            'quantity' => 1
+            'quantity' => 1,
         ]);
 
         $item2 = CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product2->id,
             'product_variant_id' => $variant2->id,
-            'quantity' => 1
+            'quantity' => 1,
         ]);
 
         // Add more quantity to first item
@@ -333,25 +333,25 @@ describe('toOrderItems', function () {
         // Product 1: Has sale price on product, variant has sale price (variant sale price should win)
         $product1 = Product::factory()->create([
             'price' => 150,
-            'sale_price' => 130
+            'sale_price' => 130,
         ]);
         // Product 2: No sale price on product, variant has sale price (variant sale price should be used)
         $product2 = Product::factory()->create([
             'price' => 250,
-            'sale_price' => null
+            'sale_price' => null,
         ]);
 
         $variant1 = ProductVariant::factory()->create([
             'product_id' => $product1->id,
             'price' => 120,
             'sale_price' => 100, // This should be the final price
-            'quantity' => 10
+            'quantity' => 10,
         ]);
         $variant2 = ProductVariant::factory()->create([
             'product_id' => $product2->id,
             'price' => 200,
             'sale_price' => 180, // This should be the final price
-            'quantity' => 5
+            'quantity' => 5,
         ]);
 
         // Create cart with items
@@ -360,13 +360,13 @@ describe('toOrderItems', function () {
             'cart_id' => $cart->id,
             'product_id' => $product1->id,
             'product_variant_id' => $variant1->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
         $cartItem2 = CartItem::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product2->id,
             'product_variant_id' => $variant2->id,
-            'quantity' => 3
+            'quantity' => 3,
         ]);
 
         // Create an order
@@ -427,14 +427,14 @@ describe('toOrderItems', function () {
     it('converts cart items with sale prices correctly', function () {
         $product = Product::factory()->create([
             'price' => 100,
-            'sale_price' => 80
+            'sale_price' => 80,
         ]);
 
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
             'price' => 90,
             'sale_price' => 75,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $cart = $this->cartService->getOrCreateCart();
@@ -442,7 +442,7 @@ describe('toOrderItems', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => $variant->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $order = \App\Models\Order::factory()->create(['user_id' => $this->user->id]);
@@ -465,7 +465,7 @@ describe('toOrderItems', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => null, // No variant
-            'quantity' => 1
+            'quantity' => 1,
         ]);
 
         $order = \App\Models\Order::factory()->create(['user_id' => $this->user->id]);
@@ -479,14 +479,14 @@ describe('toOrderItems', function () {
     it('uses product sale price when variant has no sale price', function () {
         $product = Product::factory()->create([
             'price' => 100,
-            'sale_price' => 85
+            'sale_price' => 85,
         ]);
 
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
             'price' => 90,
             'sale_price' => null, // No variant sale price
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $cart = $this->cartService->getOrCreateCart();
@@ -494,7 +494,7 @@ describe('toOrderItems', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => $variant->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $order = \App\Models\Order::factory()->create(['user_id' => $this->user->id]);
@@ -512,14 +512,14 @@ describe('toOrderItems', function () {
     it('uses variant price when no sale prices are available', function () {
         $product = Product::factory()->create([
             'price' => 100,
-            'sale_price' => null
+            'sale_price' => null,
         ]);
 
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
             'price' => 90,
             'sale_price' => null,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $cart = $this->cartService->getOrCreateCart();
@@ -527,7 +527,7 @@ describe('toOrderItems', function () {
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'product_variant_id' => $variant->id,
-            'quantity' => 2
+            'quantity' => 2,
         ]);
 
         $order = \App\Models\Order::factory()->create(['user_id' => $this->user->id]);

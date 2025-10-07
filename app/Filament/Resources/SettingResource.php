@@ -19,7 +19,9 @@ class SettingResource extends Resource
 
     protected static ?string $navigationGroup = 'System';
 
-    protected static ?int $navigationSort = 100;    protected static ?string $navigationLabel = 'الإعدادات';
+    protected static ?int $navigationSort = 100;
+
+    protected static ?string $navigationLabel = 'الإعدادات';
 
     protected static ?string $pluralModelLabel = 'الإعدادات';
 
@@ -28,60 +30,60 @@ class SettingResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([                Forms\Components\Section::make('المعلومات الأساسية')
-                    ->schema([
-                        Forms\Components\TextInput::make('key')
-                            ->label('المفتاح')
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255)
-                            ->helperText('معرف فريد لهذا الإعداد'),
+            ->schema([Forms\Components\Section::make('المعلومات الأساسية')
+                ->schema([
+                    Forms\Components\TextInput::make('key')
+                        ->label('المفتاح')
+                        ->required()
+                        ->unique(ignoreRecord: true)
+                        ->maxLength(255)
+                        ->helperText('معرف فريد لهذا الإعداد'),
 
-                        Forms\Components\Select::make('group')
-                            ->label('المجموعة')
-                            ->options([
-                                'general' => 'عام',
-                                'appearance' => 'المظهر',
-                                'seo' => 'تحسين محركات البحث',
-                                'social' => 'وسائل التواصل الاجتماعي',
-                                'analytics' => 'التحليلات',
-                                'contact' => 'الاتصال',
-                                'email' => 'البريد الإلكتروني',
-                                'payment' => 'الدفع',
-                                'legal' => 'قانوني',
-                            ])
-                            ->required()
-                            ->default('general'),
+                    Forms\Components\Select::make('group')
+                        ->label('المجموعة')
+                        ->options([
+                            'general' => 'عام',
+                            'appearance' => 'المظهر',
+                            'seo' => 'تحسين محركات البحث',
+                            'social' => 'وسائل التواصل الاجتماعي',
+                            'analytics' => 'التحليلات',
+                            'contact' => 'الاتصال',
+                            'email' => 'البريد الإلكتروني',
+                            'payment' => 'الدفع',
+                            'legal' => 'قانوني',
+                        ])
+                        ->required()
+                        ->default('general'),
 
-                        Forms\Components\Select::make('type')
-                            ->label('النوع')
-                            ->options([
-                                'text' => 'نص',
-                                'textarea' => 'نص متعدد الأسطر',
-                                'url' => 'رابط',
-                                'image' => 'صورة',
-                                'boolean' => 'منطقي (صحيح/خطأ)',
-                                'json' => 'JSON',
-                                'integer' => 'رقم صحيح',
-                                'float' => 'رقم عشري',
-                            ])
-                            ->required()
-                            ->default('text')
-                            ->reactive()
-                            ->afterStateUpdated(fn ($state, Forms\Set $set) => $set('value', null)),
+                    Forms\Components\Select::make('type')
+                        ->label('النوع')
+                        ->options([
+                            'text' => 'نص',
+                            'textarea' => 'نص متعدد الأسطر',
+                            'url' => 'رابط',
+                            'image' => 'صورة',
+                            'boolean' => 'منطقي (صحيح/خطأ)',
+                            'json' => 'JSON',
+                            'integer' => 'رقم صحيح',
+                            'float' => 'رقم عشري',
+                        ])
+                        ->required()
+                        ->default('text')
+                        ->reactive()
+                        ->afterStateUpdated(fn ($state, Forms\Set $set) => $set('value', null)),
 
-                        Forms\Components\TextInput::make('display_order')
-                            ->label('ترتيب العرض')
-                            ->numeric()
-                            ->default(0)
-                            ->helperText('ترتيب العرض ضمن المجموعة'),
+                    Forms\Components\TextInput::make('display_order')
+                        ->label('ترتيب العرض')
+                        ->numeric()
+                        ->default(0)
+                        ->helperText('ترتيب العرض ضمن المجموعة'),
 
-                        Forms\Components\Toggle::make('is_required')
-                            ->label('مطلوب')
-                            ->default(false)
-                            ->helperText('ما إذا كان هذا الإعداد مطلوباً'),
-                    ])
-                    ->columns(2),
+                    Forms\Components\Toggle::make('is_required')
+                        ->label('مطلوب')
+                        ->default(false)
+                        ->helperText('ما إذا كان هذا الإعداد مطلوباً'),
+                ])
+                ->columns(2),
 
                 Forms\Components\Section::make('التسميات والأوصاف')
                     ->schema([
@@ -147,7 +149,8 @@ class SettingResource extends Resource
     }
 
     public static function table(Table $table): Table
-    {        return $table
+    {
+        return $table
             ->columns([
                 Tables\Columns\TextColumn::make('key')
                     ->label('المفتاح')
@@ -227,46 +230,46 @@ class SettingResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])            ->filters([
-                Tables\Filters\SelectFilter::make('group')
-                    ->label('المجموعة')
-                    ->options([
-                        'general' => 'عام',
-                        'appearance' => 'المظهر',
-                        'seo' => 'تحسين محركات البحث',
-                        'social' => 'وسائل التواصل الاجتماعي',
-                        'analytics' => 'التحليلات',
-                        'contact' => 'الاتصال',
-                        'email' => 'البريد الإلكتروني',
-                        'payment' => 'الدفع',
-                        'legal' => 'قانوني',
-                    ]),
+            ])->filters([
+                    Tables\Filters\SelectFilter::make('group')
+                        ->label('المجموعة')
+                        ->options([
+                            'general' => 'عام',
+                            'appearance' => 'المظهر',
+                            'seo' => 'تحسين محركات البحث',
+                            'social' => 'وسائل التواصل الاجتماعي',
+                            'analytics' => 'التحليلات',
+                            'contact' => 'الاتصال',
+                            'email' => 'البريد الإلكتروني',
+                            'payment' => 'الدفع',
+                            'legal' => 'قانوني',
+                        ]),
 
-                Tables\Filters\SelectFilter::make('type')
-                    ->label('النوع')
-                    ->options([
-                        'text' => 'نص',
-                        'textarea' => 'نص متعدد الأسطر',
-                        'url' => 'رابط',
-                        'image' => 'صورة',
-                        'boolean' => 'منطقي',
-                        'json' => 'JSON',
-                        'integer' => 'رقم صحيح',
-                        'float' => 'رقم عشري',
-                    ]),
+                    Tables\Filters\SelectFilter::make('type')
+                        ->label('النوع')
+                        ->options([
+                            'text' => 'نص',
+                            'textarea' => 'نص متعدد الأسطر',
+                            'url' => 'رابط',
+                            'image' => 'صورة',
+                            'boolean' => 'منطقي',
+                            'json' => 'JSON',
+                            'integer' => 'رقم صحيح',
+                            'float' => 'رقم عشري',
+                        ]),
 
-                Tables\Filters\TernaryFilter::make('is_required')
-                    ->label('مطلوب'),
+                    Tables\Filters\TernaryFilter::make('is_required')
+                        ->label('مطلوب'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+            Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ])
+            ]),
+        ])
             ->defaultSort('group')
             ->defaultSort('display_order');
     }

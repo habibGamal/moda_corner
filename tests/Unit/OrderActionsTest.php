@@ -4,8 +4,6 @@ use App\Actions\Orders\CancelOrderAction;
 use App\Actions\Orders\MarkOrderAsDeliveredAction;
 use App\Actions\Orders\MarkOrderAsShippedAction;
 use App\Enums\OrderStatus;
-use App\Enums\PaymentMethod;
-use App\Enums\PaymentStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -33,7 +31,7 @@ describe('CancelOrderAction', function () {
         $product = Product::factory()->create();
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $order = Order::factory()->create([
@@ -76,7 +74,7 @@ describe('CancelOrderAction', function () {
             'order_status' => OrderStatus::DELIVERED,
         ]);
 
-        expect(fn() => $this->cancelOrderAction->execute($order))
+        expect(fn () => $this->cancelOrderAction->execute($order))
             ->toThrow(Exception::class, 'Only orders in processing status can be cancelled');
     });
 
@@ -85,7 +83,7 @@ describe('CancelOrderAction', function () {
             'order_status' => OrderStatus::CANCELLED,
         ]);
 
-        expect(fn() => $this->cancelOrderAction->execute($order))
+        expect(fn () => $this->cancelOrderAction->execute($order))
             ->toThrow(Exception::class, 'Only orders in processing status can be cancelled');
     });
 
@@ -93,13 +91,13 @@ describe('CancelOrderAction', function () {
         $product1 = Product::factory()->create();
         $variant1 = ProductVariant::factory()->create([
             'product_id' => $product1->id,
-            'quantity' => 5
+            'quantity' => 5,
         ]);
 
         $product2 = Product::factory()->create();
         $variant2 = ProductVariant::factory()->create([
             'product_id' => $product2->id,
-            'quantity' => 15
+            'quantity' => 15,
         ]);
 
         $order = Order::factory()->create([
@@ -171,7 +169,7 @@ describe('MarkOrderAsShippedAction', function () {
             'order_status' => OrderStatus::SHIPPED,
         ]);
 
-        expect(fn() => $this->markOrderAsShippedAction->execute($order))
+        expect(fn () => $this->markOrderAsShippedAction->execute($order))
             ->toThrow(Exception::class, 'Only processing orders can be marked as shipped.');
     });
 
@@ -180,7 +178,7 @@ describe('MarkOrderAsShippedAction', function () {
             'order_status' => OrderStatus::DELIVERED,
         ]);
 
-        expect(fn() => $this->markOrderAsShippedAction->execute($order))
+        expect(fn () => $this->markOrderAsShippedAction->execute($order))
             ->toThrow(Exception::class, 'Only processing orders can be marked as shipped.');
     });
 
@@ -189,7 +187,7 @@ describe('MarkOrderAsShippedAction', function () {
             'order_status' => OrderStatus::CANCELLED,
         ]);
 
-        expect(fn() => $this->markOrderAsShippedAction->execute($order))
+        expect(fn () => $this->markOrderAsShippedAction->execute($order))
             ->toThrow(Exception::class, 'Only processing orders can be marked as shipped.');
     });
 });
@@ -245,7 +243,7 @@ describe('MarkOrderAsDeliveredAction', function () {
             'order_status' => OrderStatus::DELIVERED,
         ]);
 
-        expect(fn() => $this->markOrderAsDeliveredAction->execute($order))
+        expect(fn () => $this->markOrderAsDeliveredAction->execute($order))
             ->toThrow(Exception::class, 'Only processing or shipped orders can be marked as delivered.');
     });
 
@@ -254,7 +252,7 @@ describe('MarkOrderAsDeliveredAction', function () {
             'order_status' => OrderStatus::CANCELLED,
         ]);
 
-        expect(fn() => $this->markOrderAsDeliveredAction->execute($order))
+        expect(fn () => $this->markOrderAsDeliveredAction->execute($order))
             ->toThrow(Exception::class, 'Only processing or shipped orders can be marked as delivered.');
     });
 });
@@ -281,7 +279,7 @@ describe('Order Status Workflow Integration', function () {
         $product = Product::factory()->create();
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'quantity' => 10
+            'quantity' => 10,
         ]);
 
         $order = Order::factory()->create([
@@ -320,11 +318,11 @@ describe('Order Status Workflow Integration', function () {
         ]);
 
         // Cannot cancel delivered order
-        expect(fn() => $this->cancelOrderAction->execute($deliveredOrder))
+        expect(fn () => $this->cancelOrderAction->execute($deliveredOrder))
             ->toThrow(Exception::class, 'Only orders in processing status can be cancelled');
 
         // Cannot mark delivered order as shipped
-        expect(fn() => $this->markOrderAsShippedAction->execute($deliveredOrder))
+        expect(fn () => $this->markOrderAsShippedAction->execute($deliveredOrder))
             ->toThrow(Exception::class, 'Only processing orders can be marked as shipped.');
     });
 

@@ -16,4 +16,4 @@ class ListHeroSlides extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
-} 
+}

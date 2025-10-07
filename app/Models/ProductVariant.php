@@ -55,8 +55,6 @@ class ProductVariant extends Model
 
     /**
      * Get the first image or null if no images.
-     *
-     * @return string|null
      */
     public function getFeaturedImageAttribute(): ?string
     {

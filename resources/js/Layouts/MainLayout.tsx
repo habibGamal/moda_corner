@@ -163,7 +163,7 @@ export default function MainLayout({
 
                 {/* Main Content */}
                 {header && (
-                    <header className="bg-white shadow">
+                    <header className="bg-white dark:bg-card shadow dark:shadow-md">
                         <div className="container mx-auto px-4 py-6">
                             {header}
                         </div>

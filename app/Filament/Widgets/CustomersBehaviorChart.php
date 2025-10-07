@@ -4,7 +4,6 @@ namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
-use Illuminate\Support\Carbon;
 
 class CustomersBehaviorChart extends ChartWidget
 {
@@ -22,18 +21,18 @@ class CustomersBehaviorChart extends ChartWidget
 
         // Get customers within date range
         $customers = \App\Models\User::query()
-            ->whereHas('orders', function($query) use ($startDate, $endDate) {
+            ->whereHas('orders', function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             });
 
         // Apply customer type filter if specified
-        if (!empty($customerType)) {
+        if (! empty($customerType)) {
             // Assuming customer type filtering logic
             // This would need to be adjusted based on your actual customer type implementation
-        }        $customers = $customers->with(['orders' => function($query) use ($startDate, $endDate) {
+        }        $customers = $customers->with(['orders' => function ($query) use ($startDate, $endDate) {
             $query->whereBetween('created_at', [$startDate, $endDate])
-                  ->selectRaw('user_id, COUNT(*) as order_count, SUM(total) as total_spent')
-                  ->groupBy('user_id');
+                ->selectRaw('user_id, COUNT(*) as order_count, SUM(total) as total_spent')
+                ->groupBy('user_id');
         }])->get();
 
         $veryActive = 0; // 10+ orders

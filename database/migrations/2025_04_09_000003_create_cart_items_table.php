@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Prevent duplicate products in the same cart
-            $table->unique(['cart_id', 'product_id', 'product_variant_id'] , 'unique_cart_item');
+            $table->unique(['cart_id', 'product_id', 'product_variant_id'], 'unique_cart_item');
         });
     }
 

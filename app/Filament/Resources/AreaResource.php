@@ -22,6 +22,7 @@ class AreaResource extends Resource
     protected static ?string $recordTitleAttribute = 'name_ar';
 
     protected static ?string $label = 'المنطقة';
+
     protected static ?string $pluralLabel = 'المناطق';
 
     protected static ?string $navigationGroup = 'إدارة المناطق';

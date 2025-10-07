@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartItem;
+use App\Models\Product;
 use App\Services\CartItemResolverService;
 use App\Services\CartService;
-use App\Models\Product;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class CartController extends Controller
 {
     protected CartService $cartService;
+
     protected CartItemResolverService $cartItemResolverService;
 
     public function __construct(CartService $cartService, CartItemResolverService $cartItemResolverService)
@@ -39,7 +40,6 @@ class CartController extends Controller
     /**
      * Add a product to the cart
      *
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function addItem(Request $request)
@@ -55,7 +55,6 @@ class CartController extends Controller
             $validated['product_id'],
             $validated['product_variant_id'] ?? null
         );
-
 
         $this->cartService->addToCart(
             $cartItem,
@@ -73,21 +72,20 @@ class CartController extends Controller
     /**
      * Update cart item quantity
      *
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateItem(Request $request, CartItem $cartItem)
     {
         $validated = $request->validate([
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1',
         ]);
 
         // Validate that the cart item belongs to the current user's cart
         if ($cartItem->cart->user_id !== Auth::id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized access to cart item'
+                'message' => 'Unauthorized access to cart item',
             ], 403);
         }
 
@@ -107,7 +105,7 @@ class CartController extends Controller
     /**
      * Remove a cart item
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function removeItem(CartItem $cartItem)
@@ -116,7 +114,7 @@ class CartController extends Controller
         if ($cartItem->cart->user_id !== Auth::id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized access to cart item'
+                'message' => 'Unauthorized access to cart item',
             ], 403);
         }
 

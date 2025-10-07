@@ -4,8 +4,8 @@ namespace App\Filament\Widgets;
 
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
+use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
 
 class LatestCustomers extends BaseWidget
@@ -14,7 +14,7 @@ class LatestCustomers extends BaseWidget
 
     protected static ?string $heading = 'أحدث العملاء';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public function table(Table $table): Table
     {
@@ -51,6 +51,7 @@ class LatestCustomers extends BaseWidget
                     ->label('آخر طلب')
                     ->getStateUsing(function ($record) {
                         $lastOrder = $record->orders()->latest()->first();
+
                         return $lastOrder ? $lastOrder->created_at->format('d/m/Y H:i') : 'لا يوجد';
                     })
                     ->sortable()
@@ -74,22 +75,22 @@ class LatestCustomers extends BaseWidget
         $customerType = $this->filters['customerType'] ?? [];
 
         $query = \App\Models\User::query()
-            ->withCount(['orders' => function($query) use ($startDate, $endDate) {
+            ->withCount(['orders' => function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
-            }])            ->withSum(['orders' => function($query) use ($startDate, $endDate) {
+            }])->withSum(['orders' => function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             }], 'total')
-            ->with(['orders' => function($query) use ($startDate, $endDate) {
+            ->with(['orders' => function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate])
-                      ->latest()
-                      ->limit(1);
+                    ->latest()
+                    ->limit(1);
             }]);
 
         // Apply date filter for customer registration
         if ($startDate && $endDate) {
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }        // Apply customer type filter if needed
-        if (!empty($customerType)) {
+        if (! empty($customerType)) {
             // Add customer type filtering logic here based on your implementation
             // Example: $query->whereIn('customer_type', $customerType);
         }

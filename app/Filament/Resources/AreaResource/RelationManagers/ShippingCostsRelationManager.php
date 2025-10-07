@@ -7,8 +7,6 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ShippingCostsRelationManager extends RelationManager
 {
@@ -64,9 +62,10 @@ class ShippingCostsRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->label('إضافة تكلفة شحن')
-                    ->visible(fn () => !$this->getOwnerRecord()->shippingCosts()->exists())
+                    ->visible(fn () => ! $this->getOwnerRecord()->shippingCosts()->exists())
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['area_id'] = $this->getOwnerRecord()->getKey();
+
                         return $data;
                     }),
             ])

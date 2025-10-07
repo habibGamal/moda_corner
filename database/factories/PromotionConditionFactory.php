@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Enums\PromotionConditionType;
-use App\Models\PromotionCondition;
 use App\Models\Promotion;
+use App\Models\PromotionCondition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -32,7 +32,7 @@ class PromotionConditionFactory extends Factory
     /**
      * Create a product condition.
      */
-    public function product(int $productId = null, int $quantity = null): static
+    public function product(?int $productId = null, ?int $quantity = null): static
     {
         return $this->state(fn (array $attributes) => [
             'type' => PromotionConditionType::PRODUCT,
@@ -44,7 +44,7 @@ class PromotionConditionFactory extends Factory
     /**
      * Create a category condition.
      */
-    public function category(int $categoryId = null, int $quantity = null): static
+    public function category(?int $categoryId = null, ?int $quantity = null): static
     {
         return $this->state(fn (array $attributes) => [
             'type' => PromotionConditionType::CATEGORY,
@@ -56,7 +56,7 @@ class PromotionConditionFactory extends Factory
     /**
      * Create a brand condition.
      */
-    public function brand(int $brandId = null, int $quantity = null): static
+    public function brand(?int $brandId = null, ?int $quantity = null): static
     {
         return $this->state(fn (array $attributes) => [
             'type' => PromotionConditionType::BRAND,
@@ -68,7 +68,7 @@ class PromotionConditionFactory extends Factory
     /**
      * Create a customer condition.
      */
-    public function customer(int $customerId = null): static
+    public function customer(?int $customerId = null): static
     {
         return $this->state(fn (array $attributes) => [
             'type' => PromotionConditionType::CUSTOMER,

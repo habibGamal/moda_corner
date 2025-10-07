@@ -77,7 +77,7 @@ class Brand extends Model
     public function getDisplayImageAttribute(): ?string
     {
         // Return the brand's own image if it exists
-        if (!empty($this->image)) {
+        if (! empty($this->image)) {
             return $this->image;
         }
 
@@ -96,7 +96,7 @@ class Brand extends Model
     {
         $image = $this->display_image;
 
-        if (!$image) {
+        if (! $image) {
             return null;
         }
 
@@ -105,6 +105,6 @@ class Brand extends Model
             return $image;
         }
 
-        return asset('storage/' . $image);
+        return asset('storage/'.$image);
     }
 }

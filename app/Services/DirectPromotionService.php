@@ -3,10 +3,8 @@
 namespace App\Services;
 
 use App\Models\DirectPromotion;
-use App\Models\ProductVariant;
 use App\Models\Product;
-use App\Models\Category;
-use App\Models\Brand;
+use App\Models\ProductVariant;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,12 +14,11 @@ class DirectPromotionService
     /**
      * Apply price discount promotion - modifies product and variant sale prices.
      *
-     * @param DirectPromotion $promotion
      * @return array ['applied_count' => int, 'reverted_count' => int]
      */
     public function applyPriceDiscount(DirectPromotion $promotion): array
     {
-        if (!$promotion->isPriceDiscount()) {
+        if (! $promotion->isPriceDiscount()) {
             throw new \InvalidArgumentException('Invalid price discount promotion');
         }
 
@@ -42,7 +39,7 @@ class DirectPromotionService
                     $discountedPrice = round($discountedPrice, 2);
 
                     $product->update([
-                        'sale_price' => $discountedPrice
+                        'sale_price' => $discountedPrice,
                     ]);
 
                     $appliedCount++;
@@ -58,7 +55,7 @@ class DirectPromotionService
                             $discountedPrice = round($discountedPrice, 2);
 
                             $variant->update([
-                                'sale_price' => $discountedPrice
+                                'sale_price' => $discountedPrice,
                             ]);
 
                             $appliedCount++;
@@ -71,15 +68,15 @@ class DirectPromotionService
             $promotion->update(['is_active' => true]);
         });
 
-        Log::info("Applied price discount promotion", [
+        Log::info('Applied price discount promotion', [
             'promotion_id' => $promotion->id,
             'applied_count' => $appliedCount,
-            'reverted_count' => $revertedCount
+            'reverted_count' => $revertedCount,
         ]);
 
         return [
             'applied_count' => $appliedCount,
-            'reverted_count' => $revertedCount
+            'reverted_count' => $revertedCount,
         ];
     }
 
@@ -103,8 +100,8 @@ class DirectPromotionService
         // Deactivate all price discount promotions
         DirectPromotion::priceDiscount()->update(['is_active' => false]);
 
-        Log::info("Reverted price discounts", [
-            'reverted_count' => $revertedCount
+        Log::info('Reverted price discounts', [
+            'reverted_count' => $revertedCount,
         ]);
 
         return $revertedCount;
@@ -112,9 +109,6 @@ class DirectPromotionService
 
     /**
      * Get products that should be affected by the promotion.
-     *
-     * @param DirectPromotion $promotion
-     * @return Collection
      */
     protected function getProductsForPromotion(DirectPromotion $promotion): Collection
     {
@@ -143,9 +137,6 @@ class DirectPromotionService
 
     /**
      * Check if an order qualifies for free shipping.
-     *
-     * @param float $orderTotal
-     * @return bool
      */
     public function qualifiesForFreeShipping(float $orderTotal): bool
     {
@@ -160,9 +151,6 @@ class DirectPromotionService
 
     /**
      * Get the active free shipping promotion that applies to the given order total.
-     *
-     * @param float $orderTotal
-     * @return DirectPromotion|null
      */
     public function getApplicableFreeShippingPromotion(float $orderTotal): ?DirectPromotion
     {
@@ -175,8 +163,6 @@ class DirectPromotionService
 
     /**
      * Get all active promotions.
-     *
-     * @return Collection
      */
     public function getActivePromotions(): Collection
     {
@@ -188,33 +174,26 @@ class DirectPromotionService
 
     /**
      * Create a new price discount promotion.
-     *
-     * @param array $data
-     * @return DirectPromotion
      */
     public function createPriceDiscount(array $data): DirectPromotion
     {
         $data['type'] = 'price_discount';
+
         return DirectPromotion::create($data);
     }
 
     /**
      * Create a new free shipping promotion.
-     *
-     * @param array $data
-     * @return DirectPromotion
      */
     public function createFreeShipping(array $data): DirectPromotion
     {
         $data['type'] = 'free_shipping';
+
         return DirectPromotion::create($data);
     }
 
     /**
      * Delete a promotion and revert its effects if it's a price discount.
-     *
-     * @param DirectPromotion $promotion
-     * @return bool
      */
     public function deletePromotion(DirectPromotion $promotion): bool
     {
@@ -227,8 +206,6 @@ class DirectPromotionService
 
     /**
      * Get statistics about current promotions.
-     *
-     * @return array
      */
     public function getPromotionStats(): array
     {

@@ -2,8 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\OrderStatus;
-use App\Enums\PaymentStatus;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -19,9 +17,9 @@ class OrdersSalesOverview extends BaseWidget
         $orderStatus = $this->filters['orderStatus'] ?? [];
 
         $baseQuery = \App\Models\Order::query()
-            ->when($startDate, fn($query) => $query->where('created_at', '>=', $startDate))
-            ->when($endDate, fn($query) => $query->where('created_at', '<=', $endDate))
-            ->when(!empty($orderStatus), fn($query) => $query->whereIn('order_status', $orderStatus));
+            ->when($startDate, fn ($query) => $query->where('created_at', '>=', $startDate))
+            ->when($endDate, fn ($query) => $query->where('created_at', '<=', $endDate))
+            ->when(! empty($orderStatus), fn ($query) => $query->whereIn('order_status', $orderStatus));
 
         // Total Orders
         $totalOrders = $baseQuery->clone()->count();
@@ -33,7 +31,7 @@ class OrdersSalesOverview extends BaseWidget
         $previousTotalOrders = \App\Models\Order::query()
             ->where('created_at', '>=', $previousStartDate)
             ->where('created_at', '<=', $previousEndDate)
-            ->when(!empty($orderStatus), fn($query) => $query->whereIn('order_status', $orderStatus))
+            ->when(! empty($orderStatus), fn ($query) => $query->whereIn('order_status', $orderStatus))
             ->count();
 
         $ordersGrowth = $previousTotalOrders > 0
@@ -49,7 +47,7 @@ class OrdersSalesOverview extends BaseWidget
             ->where('created_at', '>=', $previousStartDate)
             ->where('created_at', '<=', $previousEndDate)
             ->where('payment_status', \App\Enums\PaymentStatus::PAID)
-            ->when(!empty($orderStatus), fn($query) => $query->whereIn('order_status', $orderStatus))
+            ->when(! empty($orderStatus), fn ($query) => $query->whereIn('order_status', $orderStatus))
             ->sum('total');
 
         $revenueGrowth = $previousRevenue > 0
@@ -81,13 +79,13 @@ class OrdersSalesOverview extends BaseWidget
                 ->color($ordersGrowth >= 0 ? 'success' : 'danger')
                 ->chart(array_fill(0, 7, rand(10, $totalOrders))),
 
-            Stat::make('إجمالي الإيرادات', 'ج.م ' . number_format(round($totalRevenue)))
+            Stat::make('إجمالي الإيرادات', 'ج.م '.number_format(round($totalRevenue)))
                 ->description($revenueGrowth >= 0 ? "+{$revenueGrowth}% من الفترة السابقة" : "{$revenueGrowth}% من الفترة السابقة")
                 ->descriptionIcon($revenueGrowth >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($revenueGrowth >= 0 ? 'success' : 'danger')
                 ->chart(array_fill(0, 7, rand(1000, round($totalRevenue)))),
 
-            Stat::make('متوسط قيمة الطلب', 'ج.م ' . number_format(round($averageOrderValue)))
+            Stat::make('متوسط قيمة الطلب', 'ج.م '.number_format(round($averageOrderValue)))
                 ->description('من إجمالي الطلبات المدفوعة')
                 ->descriptionIcon('heroicon-m-calculator')
                 ->color('info'),
@@ -103,7 +101,7 @@ class OrdersSalesOverview extends BaseWidget
                 ->color('success'),
 
             Stat::make('طلبات ملغاة', number_format($cancelledOrders))
-                ->description($totalOrders > 0 ? round(($cancelledOrders / $totalOrders) * 100, 1) . '% من الإجمالي' : '0% من الإجمالي')
+                ->description($totalOrders > 0 ? round(($cancelledOrders / $totalOrders) * 100, 1).'% من الإجمالي' : '0% من الإجمالي')
                 ->descriptionIcon('heroicon-m-x-circle')
                 ->color('danger'),
         ];

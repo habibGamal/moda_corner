@@ -17,8 +17,9 @@ class ProductsCategoriesChart extends ChartWidget
     {
         $startDate = $this->filters['startDate'] ?? now()->subMonth();
         $endDate = $this->filters['endDate'] ?? now();
-        $status = $this->filters['status'] ?? [];        $categoriesData = \App\Models\Product::query()
-            ->when(!empty($status), function($query) use ($status) {
+        $status = $this->filters['status'] ?? [];
+        $categoriesData = \App\Models\Product::query()
+            ->when(! empty($status), function ($query) use ($status) {
                 if (in_array('active', $status)) {
                     $query->where('is_active', true);
                 }
@@ -29,10 +30,10 @@ class ProductsCategoriesChart extends ChartWidget
             ->with('category')
             ->get()
             ->groupBy('category.name_ar')
-            ->map(function($products, $categoryName) {
-                return (object)[
+            ->map(function ($products, $categoryName) {
+                return (object) [
                     'category' => $categoryName ?: 'غير محدد',
-                    'count' => $products->count()
+                    'count' => $products->count(),
                 ];
             })
             ->values()
@@ -62,7 +63,8 @@ class ProductsCategoriesChart extends ChartWidget
             'rgb(236, 72, 153)',  // Pink
             'rgb(14, 165, 233)',  // Sky
             'rgb(245, 158, 11)',  // Amber
-        ];        foreach ($categoriesData as $index => $category) {
+        ];
+        foreach ($categoriesData as $index => $category) {
             $categoryName = $category->category;
             $labels[] = $categoryName;
             $data[] = $category->count;

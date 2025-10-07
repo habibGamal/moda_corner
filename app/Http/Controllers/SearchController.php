@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\ProductListService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Services\ProductListService;
 
 class SearchController extends Controller
 {
@@ -49,7 +48,7 @@ class SearchController extends Controller
     /**
      * Show search results page
      */
-    public function results(Request $request , ProductListService $productListService)
+    public function results(Request $request, ProductListService $productListService)
     {
         $query = $request->input('q');
         $page = $request->input('section_search_results_products_page', 1);
@@ -64,7 +63,7 @@ class SearchController extends Controller
         $allCategories = [];
         $priceRange = [];
 
-        if (!empty($query) || $brandIds || $categoryIds || $minPrice || $maxPrice) {
+        if (! empty($query) || $brandIds || $categoryIds || $minPrice || $maxPrice) {
             // Use the ProductListService to get filtered products
             $filteredQuery = $productListService->getFilteredProducts([
                 'query' => $query,
@@ -72,7 +71,7 @@ class SearchController extends Controller
                 'categories' => $categoryIds,
                 'minPrice' => $minPrice,
                 'maxPrice' => $maxPrice,
-                'sortBy' => $sortBy
+                'sortBy' => $sortBy,
             ]);
 
             // Load relationships
@@ -82,7 +81,7 @@ class SearchController extends Controller
                 },
                 'category' => function ($query) {
                     $query->select('id', 'name_en', 'name_ar', 'slug');
-                }
+                },
             ]);
 
             $searchResults = $filteredQuery->paginate(12, ['*'], 'section_search_results_products_page', $page)
@@ -99,8 +98,8 @@ class SearchController extends Controller
         }
 
         return Inertia::render('Search/Results', [
-            'section_search_results_products_page_data' => !$searchResults->isEmpty() ? inertia()->merge($searchResults->items()) : [],
-            'section_search_results_products_page_pagination' => !$searchResults->isEmpty() ? \Illuminate\Support\Arr::except($searchResults->toArray(), ['data']) : null,
+            'section_search_results_products_page_data' => ! $searchResults->isEmpty() ? inertia()->merge($searchResults->items()) : [],
+            'section_search_results_products_page_pagination' => ! $searchResults->isEmpty() ? \Illuminate\Support\Arr::except($searchResults->toArray(), ['data']) : null,
             'query' => $query,
             'filters' => [
                 'brands' => $allBrands,
@@ -118,8 +117,8 @@ class SearchController extends Controller
     /**
      * Recursively add all child categories to the array
      *
-     * @param int $categoryId
-     * @param array &$categoryArray
+     * @param  int  $categoryId
+     * @param  array  &$categoryArray
      * @return void
      */
     private function addChildCategories($categoryId, &$categoryArray)

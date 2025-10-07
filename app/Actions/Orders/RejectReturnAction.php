@@ -18,9 +18,6 @@ class RejectReturnAction
     /**
      * Reject a return request
      *
-     * @param Order $order
-     * @param string|null $rejectionReason
-     * @return Order
      * @throws \Exception
      */
     public function execute(Order $order, ?string $rejectionReason = null): Order

@@ -19,10 +19,10 @@ class ProductsInventoryChart extends ChartWidget
         $status = $this->filters['status'] ?? [];
 
         $query = \App\Models\Product::query();        // Apply filters
-        if (!empty($category)) {
+        if (! empty($category)) {
             $query->whereIn('category_id', $category);
         }
-        if (!empty($status)) {
+        if (! empty($status)) {
             if (in_array('active', $status)) {
                 $query->where('is_active', true);
             }

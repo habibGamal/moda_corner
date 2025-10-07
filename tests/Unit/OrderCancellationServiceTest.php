@@ -104,13 +104,13 @@ describe('OrderCancellationService', function () {
             ]);
 
             // Act & Assert
-            expect(fn() => $this->orderCancellationService->cancelOrder($order->id))
+            expect(fn () => $this->orderCancellationService->cancelOrder($order->id))
                 ->toThrow(Exception::class, 'Only orders in processing status can be cancelled');
         });
 
         it('throws exception for non-existent order', function () {
             // Act & Assert
-            expect(fn() => $this->orderCancellationService->cancelOrder(999))
+            expect(fn () => $this->orderCancellationService->cancelOrder(999))
                 ->toThrow(ModelNotFoundException::class);
         });
         it('sends notifications to customer', function () {
@@ -129,6 +129,7 @@ describe('OrderCancellationService', function () {
                 OrderCancellationNotification::class,
                 function ($notification) {
                     $array = $notification->toArray($this->user);
+
                     return $array['recipient'] === 'customer';
                 }
             );
@@ -247,7 +248,7 @@ describe('OrderCancellationService', function () {
             ]);
 
             // Act & Assert
-            expect(fn() => $this->orderCancellationService->processRefund($order))
+            expect(fn () => $this->orderCancellationService->processRefund($order))
                 ->toThrow(Exception::class, 'This order does not require a refund');
         });
 
@@ -291,7 +292,7 @@ describe('OrderCancellationService', function () {
             $result1 = $this->orderCancellationService->cancelOrder($order->id);
 
             // Second cancellation should fail
-            expect(fn() => $this->orderCancellationService->cancelOrder($order->id))
+            expect(fn () => $this->orderCancellationService->cancelOrder($order->id))
                 ->toThrow(Exception::class, 'Only orders in processing status can be cancelled');
 
             // Assert
@@ -305,7 +306,7 @@ describe('OrderCancellationService', function () {
             ]);
 
             // Act & Assert - Should throw exception for delivered order
-            expect(fn() => $this->orderCancellationService->cancelOrder($order->id))
+            expect(fn () => $this->orderCancellationService->cancelOrder($order->id))
                 ->toThrow(Exception::class, 'Only orders in processing status can be cancelled');
 
             // Verify order status wasn't changed

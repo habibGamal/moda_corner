@@ -30,31 +30,31 @@ class ListOrders extends ListRecords
                 ->icon('heroicon-o-cog')
                 ->badge(Order::processing()->count())
                 ->badgeColor('warning')
-                ->modifyQueryUsing(fn(Builder $query) => $query->processing()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->processing()),
 
             'delivery' => Tab::make('قيد التوصيل')
                 ->icon('heroicon-o-truck')
                 ->badge(Order::delivery()->count())
                 ->badgeColor('info')
-                ->modifyQueryUsing(fn(Builder $query) => $query->delivery()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->delivery()),
 
             'completed' => Tab::make('مكتملة')
                 ->icon('heroicon-o-check-circle')
                 ->badge(Order::completed()->count())
                 ->badgeColor('success')
-                ->modifyQueryUsing(fn(Builder $query) => $query->completed()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->completed()),
 
             'cancelled' => Tab::make('ملغاة')
                 ->icon('heroicon-o-x-circle')
                 ->badge(Order::cancelled()->count())
                 ->badgeColor('danger')
-                ->modifyQueryUsing(fn(Builder $query) => $query->cancelled()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->cancelled()),
 
             'returns' => Tab::make('المرتجعات')
                 ->icon('heroicon-o-arrow-uturn-left')
                 ->badge(Order::returns()->count())
                 ->badgeColor('warning')
-                ->modifyQueryUsing(fn(Builder $query) => $query->returns()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->returns()),
         ];
     }
 }

@@ -16,17 +16,16 @@ if (! function_exists('formatCurrency')) {
     /**
      * Format currency amount in Egyptian Pounds (EGP)
      *
-     * @param float|int|string $amount
-     * @param bool $includeSymbol Whether to include the currency symbol
-     * @param int $decimals Number of decimal places
-     * @return string
+     * @param  float|int|string  $amount
+     * @param  bool  $includeSymbol  Whether to include the currency symbol
+     * @param  int  $decimals  Number of decimal places
      */
     function formatCurrency($amount, bool $includeSymbol = true, int $decimals = 2): string
     {
         $formattedAmount = number_format((float) $amount, $decimals);
 
         if ($includeSymbol) {
-            return 'ج.م ' . $formattedAmount;
+            return 'ج.م '.$formattedAmount;
         }
 
         return $formattedAmount;
@@ -37,17 +36,16 @@ if (! function_exists('formatCurrencyEn')) {
     /**
      * Format currency amount in Egyptian Pounds (EGP) for English context
      *
-     * @param float|int|string $amount
-     * @param bool $includeSymbol Whether to include the currency symbol
-     * @param int $decimals Number of decimal places
-     * @return string
+     * @param  float|int|string  $amount
+     * @param  bool  $includeSymbol  Whether to include the currency symbol
+     * @param  int  $decimals  Number of decimal places
      */
     function formatCurrencyEn($amount, bool $includeSymbol = true, int $decimals = 2): string
     {
         $formattedAmount = number_format((float) $amount, $decimals);
 
         if ($includeSymbol) {
-            return 'EGP ' . $formattedAmount;
+            return 'EGP '.$formattedAmount;
         }
 
         return $formattedAmount;
@@ -57,8 +55,6 @@ if (! function_exists('formatCurrencyEn')) {
 if (! function_exists('generateMerchantOrderNumber')) {
     /**
      * Generate a unique order number
-     *
-     * @return string
      */
     function generateMerchantOrderNumber($order_id): string
     {
@@ -68,18 +64,16 @@ if (! function_exists('generateMerchantOrderNumber')) {
 if (! function_exists('extractOrderIdFromMerchantOrderNumber')) {
     /**
      * Extract the order ID from a merchant order number
-     *
-     * @param string $merchantOrderNumber
-     * @return int|null
      */
     function extractOrderIdFromMerchantOrderNumber(string $merchantOrderNumber): ?int
     {
-        $prefix = config('app.name') . '-';
+        $prefix = config('app.name').'-';
         if (str_starts_with($merchantOrderNumber, $prefix)) {
             $orderId = substr($merchantOrderNumber, strlen($prefix));
+
             return is_numeric($orderId) ? (int) $orderId : null;
         }
+
         return null;
     }
 }
-
