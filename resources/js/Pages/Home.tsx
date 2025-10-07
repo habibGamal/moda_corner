@@ -31,6 +31,8 @@ export default function Home({
     const { t, getLocalizedField, direction } = useI18n();
     const { title } = useSiteBranding();
 
+
+
     return (
         <div className={`${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
             <Head title={title} />

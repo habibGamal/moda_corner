@@ -12,6 +12,7 @@ import { App } from "@/types";
 import { Head, Link } from "@inertiajs/react";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { useState, useEffect } from "react";
+import ReactPixel from "react-facebook-pixel";
 
 interface ShowProps {
     product: App.Models.Product;
@@ -51,6 +52,25 @@ export default function Show({ product, auth }: ShowProps) {
         // Reset quantity to 1 when variant changes
         setQuantity(1);
     };
+
+    useEffect(() => {
+        if (selectedVariant)
+            ReactPixel.track("AddToWishlist", {
+                content_ids: [selectedVariant.id],
+                contents: [{ id: selectedVariant.id, quantity: 1 }],
+                content_type: "product",
+                value: selectedVariant?.sale_price,
+                currency: "EGP",
+            });
+        else
+            ReactPixel.track("AddToWishlist", {
+                content_ids: [product.id],
+                contents: [{ id: product.id, quantity: 1 }],
+                content_type: "product",
+                value: product?.sale_price,
+                currency: "EGP",
+            });
+    }, [selectedVariant]);
 
     return (
         <>

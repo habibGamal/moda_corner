@@ -4,6 +4,7 @@ import { router } from "@inertiajs/react";
 import { App } from "@/types";
 import { useI18n } from "@/hooks/use-i18n";
 import { toast } from "./use-toast";
+import ReactPixel from "react-facebook-pixel";
 
 type LoadingState = Record<number | string, boolean>;
 
@@ -18,7 +19,8 @@ export default function useCart() {
     const addToCart = async (
         productId: number,
         quantity: number = 1,
-        variantId?: number
+        variantId?: number,
+        product: App.Models.Product | null = null
     ) => {
         setAddingToCart((prev) => ({ ...prev, [productId]: true }));
 
@@ -27,6 +29,14 @@ export default function useCart() {
                 product_id: productId,
                 product_variant_id: variantId,
                 quantity,
+            });
+
+            ReactPixel.track("AddToCart", {
+                content_ids: [productId],
+                content_type: "product",
+                contents: variantId ? [{id: variantId, quantity}] : [{id: productId, quantity}],
+                value: product?.sale_price,
+                currency: "EGP",
             });
 
             // Show success toast or notification here if needed

@@ -37,7 +37,7 @@
         /* Previously very saturated green; use a darker, more muted tone for card background */
         --card: 150 20% 6%;
         --card-foreground: 151 55% 91.2%;
-        --popover: 154 64% 8%;
+        --popover: 150 20% 6%;
         --popover-foreground: 151 55% 91.2%;
         --primary: 158 64% 51.6%;
         --primary-foreground: 154 64% 8%;
@@ -59,7 +59,6 @@
         --chart-5: 336 80% 65%;
     }
 }
-
 
 @layer base {
     * {
@@ -113,8 +112,6 @@
     }
 }
 
-
-
 .section-loaded {
     animation: fadeInMove 300ms;
 }
@@ -122,7 +119,6 @@
 .section-go-away {
     animation: fadeOutMove 300ms forwards;
 }
-
 
 @keyframes fadeOutMove {
     0% {
@@ -147,7 +143,8 @@
 }
 
 @keyframes gradient-x {
-    0%, 100% {
+    0%,
+    100% {
         background-position: 0% 50%;
     }
     50% {
@@ -173,7 +170,8 @@
 
 /* Animated Background Keyframes */
 @keyframes float {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateY(0px) rotate(0deg);
     }
     50% {
@@ -182,7 +180,8 @@
 }
 
 @keyframes swim {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateX(0px) translateY(0px) rotate(0deg);
     }
     25% {
@@ -197,7 +196,8 @@
 }
 
 @keyframes drift {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateX(0px) translateY(0px) scale(1);
     }
     33% {
@@ -209,7 +209,8 @@
 }
 
 @keyframes drawLine {
-    0%, 100% {
+    0%,
+    100% {
         stroke-dasharray: 0, 1000;
         stroke-dashoffset: 0;
     }

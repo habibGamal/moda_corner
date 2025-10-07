@@ -67,7 +67,7 @@ export default function Index({ auth,  cart, cartSummary }: CartIndexProps) {
                             calculateItemTotal={calculateItemTotal}
                             clearCart={clearCart}
                         />
-                        <OrderSummary cartSummary={cartSummary} />
+                        <OrderSummary items={cart.items} cartSummary={cartSummary} />
                     </div>
                 )}
             </div>

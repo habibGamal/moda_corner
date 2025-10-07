@@ -12,6 +12,7 @@ import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import ReactPixel from "react-facebook-pixel";
 
 // Order summary type definition
 interface OrderSummary {
@@ -31,6 +32,7 @@ interface CheckoutProps extends App.Interfaces.AppPageProps {
     };
     addresses: App.Models.Address[];
     paymentMethods: string[];
+    cartItems: App.Models.CartItem[];
 }
 
 // Define form schema with zod
@@ -50,6 +52,7 @@ export default function Index({
     cartSummary,
     addresses,
     paymentMethods,
+    cartItems,
 }: CheckoutProps) {
     const { t, direction } = useI18n();
     const [orderSummary, setOrderSummary] =
@@ -152,13 +155,19 @@ export default function Index({
                 if (page.props.orderSummary) {
                     setOrderSummary(page.props.orderSummary as OrderSummary);
                     // Check if the coupon was actually applied by checking if there's a promotion
-                    const newOrderSummary = page.props.orderSummary as OrderSummary;
-                    if (!newOrderSummary.appliedPromotion && newOrderSummary.discount === 0) {
+                    const newOrderSummary = page.props
+                        .orderSummary as OrderSummary;
+                    if (
+                        !newOrderSummary.appliedPromotion &&
+                        newOrderSummary.discount === 0
+                    ) {
                         // Coupon was not applied, show error
-                        setCouponError(t(
-                            "invalid_coupon_code",
-                            "Invalid coupon code. Please check and try again."
-                        ));
+                        setCouponError(
+                            t(
+                                "invalid_coupon_code",
+                                "Invalid coupon code. Please check and try again."
+                            )
+                        );
                     } else {
                         setCouponError(null);
                     }
@@ -169,10 +178,12 @@ export default function Index({
                 if (errors.coupon_code) {
                     setCouponError(errors.coupon_code);
                 } else {
-                    setCouponError(t(
-                        "coupon_error",
-                        "Failed to apply coupon code. Please try again."
-                    ));
+                    setCouponError(
+                        t(
+                            "coupon_error",
+                            "Failed to apply coupon code. Please try again."
+                        )
+                    );
                 }
             },
         });
@@ -243,6 +254,17 @@ export default function Index({
             },
             {
                 onFinish: () => setIsSubmitting(false),
+                onSuccess: () => {
+                    ReactPixel.track("Purchase", {
+                        content_ids: cartItems.map((item) => item.product_id),
+                        content_type:
+                            cartItems.length > 1 ? "product_group" : "product",
+                        contents: cartItems.map((item) => ({id: item.product_id, quantity: item.quantity})),
+                        num_items: cartSummary.totalItems,
+                        value: cartSummary.totalPrice,
+                        currency: "EGP",
+                    });
+                },
             }
         );
     };

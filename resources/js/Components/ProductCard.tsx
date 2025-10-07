@@ -7,6 +7,7 @@ import { Image } from "@/Components/ui/Image";
 import { Link } from "@inertiajs/react";
 import { router } from "@inertiajs/react";
 import { App } from "@/types";
+import ReactPixel from "react-facebook-pixel";
 
 interface ProductCardProps {
     product: App.Models.Product;
@@ -29,6 +30,14 @@ export default function ProductCard({ product }: ProductCardProps) {
             { product_id: product.id },
             {
                 preserveScroll: true,
+                onSuccess: () => {
+                    ReactPixel.track("AddToWishlist", {
+                        content_ids: [product.id],
+                        contents: [{ id: product.id, quantity: 1 }],
+                        value: product?.sale_price,
+                        currency: "EGP",
+                    });
+                },
             }
         );
     };
@@ -92,7 +101,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                                     <svg
                                         key={index}
                                         className={`h-4 w-4 ${
-                                            index < Math.round(product.average_rating)
+                                            index <
+                                            Math.round(product.average_rating)
                                                 ? "text-yellow-400 fill-yellow-400"
                                                 : "text-gray-300 dark:text-gray-600"
                                         }`}
@@ -104,7 +114,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                                 ))}
                             </div>
                             <span className="text-sm text-muted-foreground">
-                                {product.average_rating.toFixed(1)} ({product.reviews_count})
+                                {product.average_rating.toFixed(1)} (
+                                {product.reviews_count})
                             </span>
                         </div>
                     )}
@@ -145,7 +156,11 @@ export default function ProductCard({ product }: ProductCardProps) {
                             <Heart
                                 className="h-4 w-4"
                                 fill={product.is_in_wishlist ? "red" : "none"}
-                                stroke={product.is_in_wishlist ? "red" : "currentColor"}
+                                stroke={
+                                    product.is_in_wishlist
+                                        ? "red"
+                                        : "currentColor"
+                                }
                             />
                         </Button>
                     </div>
@@ -158,7 +173,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     variant={product.quantity <= 0 ? "secondary" : "default"}
                     className="flex-1 font-medium transition-all duration-200 hover:shadow-md"
                     size="lg"
-                    onClick={() => addToCart(product.id, 1)}
+                    onClick={() => addToCart(product.id, 1, undefined, product)}
                     disabled={addingToCart[product.id] || product.quantity <= 0}
                 >
                     <ShoppingBag className="h-4 w-4 mr-2" />

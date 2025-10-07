@@ -1,7 +1,7 @@
 import { usePage } from '@inertiajs/react';
 import { PageProps } from '@inertiajs/core';
 
-interface SiteConfig {
+export interface SiteConfig {
     site_title: string;
     site_logo?: string;
     site_icon?: string;

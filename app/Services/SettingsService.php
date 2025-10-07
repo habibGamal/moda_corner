@@ -51,9 +51,7 @@ class SettingsService
      */
     public static function getAllFlat(): array
     {
-        return Cache::remember(self::CACHE_KEY.'_flat', self::CACHE_DURATION, function () {
-            return Setting::pluck('value', 'key')->toArray();
-        });
+        return Setting::pluck('value', 'key')->toArray();
     }
 
     /**

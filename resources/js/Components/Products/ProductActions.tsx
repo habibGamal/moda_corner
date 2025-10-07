@@ -4,6 +4,7 @@ import useCart from "@/hooks/use-cart";
 import { App } from "@/types";
 import { router } from "@inertiajs/react";
 import { Heart, ShoppingBag } from "lucide-react";
+import ReactPixel from "react-facebook-pixel";
 
 interface ProductActionsProps {
     product: App.Models.Product;
@@ -23,11 +24,11 @@ export default function ProductActions({
         if (selectedVariant) {
             if (selectedVariant.quantity > 0) {
                 // Add with variant ID
-                addToCart(product.id, quantity, selectedVariant.id);
+                addToCart(product.id, quantity, selectedVariant.id, product);
             }
         } else if (product.total_quantity && product.total_quantity > 0) {
             // Legacy fallback for products without variants
-            addToCart(product.id, quantity);
+            addToCart(product.id, quantity, undefined, product);
         }
     };
 
@@ -43,17 +44,22 @@ export default function ProductActions({
             { product_id: product.id },
             {
                 preserveScroll: true,
+                onSuccess: () => {
+                    ReactPixel.track("AddToWishlist", {
+                        content_ids: [product.id],
+                        contents: [{ id: product.id, quantity: 1 }],
+                        value: product?.sale_price,
+                        currency: "EGP",
+                    });
+                },
             }
         );
     };
 
     const removeFromWishlist = () => {
-        router.delete(
-            route("wishlist.remove", product.id),
-            {
-                preserveScroll: true,
-            }
-        );
+        router.delete(route("wishlist.remove", product.id), {
+            preserveScroll: true,
+        });
     };
 
     return (
@@ -76,9 +82,7 @@ export default function ProductActions({
                 variant="outline"
                 size="lg"
                 className="flex-shrink-0"
-                onClick={
-                    isInWishlist ? removeFromWishlist : addToWishlist
-                }
+                onClick={isInWishlist ? removeFromWishlist : addToWishlist}
             >
                 <Heart
                     className="w-5 h-5"

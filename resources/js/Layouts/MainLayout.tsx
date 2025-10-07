@@ -1,25 +1,22 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
-import SearchBar from "@/Components/SearchBar";
 import Footer from "@/Components/Footer";
+import SearchBar from "@/Components/SearchBar";
 import { useI18n } from "@/hooks/use-i18n";
 import { Link, router, usePage } from "@inertiajs/react";
 import {
     PropsWithChildren,
     ReactNode,
+    useEffect,
     useRef,
     useState,
-    useEffect,
 } from "react";
-import { useIsomorphicLayoutEffect } from "@/hooks/use-isomorphic-layout-effect";
 
 // Import our custom components
 import DesktopNav from "@/Components/DesktopNav";
 import MobileBottomNav from "@/Components/MobileBottomNav";
 import MobileNav from "@/Components/MobileNav";
 import UserActions from "@/Components/UserActions";
-import { MaintenanceWrapper } from "@/Components/Settings/SettingsComponents";
 import { App } from "@/types";
-import LogoAnimation from "@/Components/LogoAnimation";
 
 export default function MainLayout({
     header,
@@ -46,7 +43,7 @@ export default function MainLayout({
     // Move DOM manipulation to useEffect to prevent hydration issues
     useEffect(() => {
         // Only run on client side
-        if (typeof window === 'undefined') return;
+        if (typeof window === "undefined") return;
 
         // const html = document.querySelector("html") as HTMLHtmlElement;
         // html.setAttribute("dir", "rtl");
@@ -59,7 +56,7 @@ export default function MainLayout({
 
     useEffect(() => {
         // Only run on client side
-        if (typeof window === 'undefined') return;
+        if (typeof window === "undefined") return;
 
         const existingAnimation = document.getElementById(
             "section-logo-animation"
@@ -99,7 +96,9 @@ export default function MainLayout({
             setTimeout(
                 () =>
                     window.scrollTo({
-                        top: window.history.state?.documentScrollPosition?.top || 0,
+                        top:
+                            window.history.state?.documentScrollPosition?.top ||
+                            0,
                         behavior: "smooth",
                     }),
                 100
@@ -119,70 +118,66 @@ export default function MainLayout({
     }, []);
 
     return (
-        <MaintenanceWrapper>
-            <div
-                className="flex min-h-screen flex-col bg-background"
-                dir={direction}
-            >
-                {/* Desktop Navigation */}
-                <nav className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                    <div className="container flex h-16 gap-4 items-center px-4">
-                        {/* Logo */}
-                        <div className="flex items-center ltr:mr-4 rtl:ml-4">
-                            <Link href="/">
-                                <ApplicationLogo className="h-8 w-auto  rounded-xl" />
-                            </Link>
-                        </div>
-
-                        {/* Desktop Nav Links */}
-                        <DesktopNav brands={brands} categories={categories} />
-
-                        {/* User Actions (Search, Wishlist, User/Login, Cart) */}
-                        <UserActions
-                            user={user}
-                            cartItemsCount={cartItemsCount}
-                            onSearchClick={handleSearchClick}
-                        />
-
-                        {/* Mobile Navigation Menu Button */}
-                        <MobileNav brands={brands} categories={categories} />
+        <div
+            className="flex min-h-screen flex-col bg-background"
+            dir={direction}
+        >
+            {/* Desktop Navigation */}
+            <nav className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <div className="container flex h-16 gap-4 items-center px-4">
+                    {/* Logo */}
+                    <div className="flex items-center ltr:mr-4 rtl:ml-4">
+                        <Link href="/">
+                            <ApplicationLogo className="h-8 w-auto  rounded-xl" />
+                        </Link>
                     </div>
 
-                    {/* Search Bar Component */}
-                    <SearchBar
-                        isOpen={isSearchOpen}
-                        onClose={() => setIsSearchOpen(false)}
+                    {/* Desktop Nav Links */}
+                    <DesktopNav brands={brands} categories={categories} />
+
+                    {/* User Actions (Search, Wishlist, User/Login, Cart) */}
+                    <UserActions
+                        user={user}
+                        cartItemsCount={cartItemsCount}
+                        onSearchClick={handleSearchClick}
                     />
-                </nav>
 
-                {/* Mobile Bottom Navigation */}
-                <MobileBottomNav
-                    cartItemsCount={cartItemsCount}
-                    onSearchClick={handleSearchClick}
+                    {/* Mobile Navigation Menu Button */}
+                    <MobileNav brands={brands} categories={categories} />
+                </div>
+
+                {/* Search Bar Component */}
+                <SearchBar
+                    isOpen={isSearchOpen}
+                    onClose={() => setIsSearchOpen(false)}
                 />
+            </nav>
 
-                {/* Main Content */}
-                {header && (
-                    <header className="bg-white dark:bg-card shadow dark:shadow-md">
-                        <div className="container mx-auto px-4 py-6">
-                            {header}
-                        </div>
-                    </header>
-                )}
+            {/* Mobile Bottom Navigation */}
+            <MobileBottomNav
+                cartItemsCount={cartItemsCount}
+                onSearchClick={handleSearchClick}
+            />
 
-                <main className="">
-                    <div
-                        ref={animationInjection}
-                        className="hidden w-[200px] h-[200px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
-                    ></div>
-                    <div ref={section} className="">
-                        {children}
-                    </div>
-                </main>
+            {/* Main Content */}
+            {header && (
+                <header className="bg-white dark:bg-card shadow dark:shadow-md">
+                    <div className="container mx-auto px-4 py-6">{header}</div>
+                </header>
+            )}
 
-                {/* Footer */}
-                <Footer />
-            </div>
-        </MaintenanceWrapper>
+            <main className="">
+                <div
+                    ref={animationInjection}
+                    className="hidden w-[200px] h-[200px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
+                ></div>
+                <div ref={section} className="">
+                    {children}
+                </div>
+            </main>
+
+            {/* Footer */}
+            <Footer />
+        </div>
     );
 }

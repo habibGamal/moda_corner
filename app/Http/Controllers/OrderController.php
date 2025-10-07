@@ -126,6 +126,7 @@ class OrderController extends Controller
                 'totalItems' => $this->cartService->getCartSummary()->totalItems,
                 'totalPrice' => $this->cartService->getCartSummary()->totalPrice,
             ],
+            'cartItems' => $cart->items,
             // Pass allowed payment methods using enum values
             'paymentMethods' => [
                 \App\Enums\PaymentMethod::CASH_ON_DELIVERY->value,
