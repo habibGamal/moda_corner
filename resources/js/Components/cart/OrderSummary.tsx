@@ -55,7 +55,7 @@ export function OrderSummary({ items, cartSummary }: OrderSummaryProps) {
                         <span>EGP {cartSummary.totalPrice.toFixed(2)}</span>
                     </div>
                     <Button
-                        onClick={() => router.get(route("checkout.index"))}
+                        onClick={checkout}
                         className="w-full"
                         size="lg"
                     >
