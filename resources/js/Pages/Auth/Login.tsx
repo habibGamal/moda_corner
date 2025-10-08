@@ -139,8 +139,8 @@ export default function Login({
                             id="remember"
                             name="remember"
                             checked={data.remember}
-                            // @ts-ignore - known issue with checkbox type
                             onCheckedChange={(checked) =>
+                                // @ts-ignore - known issue with checkbox type
                                 setData("remember", Boolean(checked))
                             }
                         />
