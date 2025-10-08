@@ -55,7 +55,7 @@ export default function Show({ product, auth }: ShowProps) {
 
     useEffect(() => {
         if (selectedVariant)
-            ReactPixel.track("AddToWishlist", {
+            ReactPixel.track("ViewContent", {
                 content_ids: [selectedVariant.id],
                 contents: [{ id: selectedVariant.id, quantity: 1 }],
                 content_type: "product",
@@ -63,7 +63,7 @@ export default function Show({ product, auth }: ShowProps) {
                 currency: "EGP",
             });
         else
-            ReactPixel.track("AddToWishlist", {
+            ReactPixel.track("ViewContent", {
                 content_ids: [product.id],
                 contents: [{ id: product.id, quantity: 1 }],
                 content_type: "product",
