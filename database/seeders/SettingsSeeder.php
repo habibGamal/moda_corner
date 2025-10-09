@@ -40,7 +40,7 @@ class SettingsSeeder extends Seeder
             [
                 'key' => 'site_description',
                 'group' => 'general',
-                'type' => 'textarea',
+                'type' => 'text',
                 'value' => 'Vilain is a modern fashion store offering curated apparel and accessories.',
                 'label_en' => 'Site Description',
                 'label_ar' => 'وصف الموقع',
