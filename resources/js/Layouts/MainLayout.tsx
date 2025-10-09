@@ -166,7 +166,7 @@ export default function MainLayout({
                 </header>
             )}
 
-            <main className="">
+            <main className="min-h-[calc(100vh-16rem)]">
                 <div
                     ref={animationInjection}
                     className="hidden w-[200px] h-[200px] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"

@@ -153,6 +153,61 @@ export default function Create({ order, returnableItems }: ReturnCreateProps) {
                             }
                             error={errors.reason}
                         />
+
+                        <div className="w-full p-4 bg-card rounded-lg border">
+                            {selectedCount === 0 && (
+                                <p className="text-sm text-destructive">
+                                    {t(
+                                        "select_at_least_one_item",
+                                        "Please select at least one item to return."
+                                    )}
+                                </p>
+                            )}
+
+                            {errors.return_items && (
+                                <p className="mt-1 text-sm text-destructive">
+                                    {Array.isArray(errors.return_items)
+                                        ? errors.return_items.join(", ")
+                                        : errors.return_items}
+                                </p>
+                            )}
+
+                            {errors.items && (
+                                <p className="mt-1 text-sm text-destructive">
+                                    {Array.isArray(errors.items)
+                                        ? errors.items.join(", ")
+                                        : errors.items}
+                                </p>
+                            )}
+                            <div className="mb-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-muted-foreground">
+                                        {t("selected_items", "Selected Items")}
+                                    </span>
+                                    <span className="font-medium">
+                                        {selectedCount}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between mt-2">
+                                    <span className="text-sm text-muted-foreground">
+                                        {t("total_refund", "Total Refund")}
+                                    </span>
+                                    <span className="font-medium">
+                                        {totalRefundAmount.toFixed(2)}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <Button
+                                type="submit"
+                                className="w-full"
+                                disabled={processing || selectedCount === 0}
+                            >
+                                {processing
+                                    ? t("requesting", "Requesting...")
+                                    : t("request_return", "Request Return")}
+                            </Button>
+                        </div>
                     </form>
                 </div>
             </div>

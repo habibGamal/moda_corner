@@ -50,6 +50,18 @@ class SettingsSeeder extends Seeder
                 'display_order' => 3,
             ],
             [
+                'key' => 'site_logo_dark',
+                'group' => 'general',
+                'type' => 'image',
+                'value' => null,
+                'label_en' => 'Site Logo (Dark Mode)',
+                'label_ar' => 'شعار الموقع (الوضع الداكن)',
+                'description_en' => 'Upload your website logo for dark mode (optional)',
+                'description_ar' => 'رفع شعار موقعك الإلكتروني للوضع الداكن (اختياري)',
+                'is_required' => false,
+                'display_order' => 4,
+            ],
+            [
                 'key' => 'facebook_pixel_url',
                 'group' => 'analytics',
                 'type' => 'text',
@@ -59,7 +71,7 @@ class SettingsSeeder extends Seeder
                 'description_en' => 'Facebook Pixel tracking URL for analytics',
                 'description_ar' => 'رابط بكسل فيسبوك لتتبع الإحصائيات',
                 'is_required' => false,
-                'display_order' => 4,
+                'display_order' => 5,
             ],
             [
                 'key' => 'facebook_pixel_id',
@@ -71,7 +83,7 @@ class SettingsSeeder extends Seeder
                 'description_en' => 'Facebook Pixel ID for tracking',
                 'description_ar' => 'معرف بكسل فيسبوك للتتبع',
                 'is_required' => false,
-                'display_order' => 5,
+                'display_order' => 6,
             ],
             [
                 'key' => 'maintenance_mode',
@@ -83,7 +95,7 @@ class SettingsSeeder extends Seeder
                 'description_en' => 'Enable maintenance mode for the website',
                 'description_ar' => 'تفعيل وضع الصيانة للموقع',
                 'is_required' => false,
-                'display_order' => 6,
+                'display_order' => 7,
             ],
             [
                 'key' => 'contact_email',
@@ -95,7 +107,7 @@ class SettingsSeeder extends Seeder
                 'description_en' => 'Main contact email address',
                 'description_ar' => 'عنوان البريد الإلكتروني الرئيسي للتواصل',
                 'is_required' => true,
-                'display_order' => 7,
+                'display_order' => 8,
             ],
             [
                 'key' => 'social_links',
@@ -112,7 +124,7 @@ class SettingsSeeder extends Seeder
                 'description_en' => 'Social media profile links',
                 'description_ar' => 'روابط ملفات وسائل التواصل الاجتماعي',
                 'is_required' => false,
-                'display_order' => 8,
+                'display_order' => 9,
             ],
         ];
 

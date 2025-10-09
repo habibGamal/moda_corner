@@ -26,7 +26,7 @@ export default function Register() {
     };
 
     return (
-        <>
+        <div className="container mt-4">
             <Head title={t("register", "Register")} />
 
             <div className="mx-auto max-w-md space-y-6 py-8">
@@ -174,6 +174,6 @@ export default function Register() {
                     </div>
                 </form>
             </div>
-        </>
+        </div>
     );
 }

@@ -13,7 +13,7 @@ interface SiteLogoProps {
  * Component to display site logo with fallback to title
  */
 export function SiteLogo({ className = '', size = 'md', showTitle = true }: SiteLogoProps) {
-    const { title, logo } = useSiteBranding();
+    const { title, logo, logoDark } = useSiteBranding();
 
     const sizeClasses = {
         sm: 'h-8 w-auto',
@@ -22,17 +22,27 @@ export function SiteLogo({ className = '', size = 'md', showTitle = true }: Site
         xl: 'h-24 w-auto',
     };
 
-    // Resolve logo path using utility
+    // Resolve logo paths using utility
     const resolvedLogo = resolveStoragePath(logo);
+    const resolvedLogoDark = resolveStoragePath(logoDark);
 
     if (resolvedLogo) {
         return (
             <div className={`flex items-center gap-3 ${className}`}>
+                {/* Light mode logo */}
                 <img
                     src={resolvedLogo}
                     alt={title}
-                    className={sizeClasses[size] + ' '}
+                    className={`${sizeClasses[size]} ${resolvedLogoDark ? 'dark:hidden' : ''}`}
                 />
+                {/* Dark mode logo (only if dark logo is provided) */}
+                {resolvedLogoDark && (
+                    <img
+                        src={resolvedLogoDark}
+                        alt={title}
+                        className={`${sizeClasses[size]} hidden dark:block`}
+                    />
+                )}
                 {showTitle && (
                     <span className="font-bold text-lg">{title}</span>
                 )}

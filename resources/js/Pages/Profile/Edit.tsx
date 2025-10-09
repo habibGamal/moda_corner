@@ -16,7 +16,7 @@ export default function Edit({
     const { t } = useI18n();
 
     return (
-        <>
+        <div className="container mt-4">
             <Head title={t("profile", "Profile")} />
 
             <PageTitle
@@ -61,6 +61,6 @@ export default function Edit({
                     <DeleteUserForm className="max-w-xl" />
                 </Card>
             </div>
-        </>
+        </div>
     );
 }

@@ -130,6 +130,7 @@ class SettingsService
         return [
             'site_title' => self::get('site_title', 'Vilain'),
             'site_logo' => self::get('site_logo'),
+            'site_logo_dark' => self::get('site_logo_dark'),
             'site_icon' => self::get('site_icon'),
             'maintenance_mode' => (bool) self::get('maintenance_mode', false),
             'contact_email' => self::get('contact_email'),

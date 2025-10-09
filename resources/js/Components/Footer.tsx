@@ -17,7 +17,7 @@ export default function Footer() {
     const hasPolicyLinks = showPrivacyPolicy || showReturnPolicy || showTermsOfService;
 
     return (
-        <footer className="bg-muted/50 dark:bg-muted/30 border-t dark:border-border/50 mt-auto mb-12 lg:mb-0">
+        <footer className="bg-muted/50 dark:bg-muted/30 border-t dark:border-border/50 mt-4 mb-12 lg:mb-0">
             <div className="container px-4 py-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* Logo & Description */}
@@ -77,7 +77,7 @@ export default function Footer() {
                                 </Link>
                             )}
                             {showReturnPolicy && (
-                                <Link href="/returns" className="hover:text-foreground transition-colors">
+                                <Link href="/returns-policy" className="hover:text-foreground transition-colors">
                                     {t('return_policy', 'Return Policy')}
                                 </Link>
                             )}

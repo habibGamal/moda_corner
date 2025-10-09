@@ -9,12 +9,12 @@ import { App } from '@/types';
 import { Plus, ArrowLeft, RotateCcw, Package } from 'lucide-react';
 
 interface ReturnsIndexProps extends App.Interfaces.AppPageProps {
-  returns: App.Models.ReturnOrder[];
+  returnOrders: App.Models.ReturnOrder[];
 }
 
-export default function Index({ returns }: ReturnsIndexProps) {
+export default function Index({ returnOrders }: ReturnsIndexProps) {
   const { t } = useI18n();
-
+    console.log('Returns:', returnOrders);
   return (
     <>
       <Head title={t("my_returns", "My Returns")} />
@@ -27,12 +27,6 @@ export default function Index({ returns }: ReturnsIndexProps) {
               icon={<RotateCcw className="h-6 w-6 text-primary" />}
             />
             <div className="flex items-center gap-3">
-              <Link href={route('returns.create')}>
-                <Button className="flex items-center gap-2">
-                  <Plus className="h-4 w-4" />
-                  {t("request_return", "Request Return")}
-                </Button>
-              </Link>
               <Link href={route('orders.index')}>
                 <Button variant="outline" className="flex items-center gap-2">
                   <ArrowLeft className="h-4 w-4 ltr:mr-0 ltr:rotate-0 rtl:ml-0 rtl:rotate-180" />
@@ -42,16 +36,13 @@ export default function Index({ returns }: ReturnsIndexProps) {
             </div>
           </div>
 
-          {returns.length === 0 ? (
+          {returnOrders.length === 0 ? (
             <EmptyState
               icon={<Package className="h-16 w-16 text-muted-foreground" />}
               title={t("no_returns", "No Return Requests")}
               description={t("no_returns_message", "You haven't requested any returns yet")}
               action={
                 <div className="flex items-center gap-3">
-                  <Link href={route('returns.create')}>
-                    <Button>{t("request_return", "Request Return")}</Button>
-                  </Link>
                   <Link href={route('orders.index')}>
                     <Button variant="outline">{t("view_orders", "View Orders")}</Button>
                   </Link>
@@ -60,7 +51,7 @@ export default function Index({ returns }: ReturnsIndexProps) {
             />
           ) : (
             <div className="space-y-4">
-              {returns.map((returnOrder) => (
+              {returnOrders.map((returnOrder) => (
                 <ReturnOrderCard key={returnOrder.id} returnOrder={returnOrder} />
               ))}
             </div>

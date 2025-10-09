@@ -74,7 +74,7 @@ export default function Kashier({ kashierParams }: KashierProps) {
     }, [kashierParams]);
 
     return (
-        <>
+        <div className="container mt-4">
             <Head title={t('processing_payment', 'Processing Payment')} />
 
             <div className="space-y-6">
@@ -127,6 +127,6 @@ export default function Kashier({ kashierParams }: KashierProps) {
                     </Alert>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

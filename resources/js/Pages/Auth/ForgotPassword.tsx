@@ -21,7 +21,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
     };
 
     return (
-        <>
+        <div className="container mt-4">
             <Head title={t('forgot_password', 'Forgot Password')} />
 
             <div className="mx-auto max-w-md space-y-6 py-8">
@@ -73,6 +73,6 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     </div>
                 </form>
             </div>
-        </>
+        </div>
     );
 }

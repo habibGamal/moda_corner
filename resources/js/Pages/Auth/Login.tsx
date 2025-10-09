@@ -33,7 +33,7 @@ export default function Login({
     };
 
     return (
-        <>
+        <div className="container mt-4">
             <Head title={t("login", "Log in")} />
 
             <div className="mx-auto max-w-md space-y-6 py-8">
@@ -173,6 +173,6 @@ export default function Login({
                     </div>
                 </form>
             </div>
-        </>
+        </div>
     );
 }

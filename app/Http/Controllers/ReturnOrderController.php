@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RequestReturnOrderRequest;
 use App\Models\Order;
+use App\Models\ReturnOrder;
 use App\Services\OrderService;
 use App\Services\ReturnOrderService;
 use Exception;
@@ -35,7 +36,13 @@ class ReturnOrderController extends Controller
      */
     public function index(Request $request)
     {
-        $returnOrders = $this->returnOrderService->getUserReturnHistory();
+        $returnOrders = ReturnOrder::where('user_id', Auth::id())
+            ->with(
+                'order.user',
+                'order.shippingAddress',
+                'returnItems.orderItem.product',
+                'returnItems.orderItem.variant',)
+            ->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Returns/Index', [
             'returnOrders' => $returnOrders,

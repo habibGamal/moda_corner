@@ -4,6 +4,7 @@ import { PageProps } from '@inertiajs/core';
 export interface SiteConfig {
     site_title: string;
     site_logo?: string;
+    site_logo_dark?: string;
     site_icon?: string;
     maintenance_mode: boolean;
     contact_email?: string;
@@ -64,6 +65,7 @@ export function useSiteBranding() {
     return {
         title: settings.site_title || 'Vilain',
         logo: settings.site_logo,
+        logoDark: settings.site_logo_dark,
         icon: settings.site_icon,
     };
 }

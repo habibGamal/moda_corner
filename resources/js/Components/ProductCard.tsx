@@ -168,10 +168,10 @@ export default function ProductCard({ product }: ProductCardProps) {
             </Link>
 
             {/* Main Action Buttons */}
-            <CardFooter className="p-5 pt-0">
+            <CardFooter className="p-2 md:p-5 pt-0">
                 <Button
                     variant={product.quantity <= 0 ? "secondary" : "default"}
-                    className="flex-1 font-medium transition-all duration-200 hover:shadow-md"
+                    className="w-full font-medium transition-all duration-200 hover:shadow-md"
                     size="lg"
                     onClick={() => addToCart(product.id, 1, undefined, product)}
                     disabled={addingToCart[product.id] || product.quantity <= 0}
