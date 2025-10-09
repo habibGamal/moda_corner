@@ -39,13 +39,13 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="force-ltr relative rounded-xl overflow-hidden bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 bg-size-200 animate-gradient-x"
+          className="force-ltr relative rounded-xl overflow-hidden bg-gradient-to-r from-primary-500 via-primary-600 to-primary-500 bg-size-200 animate-gradient-x"
         >
           {/* Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden">
             {/* Floating particles */}
             <motion.div
-              className="absolute top-2 left-1/4 w-1 h-1 bg-white/30 rounded-full"
+              className="absolute top-2 left-1/4 w-1 h-1 bg-primary-foreground/30 rounded-full"
               animate={{
                 y: [0, -8, 0],
                 opacity: [0.3, 0.8, 0.3],
@@ -58,7 +58,7 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
               }}
             />
             <motion.div
-              className="absolute top-3 right-1/3 w-1.5 h-1.5 bg-white/40 rounded-full"
+              className="absolute top-3 right-1/3 w-1.5 h-1.5 bg-primary-foreground/40 rounded-full"
               animate={{
                 y: [0, -10, 0],
                 opacity: [0.4, 0.9, 0.4],
@@ -72,7 +72,7 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
               }}
             />
             <motion.div
-              className="absolute bottom-2 left-1/3 w-1 h-1 bg-white/25 rounded-full"
+              className="absolute bottom-2 left-1/3 w-1 h-1 bg-primary-foreground/25 rounded-full"
               animate={{
                 y: [0, -6, 0],
                 opacity: [0.25, 0.7, 0.25],
@@ -87,7 +87,7 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
             />
 
             {/* Subtle glow effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-foreground/8 to-transparent animate-pulse" />
           </div>
 
           <div className="container mx-auto px-4 py-3 relative">
@@ -115,7 +115,7 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
                     ease: "easeInOut"
                   }}
                 >
-                  <Megaphone className="h-5 w-5 text-white/90 mr-3" />
+                  <Megaphone className="h-5 w-5 text-primary-foreground/95 mr-3" />
                 </motion.div>
               </motion.div>
 
@@ -150,11 +150,11 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
                   className="text-center"
                 >
                   <motion.p
-                    className="text-white font-semibold text-sm md:text-base tracking-wide"
+                    className="text-primary-foreground font-semibold text-sm md:text-base tracking-wide"
                     animate={{
                       textShadow: [
                         "0 0 0px rgba(255,255,255,0)",
-                        "0 0 8px rgba(255,255,255,0.3)",
+                        "0 0 8px rgba(255,255,255,0.12)",
                         "0 0 0px rgba(255,255,255,0)"
                       ]
                     }}
@@ -183,7 +183,7 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
                     ease: "linear"
                   }}
                 >
-                  <Sparkles className="h-4 w-4 text-yellow-200/80" />
+                  <Sparkles className="h-4 w-4 text-primary-200/80" />
                 </motion.div>
               </div>
             </div>
@@ -201,8 +201,8 @@ export default function AnnouncementBanner({ announcements }: AnnouncementBanner
                     key={index}
                     className={`h-1 rounded-full transition-all duration-300 cursor-pointer ${
                       index === currentAnnouncementIndex
-                        ? 'w-8 bg-white/90 shadow-sm shadow-white/20'
-                        : 'w-3 bg-white/40 hover:bg-white/60'
+                        ? 'w-8 bg-primary-foreground/90 shadow-sm shadow-primary-foreground/20'
+                        : 'w-3 bg-primary-foreground/40 hover:bg-primary-foreground/60'
                     }`}
                     onClick={() => setCurrentAnnouncementIndex(index)}
                     whileHover={{

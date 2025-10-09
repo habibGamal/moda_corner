@@ -65,7 +65,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
                     {/* Discount Badge */}
                     {hasDiscount && discountPercentage > 0 && (
-                        <div className="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg animate-pulse">
+                        <div className="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg animate-pulse">
                             -{discountPercentage}%
                         </div>
                     )}

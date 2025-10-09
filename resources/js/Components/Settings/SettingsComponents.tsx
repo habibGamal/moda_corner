@@ -31,7 +31,7 @@ export function SiteLogo({ className = '', size = 'md', showTitle = true }: Site
                 <img
                     src={resolvedLogo}
                     alt={title}
-                    className={sizeClasses[size] + ' rounded-xl'}
+                    className={sizeClasses[size] + ' '}
                 />
                 {showTitle && (
                     <span className="font-bold text-lg">{title}</span>

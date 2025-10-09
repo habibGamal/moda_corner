@@ -62,7 +62,7 @@ export default function HeroSection({ announcements, heroSlides }: HeroSectionPr
                                             <span
                                                 className="text-transparent bg-clip-text "
                                                 style={{
-                                                    WebkitTextStroke: "2px #10b981",
+                                                    WebkitTextStroke: "2px rgb(16 185 129)",
                                                     color: "transparent",
                                                 }}
                                             >
@@ -85,7 +85,7 @@ export default function HeroSection({ announcements, heroSlides }: HeroSectionPr
                             <Button
                                 asChild
                                 size="lg"
-                                className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 text-lg font-semibold"
+                                className="bg-primary-500 hover:bg-primary-600 text-white px-8 py-4 text-lg font-semibold"
                             >
                                 <Link href="/sections/4" className="flex items-center gap-2">
                                     <Star className="h-5 w-5" />
@@ -109,7 +109,7 @@ export default function HeroSection({ announcements, heroSlides }: HeroSectionPr
                         {/* Question Text */}
                         <div className="mt-8">
                             <p className="text-gray-500 dark:text-gray-400 flex items-center justify-center ltr:lg:justify-start rtl:lg:justify-end gap-2">
-                                <span className="w-2 h-2 bg-emerald-400 dark:bg-emerald-500 rounded-full"></span>
+                                <span className="w-2 h-2 bg-primary-400 dark:bg-primary-500 rounded-full"></span>
                                 {t("hero_question")}
                             </p>
                         </div>
