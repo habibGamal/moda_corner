@@ -38,6 +38,18 @@ class SettingsSeeder extends Seeder
                 'display_order' => 2,
             ],
             [
+                'key' => 'site_title',
+                'group' => 'general',
+                'type' => 'text',
+                'value' => 'Vilain',
+                'label_en' => 'Site Title',
+                'label_ar' => 'عنوان الموقع',
+                'description_en' => 'The main title of your website',
+                'description_ar' => 'العنوان الرئيسي لموقعك الإلكتروني',
+                'is_required' => true,
+                'display_order' => 2,
+            ],
+            [
                 'key' => 'site_logo',
                 'group' => 'general',
                 'type' => 'image',
@@ -129,7 +141,7 @@ class SettingsSeeder extends Seeder
         ];
 
         foreach ($settings as $setting) {
-            Setting::updateOrCreate(
+            Setting::createOrFirst(
                 ['key' => $setting['key']],
                 $setting
             );

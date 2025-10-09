@@ -7,7 +7,7 @@
 
     <title inertia>{{ App\Services\SettingsService::get('site_title', config('app.name', 'Laravel')) }}</title>
     <meta name="description"
-        content="متجرك المتكامل لجميع مستلزمات الأطفال في أسيوط. نوفر تشكيلة واسعة من الببرونات, عربيات الأطفال, منتجات العناية, والملابس من أشهر الماركات العالمية مثل شيكو, بابلز, وسفاري.">
+        content="{{ App\Services\SettingsService::get('site_description', 'The best e-commerce platform for your online store.') }}">
     <!-- Site Icon/Favicon -->
     @if (App\Services\SettingsService::get('site_icon'))
         @php
