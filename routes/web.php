@@ -153,4 +153,7 @@ Route::prefix('api')->group(function () {
     Route::get('/settings/{key}', [App\Http\Controllers\Api\SettingsController::class, 'show']);
 });
 
+// Facebook Data Feed - Public endpoint for Facebook crawlers
+Route::get('/datafeed.csv', [App\Http\Controllers\FacebookDataFeedController::class, 'generateFeed'])->name('facebook.datafeed');
+
 require __DIR__.'/auth.php';
