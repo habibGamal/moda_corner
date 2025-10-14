@@ -110,6 +110,18 @@ class SettingsSeeder extends Seeder
                 'display_order' => 7,
             ],
             [
+                'key' => 'soon_banner',
+                'group' => 'general',
+                'type' => 'boolean',
+                'value' => '0',
+                'label_en' => 'Soon Banner',
+                'label_ar' => 'بانر قريباً',
+                'description_en' => 'Enable soon banner for the website',
+                'description_ar' => 'تفعيل بانر قريباً للموقع',
+                'is_required' => false,
+                'display_order' => 8,
+            ],
+            [
                 'key' => 'contact_email',
                 'group' => 'contact',
                 'type' => 'text',

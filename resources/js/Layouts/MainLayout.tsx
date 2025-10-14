@@ -17,6 +17,7 @@ import MobileBottomNav from "@/Components/MobileBottomNav";
 import MobileNav from "@/Components/MobileNav";
 import UserActions from "@/Components/UserActions";
 import { App } from "@/types";
+import { useSettings } from "@/hooks/useSettings";
 
 export default function MainLayout({
     header,
@@ -116,15 +117,18 @@ export default function MainLayout({
             window.removeEventListener("popstate", handlePopState);
         };
     }, []);
-
+    const { soon_banner } = useSettings();
+    console.log("soon_banner", soon_banner);
     return (
         <div
             className="flex min-h-screen flex-col bg-background"
             dir={direction}
         >
-            <div className="fixed inset-0 bg-black text-orange-500 z-50 grid place-items-center text-7xl font-bold">
-                <p>SOON</p>
-            </div>
+            {soon_banner && (
+                <div className="fixed inset-0 bg-black text-orange-500 z-50 grid place-items-center text-7xl font-bold">
+                    <p>SOON</p>
+                </div>
+            )}
             {/* Desktop Navigation */}
             <nav className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <div className="container flex h-16 gap-4 items-center px-4">

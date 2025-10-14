@@ -12,6 +12,7 @@ export default function Footer() {
     const showPrivacyPolicy = settings.show_privacy_policy !== false;
     const showReturnPolicy = settings.show_return_policy !== false;
     const showTermsOfService = settings.show_terms_of_service !== false;
+    const showContactPage = settings.show_contact_page;
 
     // Check if any policy links should be shown
     const hasPolicyLinks = showPrivacyPolicy || showReturnPolicy || showTermsOfService;
@@ -84,6 +85,11 @@ export default function Footer() {
                             {showTermsOfService && (
                                 <Link href="/terms" className="hover:text-foreground transition-colors">
                                     {t('terms_of_service', 'Terms of Service')}
+                                </Link>
+                            )}
+                            {showContactPage && (
+                                <Link href="/contact" className="hover:text-foreground transition-colors">
+                                    {t('contact', 'Contact')}
                                 </Link>
                             )}
                         </div>

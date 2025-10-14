@@ -15,6 +15,7 @@ export interface SiteConfig {
     show_return_policy?: boolean;
     show_terms_of_service?: boolean;
     show_contact_page?: boolean;
+    soon_banner?: boolean;
 }
 
 interface PagePropsWithSettings extends PageProps {

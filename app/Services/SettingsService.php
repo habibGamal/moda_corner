@@ -141,6 +141,7 @@ class SettingsService
             'show_return_policy' => (bool) self::get('show_return_policy', true),
             'show_terms_of_service' => (bool) self::get('show_terms_of_service', true),
             'show_contact_page' => (bool) self::get('show_contact_page', true),
+            'soon_banner' => (bool) self::get('soon_banner', false),
         ];
     }
 
