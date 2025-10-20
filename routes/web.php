@@ -48,6 +48,10 @@ Route::get('/privacy', [App\Http\Controllers\PagesController::class, 'privacy'])
 Route::get('/returns-policy', [App\Http\Controllers\PagesController::class, 'returns'])->name('pages.returns');
 Route::get('/terms', [App\Http\Controllers\PagesController::class, 'terms'])->name('pages.terms');
 Route::get('/contact', [App\Http\Controllers\PagesController::class, 'contact'])->name('pages.contact');
+Route::get('/exchange-policy', [App\Http\Controllers\PagesController::class, 'exchangePolicy'])->name('pages.exchange-policy');
+Route::get('/about-us', [App\Http\Controllers\PagesController::class, 'aboutUs'])->name('pages.about-us');
+Route::get('/delivery-policy', [App\Http\Controllers\PagesController::class, 'deliveryPolicy'])->name('pages.delivery-policy');
+Route::get('/shipping-policy', [App\Http\Controllers\PagesController::class, 'shippingPolicy'])->name('pages.shipping-policy');
 Route::get('/facebook-data-deletion', [App\Http\Controllers\PagesController::class, 'facebookDataDeletion'])->name('pages.facebook-data-deletion');
 
 Route::get('/notify', function () {
@@ -131,11 +135,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/reviews/{review}', [ProductReviewController::class, 'destroy'])->name('reviews.destroy');
     Route::get('/products/{product}/reviews/can-review', [ProductReviewController::class, 'canReview'])->name('products.reviews.can-review');
 
-    // Legacy Kashier payment routes for backward compatibility
-    Route::get('/payments/kashier/initiate', [PaymentController::class, 'initiatePayment'])->name('kashier.payment.initiate');
-    Route::get('/payments/kashier/success', [PaymentController::class, 'handleSuccess'])->name('kashier.payment.success');
-    Route::get('/payments/kashier/failure', [PaymentController::class, 'handleFailure'])->name('kashier.payment.failure');
-    Route::get('/payments/kashier/{order}', [PaymentController::class, 'showPayment'])->name('kashier.payment.show');
+    // // Legacy Kashier payment routes for backward compatibility
+    // Route::get('/payments/kashier/initiate', [PaymentController::class, 'initiatePayment'])->name('kashier.payment.initiate');
+    // Route::get('/payments/kashier/success', [PaymentController::class, 'handleSuccess'])->name('kashier.payment.success');
+    // Route::get('/payments/kashier/failure', [PaymentController::class, 'handleFailure'])->name('kashier.payment.failure');
+    // Route::get('/payments/kashier/{order}', [PaymentController::class, 'showPayment'])->name('kashier.payment.show');
 });
 
 // Payment webhook - This route is not protected as it's accessed by payment gateways

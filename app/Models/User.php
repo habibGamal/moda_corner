@@ -28,6 +28,7 @@ class User extends Authenticatable implements FilamentUser
         'google_id',
         'avatar',
         'is_admin',
+        'birthdate',
     ];
 
     /**
@@ -50,6 +51,7 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'birthdate' => 'date',
         ];
     }
 

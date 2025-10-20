@@ -77,6 +77,74 @@ class PagesController extends Controller
     }
 
     /**
+     * Display the exchange policy page.
+     */
+    public function exchangePolicy(): Response
+    {
+        return Inertia::render('Pages/ExchangePolicy', [
+            'content' => [
+                'en' => SettingsService::get('exchange_policy_en'),
+                'ar' => SettingsService::get('exchange_policy_ar'),
+            ],
+            'title' => [
+                'en' => 'Exchange Policy',
+                'ar' => 'سياسة الاستبدال',
+            ],
+        ]);
+    }
+
+    /**
+     * Display the about us page.
+     */
+    public function aboutUs(): Response
+    {
+        return Inertia::render('Pages/AboutUs', [
+            'content' => [
+                'en' => SettingsService::get('about_us_en'),
+                'ar' => SettingsService::get('about_us_ar'),
+            ],
+            'title' => [
+                'en' => 'About Us',
+                'ar' => 'من نحن',
+            ],
+        ]);
+    }
+
+    /**
+     * Display the delivery policy page.
+     */
+    public function deliveryPolicy(): Response
+    {
+        return Inertia::render('Pages/DeliveryPolicy', [
+            'content' => [
+                'en' => SettingsService::get('delivery_policy_en'),
+                'ar' => SettingsService::get('delivery_policy_ar'),
+            ],
+            'title' => [
+                'en' => 'Delivery Policy',
+                'ar' => 'سياسة التسليم',
+            ],
+        ]);
+    }
+
+    /**
+     * Display the shipping policy page.
+     */
+    public function shippingPolicy(): Response
+    {
+        return Inertia::render('Pages/ShippingPolicy', [
+            'content' => [
+                'en' => SettingsService::get('shipping_policy_en'),
+                'ar' => SettingsService::get('shipping_policy_ar'),
+            ],
+            'title' => [
+                'en' => 'Shipping Policy',
+                'ar' => 'سياسة الشحن',
+            ],
+        ]);
+    }
+
+    /**
      * Display the Facebook data deletion instructions page.
      */
     public function facebookDataDeletion(): Response

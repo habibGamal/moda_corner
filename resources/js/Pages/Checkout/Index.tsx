@@ -45,6 +45,7 @@ const checkoutFormSchema = z.object({
     }),
     notes: z.string().optional(),
     coupon_code: z.string().optional(),
+    birthdate: z.string().optional(),
 });
 
 export default function Index({
@@ -251,6 +252,7 @@ export default function Index({
                 payment_method: values.payment_method,
                 notes: values.notes || null,
                 coupon_code: values.coupon_code || null,
+                birthdate: values.birthdate || null,
             },
             {
                 onFinish: () => setIsSubmitting(false),

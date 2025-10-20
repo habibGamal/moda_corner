@@ -7,6 +7,7 @@ declare namespace App.Models {
         name: string;
         email: string;
         avatar?: string;
+        birthdate?: string;
         created_at?: string;
         updated_at?: string;
     }
