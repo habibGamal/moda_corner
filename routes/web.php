@@ -4,6 +4,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\InstaPayController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderReturnController;
 use App\Http\Controllers\PaymentController;
@@ -129,6 +130,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/payments/failure', [PaymentController::class, 'handleFailure'])->name('payment.failure');
     Route::get('/payments/{order}', [PaymentController::class, 'showPayment'])->name('payment.show');
 
+    // InstaPay routes
+    Route::get('/instapay/{order}', [InstaPayController::class, 'show'])->name('instapay.upload')->where('order', '[0-9]+');
+    Route::post('/instapay/{order}', [InstaPayController::class, 'store'])->name('instapay.store')->where('order', '[0-9]+');
+    Route::post('/instapay/{order}/reupload', [InstaPayController::class, 'reupload'])->name('instapay.reupload')->where('order', '[0-9]+');
+
     // Product Review routes (authenticated)
     Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store'])->name('products.reviews.store');
     Route::put('/reviews/{review}', [ProductReviewController::class, 'update'])->name('reviews.update');
@@ -148,6 +154,10 @@ Route::post('/webhooks/payment', [PaymentWebhookController::class, 'handle'])->n
 
 // Legacy Kashier webhook for backward compatibility
 Route::post('/webhooks/kashier', [PaymentWebhookController::class, 'handle'])->name('kashier.payment.webhook')
+    ->withoutMiddleware([VerifyCsrfToken::class]);
+
+// Paymob webhook
+Route::post('/webhooks/paymob', [App\Http\Controllers\PaymobWebhookController::class, 'handle'])->name('paymob.payment.webhook')
     ->withoutMiddleware([VerifyCsrfToken::class]);
 
 // API Routes for Settings

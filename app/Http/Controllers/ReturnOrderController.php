@@ -93,6 +93,15 @@ class ReturnOrderController extends Controller
         } catch (ModelNotFoundException $e) {
             return redirect()->route('orders.index')
                 ->with('error', 'Order not found.');
+        } catch (Exception $e) {
+            Log::error('Failed to load return order creation page', [
+                'order_id' => $orderId,
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()->route('orders.index')
+                ->with('error', 'Unable to load return order page.');
         }
     }
 

@@ -21,7 +21,8 @@ interface PaymentValidatorInterface
      *
      * @param  string  $rawPayload  The raw JSON payload from the webhook
      * @param  array  $headers  The HTTP headers from the request
+     * @param  array  $queryParams  Optional query parameters (used by Paymob)
      * @return bool Whether the payment response is valid
      */
-    public function validateWebhookPayload(string $rawPayload, array $headers): bool;
+    public function validateWebhookPayload(string $rawPayload, array $headers, array $queryParams = []): bool;
 }

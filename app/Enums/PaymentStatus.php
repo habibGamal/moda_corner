@@ -14,6 +14,7 @@ enum PaymentStatus: string implements HasColor, HasIcon, HasLabel
      * After the order is delivered, the status will be updated to PAID.
      */
     case PENDING = 'pending';
+    case IN_REVIEW = 'in_review';
     case PAID = 'paid';
     case FAILED = 'failed';
     case REFUNDED = 'refunded';
@@ -22,6 +23,7 @@ enum PaymentStatus: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
             self::PENDING => 'warning',
+            self::IN_REVIEW => 'info',
             self::PAID => 'success',
             self::FAILED => 'danger',
             self::REFUNDED => 'info',
@@ -32,6 +34,7 @@ enum PaymentStatus: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
             self::PENDING => 'heroicon-o-clock',
+            self::IN_REVIEW => 'heroicon-o-document-magnifying-glass',
             self::PAID => 'heroicon-o-check-circle',
             self::FAILED => 'heroicon-o-x-circle',
             self::REFUNDED => 'heroicon-o-arrow-uturn-left',
@@ -42,6 +45,7 @@ enum PaymentStatus: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
             self::PENDING => 'قيد الانتظار',
+            self::IN_REVIEW => 'قيد المراجعة',
             self::PAID => 'تم الدفع',
             self::FAILED => 'فشل الدفع',
             self::REFUNDED => 'تم الاسترداد',
@@ -58,6 +62,11 @@ enum PaymentStatus: string implements HasColor, HasIcon, HasLabel
         return $this === self::PENDING;
     }
 
+    public function isInReview(): bool
+    {
+        return $this === self::IN_REVIEW;
+    }
+
     public function isFailed(): bool
     {
         return $this === self::FAILED;
@@ -72,6 +81,7 @@ enum PaymentStatus: string implements HasColor, HasIcon, HasLabel
     {
         return [
             self::PENDING->value => self::PENDING->getLabel(),
+            self::IN_REVIEW->value => self::IN_REVIEW->getLabel(),
             self::PAID->value => self::PAID->getLabel(),
             self::FAILED->value => self::FAILED->getLabel(),
             self::REFUNDED->value => self::REFUNDED->getLabel(),

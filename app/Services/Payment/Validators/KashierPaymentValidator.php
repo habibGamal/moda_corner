@@ -108,7 +108,7 @@ class KashierPaymentValidator implements PaymentValidatorInterface
     /**
      * Validate the webhook payload from Kashier
      */
-    public function validateWebhookPayload(string $rawPayload, array $headers): bool
+    public function validateWebhookPayload(string $rawPayload, array $headers, array $queryParams = []): bool
     {
         try {
             $jsonData = json_decode($rawPayload, true);

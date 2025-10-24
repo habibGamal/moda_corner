@@ -38,7 +38,6 @@ class PaymentController extends Controller
             $this->validatePaymentInitiation($order);
 
             $paymentData = $this->paymentProcessor->processPayment($order);
-
             // Store order ID in session for callbacks
             session()->put('payment_order_id', $order->id);
 
@@ -156,7 +155,6 @@ class PaymentController extends Controller
             $this->validatePaymentInitiation($order);
 
             $paymentData = $this->paymentProcessor->processPayment($order);
-
             session()->put('payment_order_id', $order->id);
 
             return $this->renderPaymentPage($order, $paymentData);
@@ -184,13 +182,29 @@ class PaymentController extends Controller
     }
 
     /**
-     * Render the appropriate payment page based on payment method
+     * Render the appropriate payment page based on payment method and gateway
      */
     private function renderPaymentPage(Order $order, PaymentResultData $paymentData)
     {
+        $defaultGateway = config('payment.default_gateway', 'paymob');
         return match ($order->payment_method) {
-            PaymentMethod::CREDIT_CARD, PaymentMethod::WALLET => Inertia::render('Payments/Kashier', [
-                'kashierParams' => $paymentData->toArray(),
+            PaymentMethod::CREDIT_CARD, PaymentMethod::WALLET => match ($defaultGateway) {
+                'paymob' => Inertia::render('Payments/Paymob', [
+                    'paymentData' => $paymentData->toArray(),
+                    'order' => $order,
+                ]),
+                // 'paymob' => redirect()->to($paymentData->iframeUrl),
+                'kashier' => Inertia::render('Payments/Kashier', [
+                    'kashierParams' => $paymentData->toArray(),
+                    'order' => $order,
+                ]),
+                default => Inertia::render('Payments/Paymob', [
+                    'paymentData' => $paymentData->toArray(),
+                    'order' => $order,
+                ]),
+            },
+            PaymentMethod::INSTAPAY => Inertia::render('Payments/InstaPay', [
+                'paymentData' => $paymentData->toArray(),
                 'order' => $order,
             ]),
             PaymentMethod::CASH_ON_DELIVERY => redirect()->route('orders.show', $order->id)

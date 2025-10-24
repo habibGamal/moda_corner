@@ -44,9 +44,9 @@ class ReturnOrderService
     public function isOrderEligibleForReturn(Order $order): bool
     {
         // Check if returns are enabled globally
-        if (! ReturnPolicyService::returnsEnabled()) {
-            return false;
-        }
+        // if (! ReturnPolicyService::returnsEnabled()) {
+        //     return false;
+        // }
 
         // Check if order is delivered
         if ($order->order_status !== OrderStatus::DELIVERED) {
@@ -54,9 +54,9 @@ class ReturnOrderService
         }
 
         // Check if within return window
-        if (! ReturnPolicyService::canReturn($order->delivered_at ?? $order->created_at)) {
-            return false;
-        }
+        // if (! ReturnPolicyService::canReturn($order->delivered_at ?? $order->created_at)) {
+        //     return false;
+        // }
 
         // Check if already has pending/approved return
         if ($this->hasActiveReturn($order)) {
@@ -314,7 +314,7 @@ class ReturnOrderService
                         'refund_amount' => $refundAmount,
                         'error' => $e->getMessage(),
                     ]);
-
+                    throw $e;
                     // Don't fail the entire completion process for refund issues
                     // Admin can manually process the refund later
                 }

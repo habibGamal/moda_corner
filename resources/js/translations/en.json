@@ -176,6 +176,8 @@
     "total": "Total",
     "payment_method": "Payment Method",
     "payment_method_cash_on_delivery": "Cash on Delivery",
+    "payment_method_instapay": "InstaPay",
+    "order_placed_upload_payment_proof": "Order placed successfully! Please upload your payment proof.",
     "view_details": "View Details",
     "order_details": "Order Details",
     "back_to_orders": "Back to Orders",

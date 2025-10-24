@@ -12,13 +12,13 @@ use App\Services\OrderCancellationService;
 use App\Services\OrderEvaluationService;
 use App\Services\OrderReturnService;
 use App\Services\OrderService;
+use App\Services\SettingsService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use App\Services\SettingsService;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -128,12 +128,13 @@ class OrderController extends Controller
                 'totalPrice' => $this->cartService->getCartSummary()->totalPrice,
             ],
             'cartItems' => $cart->items,
-            'deliveryTimeOptions' => json_decode(app(SettingsService::class)->get('delivery_time_options', "[]")),
+            'deliveryTimeOptions' => json_decode(app(SettingsService::class)->get('delivery_time_options', '[]')),
             // Pass allowed payment methods using enum values
             'paymentMethods' => [
                 \App\Enums\PaymentMethod::CASH_ON_DELIVERY->value,
                 \App\Enums\PaymentMethod::CREDIT_CARD->value,
                 \App\Enums\PaymentMethod::WALLET->value,
+                \App\Enums\PaymentMethod::INSTAPAY->value,
             ],
         ]);
     }
@@ -169,6 +170,12 @@ class OrderController extends Controller
                 return redirect()->route('payment.initiate', [
                     'order_id' => $order->id,
                 ]);
+            }
+
+            // If payment method requires manual verification (InstaPay), redirect to upload form
+            if ($paymentMethod->requiresManualVerification()) {
+                return redirect()->route('instapay.upload', $order->id)
+                    ->with('success', __('order.order_placed_upload_payment_proof'));
             }
 
             return redirect()->route('orders.show', $order->id)

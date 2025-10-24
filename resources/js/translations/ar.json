@@ -252,6 +252,8 @@
     "items": "العناصر",
     "payment_method": "طريقة الدفع",
     "payment_method_cash_on_delivery": "الدفع عند الاستلام",
+    "payment_method_instapay": "إنستاباي",
+    "order_placed_upload_payment_proof": "تم إنشاء الطلب بنجاح! يرجى رفع إثبات الدفع.",
     "view_details": "عرض التفاصيل",
     "order_details": "تفاصيل الطلب",
     "back_to_orders": "العودة إلى الطلبات",

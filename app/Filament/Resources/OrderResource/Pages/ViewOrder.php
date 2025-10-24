@@ -10,6 +10,8 @@ use App\Actions\Orders\MarkOrderAsShippedAction;
 use App\Actions\Orders\ProcessRefundAction;
 use App\Actions\Orders\RejectReturnAction;
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use App\Enums\ReturnStatus;
 use App\Filament\Resources\OrderResource;
 use Filament\Actions\Action;
@@ -24,6 +26,79 @@ class ViewOrder extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('confirm_instapay_payment')
+                ->label('تأكيد الدفع')
+                ->icon('heroicon-o-check-badge')
+                ->color('success')
+                ->visible(fn ($record) =>
+                    $record->payment_method === PaymentMethod::INSTAPAY &&
+                    $record->payment_status === PaymentStatus::IN_REVIEW &&
+                    $record->payment_proof !== null
+                )
+                ->requiresConfirmation()
+                ->modalHeading('تأكيد الدفع عبر إنستاباي')
+                ->modalDescription('هل أنت متأكد من تأكيد هذا الدفع؟ سيتم تحديث حالة الدفع إلى "مدفوع".')
+                ->action(function () {
+                    try {
+                        $this->record->payment_status = PaymentStatus::PAID;
+
+                        $existingDetails = json_decode($this->record->payment_details, true) ?? [];
+                        $this->record->payment_details = json_encode(array_merge($existingDetails, [
+                            'verified_at' => now()->toISOString(),
+                            'verified_by' => auth()->id(),
+                        ]));
+
+                        $this->record->save();
+
+                        Notification::make()
+                            ->title('تم تأكيد الدفع بنجاح')
+                            ->success()
+                            ->send();
+                    } catch (\Exception $e) {
+                        Notification::make()
+                            ->title('فشل في تأكيد الدفع')
+                            ->body($e->getMessage())
+                            ->danger()
+                            ->send();
+                    }
+                }),
+            Action::make('reject_instapay_payment')
+                ->label('رفض الدفع')
+                ->icon('heroicon-o-x-circle')
+                ->color('danger')
+                ->visible(fn ($record) =>
+                    $record->payment_method === PaymentMethod::INSTAPAY &&
+                    $record->payment_status === PaymentStatus::IN_REVIEW &&
+                    $record->payment_proof !== null
+                )
+                ->requiresConfirmation()
+                ->modalHeading('رفض الدفع عبر إنستاباي')
+                ->modalDescription('سيتم رفض إثبات الدفع والسماح للعميل بإعادة الرفع. هل أنت متأكد؟')
+                ->action(function () {
+                    try {
+                        $this->record->payment_status = PaymentStatus::PENDING;
+                        $existingDetails = json_decode($this->record->payment_details, true) ?? [];
+                        $this->record->payment_details = json_encode(array_merge($existingDetails, [
+                            'rejected_at' => now()->toISOString(),
+                            'rejected_by' => auth()->id(),
+                            'can_reupload' => true,
+                        ]));
+
+                        $this->record->save();
+
+                        Notification::make()
+                            ->title('تم رفض إثبات الدفع')
+                            ->body('يمكن للعميل الآن إعادة رفع إثبات الدفع')
+                            ->warning()
+                            ->send();
+                    } catch (\Exception $e) {
+                        Notification::make()
+                            ->title('فشل في رفض الدفع')
+                            ->body($e->getMessage())
+                            ->danger()
+                            ->send();
+                    }
+                }),
             Action::make('mark_shipped')
                 ->label('تحديد كمشحون')
                 ->icon('heroicon-o-paper-airplane')

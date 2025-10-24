@@ -156,7 +156,7 @@ export default function Show({
                                     >
                                         <a
                                             href={route(
-                                                "kashier.payment.show",
+                                                "payment.show",
                                                 order.id
                                             )}
                                         >

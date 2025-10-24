@@ -39,6 +39,7 @@ class PaymentProcessor
             PaymentMethod::CASH_ON_DELIVERY->value => 'cod', // Special case for COD
             PaymentMethod::CREDIT_CARD->value => $defaultGateway,
             PaymentMethod::WALLET->value => $defaultGateway,
+            PaymentMethod::INSTAPAY->value => 'instapay', // Manual payment verification
         ]);
     }
 
@@ -132,7 +133,6 @@ class PaymentProcessor
         }
 
         $strategy = $this->findStrategyForOrder($order);
-
         if (! $strategy) {
             return RefundResultData::failure([
                 'error' => "No payment strategy found for payment method: {$order->payment_method->value}",
@@ -162,6 +162,11 @@ class PaymentProcessor
             return $this->strategies->get('cod');
         }
 
+        // Special case for InstaPay
+        if ($order->payment_method === PaymentMethod::INSTAPAY) {
+            return $this->strategies->get('instapay');
+        }
+
         // For online payment methods, get the gateway
         $gatewayName = $this->getGatewayForPaymentMethod($order->payment_method);
         $strategy = $this->strategies->get($gatewayName);
@@ -184,6 +189,11 @@ class PaymentProcessor
         // COD is always supported if COD strategy exists
         if ($paymentMethod === PaymentMethod::CASH_ON_DELIVERY) {
             return $this->strategies->has('cod');
+        }
+
+        // InstaPay is supported if InstaPay strategy exists
+        if ($paymentMethod === PaymentMethod::INSTAPAY) {
+            return $this->strategies->has('instapay');
         }
 
         // For online methods, check if the configured gateway exists

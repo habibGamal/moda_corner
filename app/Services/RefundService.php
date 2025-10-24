@@ -41,7 +41,7 @@ class RefundService
         try {
             // Validate refund amount
             if ($refundAmount <= 0) {
-                throw new Exception('Refund amount must be greater than zero');
+                throw new Exception(message: 'Refund amount must be greater than zero');
             }
 
             if ($refundAmount > (float) $order->total) {
@@ -90,7 +90,6 @@ class RefundService
                     ? 'Order return refund'
                     : 'Partial order return refund'
             );
-
             // Call payment processor refund using new system
             $refundResult = $this->paymentProcessor->processRefund($refundRequest);
 
@@ -111,7 +110,8 @@ class RefundService
 
                 return true;
             } else {
-                throw new Exception('Payment refund failed: '.($refundResult->messageEn ?? 'Unknown error'));
+                dd( $refundResult);
+                throw new Exception('Payment refund failed: '.($refundResult));
             }
         } catch (Exception $e) {
             Log::error('Payment refund failed', [

@@ -10,6 +10,7 @@ use App\Actions\Orders\MarkOrderAsShippedAction;
 use App\Actions\Orders\ProcessRefundAction;
 use App\Actions\Orders\RejectReturnAction;
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Enums\ReturnStatus;
 use App\Filament\Resources\OrderResource\Pages;
@@ -19,6 +20,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Section as FormSection;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -167,6 +169,13 @@ class OrderResource extends Resource
                             ->badge(),
                         TextEntry::make('payment_method')
                             ->label('طريقة الدفع'),
+                        TextEntry::make('payment_details')
+                            ->label('حساب إنستاباي')
+                            ->formatStateUsing(function ($record) {
+                                $details = json_decode($record->payment_details, true);
+                                return $details['instapay_account'] ?? '-';
+                            })
+                            ->visible(fn ($record) => $record->payment_method === PaymentMethod::INSTAPAY),
                         TextEntry::make('created_at')
                             ->label('تاريخ الإنشاء')
                             ->dateTime(),
@@ -249,6 +258,42 @@ class OrderResource extends Resource
                             ->columnSpanFull()
                             ->visible(fn ($record) => $record->return_status),
                     ])->columns(2),
+
+                Section::make('إثبات الدفع')
+                    ->schema([
+                        ImageEntry::make('payment_proof')
+                            ->label('صورة إثبات الدفع')
+                            ->disk('public')
+                            ->visible(fn ($record) => $record->payment_method === PaymentMethod::INSTAPAY && $record->payment_proof),
+                        TextEntry::make('payment_details')
+                            ->label('حالة التحقق')
+                            ->formatStateUsing(function ($record) {
+                                if ($record->payment_status === PaymentStatus::PAID) {
+                                    $details = json_decode($record->payment_details, true);
+                                    $verifiedAt = $details['verified_at'] ?? null;
+                                    return 'تم التأكيد' . ($verifiedAt ? ' في ' . \Carbon\Carbon::parse($verifiedAt)->format('Y-m-d H:i') : '');
+                                }
+
+                                $details = json_decode($record->payment_details, true);
+                                $rejectedAt = $details['rejected_at'] ?? null;
+                                if ($rejectedAt) {
+                                    return 'تم الرفض - يمكن إعادة الرفع';
+                                }
+
+                                return 'في انتظار المراجعة';
+                            })
+                            ->badge()
+                            // ->color(fn ($record) => match ($record->payment_status) {
+                            //     PaymentStatus::PAID => 'success',
+                            //     default => function ($record) {
+                            //         $details = json_decode($record->payment_details, true);
+                            //         return ($details['rejected_at'] ?? null) ? 'danger' : 'warning';
+                            //     },
+                            // })
+                            ->visible(fn ($record) => $record->payment_method === PaymentMethod::INSTAPAY && $record->payment_proof),
+                    ])
+                    ->visible(fn ($record) => $record->payment_method === PaymentMethod::INSTAPAY && $record->payment_proof)
+                    ->columns(1),
             ]);
     }
 

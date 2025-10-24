@@ -36,6 +36,7 @@ class Order extends Model
         'preferred_delivery_time',
         'payment_id',
         'payment_details',
+        'payment_proof',
         'return_status',
         'delivered_at',
         'return_requested_at',

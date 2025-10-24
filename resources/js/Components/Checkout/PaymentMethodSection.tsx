@@ -13,7 +13,7 @@ import {
 import { Label } from "@/Components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
 import { useI18n } from "@/hooks/use-i18n";
-import { Banknote, CreditCard } from "lucide-react";
+import { Banknote, CreditCard, Building2 } from "lucide-react";
 import { Control } from "react-hook-form";
 
 interface PaymentMethodSectionProps {
@@ -73,6 +73,9 @@ export function PaymentMethodSection({
                                                 {(method === "credit_card" || method === "wallet") && (
                                                     <CreditCard className="w-4 h-4" />
                                                 )}
+                                                {method === "instapay" && (
+                                                    <Building2 className="w-4 h-4" />
+                                                )}
                                                 {t(
                                                     `payment_method_${method}`,
                                                     method === "cash_on_delivery"
@@ -81,6 +84,8 @@ export function PaymentMethodSection({
                                                         ? "Credit Card"
                                                         : method === "wallet"
                                                         ? "Wallet"
+                                                        : method === "instapay"
+                                                        ? "InstaPay"
                                                         : method
                                                 )}
                                             </Label>
