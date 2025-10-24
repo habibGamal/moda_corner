@@ -309,6 +309,10 @@
     "privacy_policy": "Privacy Policy",
     "return_policy": "Return Policy",
     "terms_of_service": "Terms of Service",
+    "exchange_policy": "Exchange Policy",
+    "about_us": "About Us",
+    "delivery_policy": "Delivery Policy",
+    "shipping_policy": "Shipping Policy",
     "facebook_data_deletion": "Facebook Data Deletion",
     "all_rights_reserved": "All rights reserved",
     "quick_links": "Quick Links",
@@ -366,5 +370,10 @@
     "toggle_theme": "Toggle theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "birthdate_optional": "Birthdate (Optional)",
+    "your_birthdate": "Your Birthdate",
+    "birthdate_description": "Help us celebrate your special day with exclusive offers",
+    "birthdate_please_note": "Please note that the date will be verified for offers",
+    "select_date": "Select date"
 }

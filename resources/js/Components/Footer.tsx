@@ -13,9 +13,13 @@ export default function Footer() {
     const showReturnPolicy = settings.show_return_policy !== false;
     const showTermsOfService = settings.show_terms_of_service !== false;
     const showContactPage = settings.show_contact_page;
+    const showExchangePolicy = settings.show_exchange_policy !== false;
+    const showAboutUs = settings.show_about_us !== false;
+    const showDeliveryPolicy = settings.show_delivery_policy !== false;
+    const showShippingPolicy = settings.show_shipping_policy !== false;
 
     // Check if any policy links should be shown
-    const hasPolicyLinks = showPrivacyPolicy || showReturnPolicy || showTermsOfService;
+    const hasPolicyLinks = showPrivacyPolicy || showReturnPolicy || showTermsOfService || showExchangePolicy || showDeliveryPolicy || showShippingPolicy || showContactPage;
 
     return (
         <footer className="bg-muted/50 dark:bg-muted/30 border-t dark:border-border/50 mt-4 mb-12 lg:mb-0">
@@ -71,7 +75,12 @@ export default function Footer() {
                         © {new Date().getFullYear()} {t('all_rights_reserved', 'All rights reserved')}
                     </p>
                     {hasPolicyLinks && (
-                        <div className="flex gap-4 mt-4 md:mt-0">
+                        <div className="flex flex-wrap gap-4 mt-4 md:mt-0 justify-center md:justify-end">
+                            {showAboutUs && (
+                                <Link href="/about-us" className="hover:text-foreground transition-colors">
+                                    {t('about_us', 'About Us')}
+                                </Link>
+                            )}
                             {showPrivacyPolicy && (
                                 <Link href="/privacy" className="hover:text-foreground transition-colors">
                                     {t('privacy_policy', 'Privacy Policy')}
@@ -80,6 +89,21 @@ export default function Footer() {
                             {showReturnPolicy && (
                                 <Link href="/returns-policy" className="hover:text-foreground transition-colors">
                                     {t('return_policy', 'Return Policy')}
+                                </Link>
+                            )}
+                            {showExchangePolicy && (
+                                <Link href="/exchange-policy" className="hover:text-foreground transition-colors">
+                                    {t('exchange_policy', 'Exchange Policy')}
+                                </Link>
+                            )}
+                            {showDeliveryPolicy && (
+                                <Link href="/delivery-policy" className="hover:text-foreground transition-colors">
+                                    {t('delivery_policy', 'Delivery Policy')}
+                                </Link>
+                            )}
+                            {showShippingPolicy && (
+                                <Link href="/shipping-policy" className="hover:text-foreground transition-colors">
+                                    {t('shipping_policy', 'Shipping Policy')}
                                 </Link>
                             )}
                             {showTermsOfService && (

@@ -146,6 +146,12 @@ class OrderController extends Controller
     public function store(StoreOrderRequest $request)
     {
         try {
+            // Update user's birthdate if provided and not already set
+            $user = Auth::user();
+            if ($request->has('birthdate') && $request->validated('birthdate') && ! $user->birthdate) {
+                $user->update(['birthdate' => $request->validated('birthdate')]);
+            }
+
             $orderData = new OrderPlacementData(
                 addressId: $request->validated('address_id'),
                 paymentMethod: \App\Enums\PaymentMethod::from($request->validated('payment_method')),

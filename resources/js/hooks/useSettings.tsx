@@ -15,6 +15,10 @@ export interface SiteConfig {
     show_return_policy?: boolean;
     show_terms_of_service?: boolean;
     show_contact_page?: boolean;
+    show_exchange_policy?: boolean;
+    show_about_us?: boolean;
+    show_delivery_policy?: boolean;
+    show_shipping_policy?: boolean;
     soon_banner?: boolean;
 }
 

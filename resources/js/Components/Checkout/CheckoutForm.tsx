@@ -1,6 +1,7 @@
 import { App } from "@/types";
 import { Control } from "react-hook-form";
 import { DeliveryTimeSection } from "./DeliveryTimeSection";
+import { BirthdateSection } from "./BirthdateSection";
 import { OrderNotesSection } from "./OrderNotesSection";
 import { PaymentMethodSection } from "./PaymentMethodSection";
 import { ShippingAddressSection } from "./ShippingAddressSection";
@@ -40,6 +41,7 @@ export function CheckoutForm({
                     direction={direction}
                 />
             )}
+            <BirthdateSection control={control} />
             <OrderNotesSection control={control} />
         </div>
     );

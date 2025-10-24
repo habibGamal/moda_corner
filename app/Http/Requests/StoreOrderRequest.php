@@ -42,6 +42,7 @@ class StoreOrderRequest extends FormRequest
             'coupon_code' => 'nullable|string|max:255', // Add more specific validation if coupons are implemented (e.g., exists:coupons,code)
             'notes' => 'nullable|string|max:1000',
             'preferred_delivery_time' => 'nullable|string|max:255',
+            'birthdate' => 'nullable|date|before:today',
         ];
     }
 }

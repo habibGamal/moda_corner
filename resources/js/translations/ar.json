@@ -345,6 +345,10 @@
     "privacy_policy": "سياسة الخصوصية",
     "return_policy": "سياسة الإرجاع",
     "terms_of_service": "شروط الخدمة",
+    "exchange_policy": "سياسة الاستبدال",
+    "about_us": "من نحن",
+    "delivery_policy": "سياسة التسليم",
+    "shipping_policy": "سياسة الشحن",
     "facebook_data_deletion": "حذف بيانات فيسبوك",
     "all_rights_reserved": "جميع الحقوق محفوظة",
     "quick_links": "روابط سريعة",
@@ -402,5 +406,10 @@
     "toggle_theme": "تبديل المظهر",
     "light": "فاتح",
     "dark": "داكن",
-    "system": "النظام"
+    "system": "النظام",
+    "birthdate_optional": "تاريخ الميلاد (اختياري)",
+    "your_birthdate": "تاريخ ميلادك",
+    "birthdate_description": "ساعدنا في الاحتفال بيومك المميز مع عروض حصرية",
+    "birthdate_please_note": "يرجى العلم انه سيتم التأكيد على التاريخ في حالة العروض",
+    "select_date": "اختر التاريخ"
 }

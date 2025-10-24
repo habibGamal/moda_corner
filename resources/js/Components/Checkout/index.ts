@@ -1,3 +1,4 @@
+export { BirthdateSection } from "./BirthdateSection";
 export { CheckoutForm } from "./CheckoutForm";
 export { CouponSection } from "./CouponSection";
 export { DeliveryTimeSection } from "./DeliveryTimeSection";
