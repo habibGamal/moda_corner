@@ -1,5 +1,6 @@
 import { App } from "@/types";
 import { Control } from "react-hook-form";
+import { DeliveryTimeSection } from "./DeliveryTimeSection";
 import { OrderNotesSection } from "./OrderNotesSection";
 import { PaymentMethodSection } from "./PaymentMethodSection";
 import { ShippingAddressSection } from "./ShippingAddressSection";
@@ -9,6 +10,7 @@ interface CheckoutFormProps {
     paymentMethods: string[];
     control: Control<any>;
     direction: "ltr" | "rtl";
+    deliveryTimeOptions?: string[];
 }
 
 export function CheckoutForm({
@@ -16,7 +18,9 @@ export function CheckoutForm({
     paymentMethods,
     control,
     direction,
+    deliveryTimeOptions = [],
 }: CheckoutFormProps) {
+    console.log(deliveryTimeOptions)
     return (
         <div className="md:col-span-2 space-y-6">
             <ShippingAddressSection
@@ -29,6 +33,13 @@ export function CheckoutForm({
                 control={control}
                 direction={direction}
             />
+            {deliveryTimeOptions.length > 0 && (
+                <DeliveryTimeSection
+                    deliveryTimeOptions={deliveryTimeOptions}
+                    control={control}
+                    direction={direction}
+                />
+            )}
             <OrderNotesSection control={control} />
         </div>
     );

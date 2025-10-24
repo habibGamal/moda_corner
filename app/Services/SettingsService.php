@@ -142,7 +142,19 @@ class SettingsService
             'show_terms_of_service' => (bool) self::get('show_terms_of_service', true),
             'show_contact_page' => (bool) self::get('show_contact_page', true),
             'soon_banner' => (bool) self::get('soon_banner', false),
+            'delivery_time_options' => self::getDeliveryTimeOptions(),
         ];
+    }
+
+    /**
+     * Get delivery time options
+     */
+    public static function getDeliveryTimeOptions(): array
+    {
+        $options = self::get('delivery_time_options', '[]');
+        $decoded = is_string($options) ? json_decode($options, true) : $options;
+
+        return is_array($decoded) ? $decoded : [];
     }
 
     /**

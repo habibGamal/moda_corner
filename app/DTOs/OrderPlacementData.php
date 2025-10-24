@@ -12,6 +12,7 @@ class OrderPlacementData
      * @param  string|null  $couponCode  Optional coupon code
      * @param  string|null  $notes  Optional order notes
      * @param  int|null  $promotionId  Optional promotion ID to apply
+     * @param  string|null  $preferredDeliveryTime  Optional preferred delivery time
      */
     public function __construct(
         public readonly int $addressId,
@@ -19,6 +20,7 @@ class OrderPlacementData
         public readonly ?string $couponCode = null,
         public readonly ?string $notes = null,
         public readonly ?int $promotionId = null,
+        public readonly ?string $preferredDeliveryTime = null,
     ) {}
 
     /**
@@ -32,6 +34,7 @@ class OrderPlacementData
             couponCode: $data['couponCode'] ?? null,
             notes: $data['notes'] ?? null,
             promotionId: $data['promotionId'] ?? null,
+            preferredDeliveryTime: $data['preferredDeliveryTime'] ?? null,
         );
     }
 }

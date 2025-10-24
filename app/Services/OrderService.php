@@ -120,6 +120,7 @@ class OrderService
             'promotion_id' => $appliedPromotion ? $appliedPromotion->id : null,
             'shipping_address_id' => $address->id,
             'notes' => $orderData->notes,
+            'preferred_delivery_time' => $orderData->preferredDeliveryTime,
         ];
 
         return Order::create($orderAttributes);

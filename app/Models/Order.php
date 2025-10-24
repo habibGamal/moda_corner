@@ -33,6 +33,7 @@ class Order extends Model
         'promotion_id',
         'shipping_address_id',
         'notes',
+        'preferred_delivery_time',
         'payment_id',
         'payment_details',
         'return_status',

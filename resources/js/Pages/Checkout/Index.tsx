@@ -33,6 +33,7 @@ interface CheckoutProps extends App.Interfaces.AppPageProps {
     addresses: App.Models.Address[];
     paymentMethods: string[];
     cartItems: App.Models.CartItem[];
+    deliveryTimeOptions?: string[];
 }
 
 // Define form schema with zod
@@ -45,6 +46,7 @@ const checkoutFormSchema = z.object({
     }),
     notes: z.string().optional(),
     coupon_code: z.string().optional(),
+    preferred_delivery_time: z.string().optional(),
 });
 
 export default function Index({
@@ -53,7 +55,9 @@ export default function Index({
     addresses,
     paymentMethods,
     cartItems,
+    deliveryTimeOptions = [],
 }: CheckoutProps) {
+    console.log(deliveryTimeOptions)
     const { t, direction } = useI18n();
     const [orderSummary, setOrderSummary] =
         useState<typeof initialOrderSummary>(initialOrderSummary);
@@ -83,6 +87,7 @@ export default function Index({
                     : "cash_on_delivery",
             notes: "",
             coupon_code: initialCouponCode,
+            preferred_delivery_time: "",
         },
     });
 
@@ -244,13 +249,14 @@ export default function Index({
         setIsSubmitting(true);
 
         // Submit the order
-        router.post(
+            router.post(
             route("orders.store"),
             {
                 address_id: parseInt(values.address_id),
                 payment_method: values.payment_method,
                 notes: values.notes || null,
                 coupon_code: values.coupon_code || null,
+                preferred_delivery_time: values.preferred_delivery_time || null,
             },
             {
                 onFinish: () => setIsSubmitting(false),
@@ -311,6 +317,7 @@ export default function Index({
                             paymentMethods={paymentMethods}
                             control={form.control}
                             direction={direction}
+                            deliveryTimeOptions={deliveryTimeOptions}
                         />
 
                         <OrderSummary
