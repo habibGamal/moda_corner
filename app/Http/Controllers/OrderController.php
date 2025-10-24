@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Services\SettingsService;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -127,6 +128,7 @@ class OrderController extends Controller
                 'totalPrice' => $this->cartService->getCartSummary()->totalPrice,
             ],
             'cartItems' => $cart->items,
+            'deliveryTimeOptions' => json_decode(app(SettingsService::class)->get('delivery_time_options', "[]")),
             // Pass allowed payment methods using enum values
             'paymentMethods' => [
                 \App\Enums\PaymentMethod::CASH_ON_DELIVERY->value,
@@ -154,7 +156,8 @@ class OrderController extends Controller
                 addressId: $request->validated('address_id'),
                 paymentMethod: \App\Enums\PaymentMethod::from($request->validated('payment_method')),
                 couponCode: $request->validated('coupon_code'),
-                notes: $request->validated('notes')
+                notes: $request->validated('notes'),
+                preferredDeliveryTime: $request->validated('preferred_delivery_time')
             );
 
             $order = $this->orderService->placeOrderFromCart($orderData);

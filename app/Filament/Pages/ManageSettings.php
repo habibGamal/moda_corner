@@ -120,10 +120,16 @@ class ManageSettings extends Page implements HasForms
                 ->directory($setting->group === 'images' ? 'images' : 'settings')
                 ->imageEditor(),
 
-            'json' => Forms\Components\KeyValue::make($setting->key)
-                ->label($setting->label_ar)
-                ->helperText($setting->description_ar)
-                ->required($setting->is_required),
+            'json' => $setting->key === 'delivery_time_options'
+                ? Forms\Components\TagsInput::make($setting->key)
+                    ->label($setting->label_ar)
+                    ->helperText($setting->description_ar)
+                    ->required($setting->is_required)
+                    ->placeholder('أضف خيار وقت التوصيل')
+                : Forms\Components\KeyValue::make($setting->key)
+                    ->label($setting->label_ar)
+                    ->helperText($setting->description_ar)
+                    ->required($setting->is_required),
 
             'select' => Forms\Components\Select::make($setting->key)
                 ->label($setting->label_ar)

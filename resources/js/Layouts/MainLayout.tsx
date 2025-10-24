@@ -118,7 +118,6 @@ export default function MainLayout({
         };
     }, []);
     const { soon_banner } = useSettings();
-    console.log("soon_banner", soon_banner);
     return (
         <div
             className="flex min-h-screen flex-col bg-background"
