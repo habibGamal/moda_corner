@@ -1,9 +1,4 @@
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/Components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import {
     FormControl,
     FormField,
@@ -67,10 +62,12 @@ export function PaymentMethodSection({
                                                 htmlFor={`payment-${method}`}
                                                 className="font-medium cursor-pointer flex py-2 items-center gap-2"
                                             >
-                                                {method === "cash_on_delivery" && (
+                                                {method ===
+                                                    "cash_on_delivery" && (
                                                     <Banknote className="w-4 h-4" />
                                                 )}
-                                                {(method === "credit_card" || method === "wallet") && (
+                                                {(method === "credit_card" ||
+                                                    method === "wallet") && (
                                                     <CreditCard className="w-4 h-4" />
                                                 )}
                                                 {method === "instapay" && (
@@ -78,9 +75,11 @@ export function PaymentMethodSection({
                                                 )}
                                                 {t(
                                                     `payment_method_${method}`,
-                                                    method === "cash_on_delivery"
+                                                    method ===
+                                                        "cash_on_delivery"
                                                         ? "Cash on Delivery"
-                                                        : method === "credit_card"
+                                                        : method ===
+                                                          "credit_card"
                                                         ? "Credit Card"
                                                         : method === "wallet"
                                                         ? "Wallet"

@@ -144,15 +144,16 @@ class OrderService
      * Get all orders for the current user
      *
      * @param  int|null  $limit  Optional limit for pagination
+     * @param  int  $page  Current page number
      */
-    public function getUserOrders(?int $limit = 10): LengthAwarePaginator
+    public function getUserOrders(?int $limit = 10, int $page = 1): LengthAwarePaginator
     {
         $user = $this->getAuthenticatedUser();
 
         return Order::where('user_id', $user->id)
             ->with(['items'])
             ->orderBy('created_at', 'desc')
-            ->paginate($limit);
+            ->paginate($limit, ['*'], 'section_orders_items_page', $page);
     }
 
     /**

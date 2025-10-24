@@ -59,7 +59,7 @@ export function ReturnItemsList({ returnItems, totalRefundAmount }: ReturnItemsL
                     {t("quantity", "Qty")}: {returnItem.quantity}
                   </div>
                   <div className="text-sm font-semibold">
-                    EGP {Number(returnItem.total_price).toFixed(2)}
+                    EGP {Number(returnItem.subtotal).toFixed(2)}
                   </div>
                 </div>
               </div>

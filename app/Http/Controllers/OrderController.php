@@ -58,8 +58,16 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $query = $this->orderService->getUserOrders($request->input('limit', 10));
+        $page = $request->input('section_orders_items_items_page', 1);
+        $limit = $request->input('limit', 10);
 
+        $query = $this->orderService->getUserOrders($limit, $page);
+        logger()->info('Fetched user orders', [
+            'user_id' => Auth::id(),
+            'page' => $page,
+            'limit' => $limit,
+            'total_orders' => $query->total(),
+        ]);
         return Inertia::render('Orders/Index', [
             'orders_data' => inertia()->merge(
                 $query->items()
@@ -133,7 +141,7 @@ class OrderController extends Controller
             'paymentMethods' => [
                 \App\Enums\PaymentMethod::CASH_ON_DELIVERY->value,
                 \App\Enums\PaymentMethod::CREDIT_CARD->value,
-                \App\Enums\PaymentMethod::WALLET->value,
+                // \App\Enums\PaymentMethod::WALLET->value,
                 \App\Enums\PaymentMethod::INSTAPAY->value,
             ],
         ]);

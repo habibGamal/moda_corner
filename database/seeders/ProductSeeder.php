@@ -19,6 +19,7 @@ class ProductSeeder extends Seeder
         // Get all categories and brands
         $categories = Category::all();
         $brands = Brand::all();
+        Product::factory()->count(100)->create()->withVariants(); // Disable default factory creation
 
         // Available product variant images
         $availableImages = [

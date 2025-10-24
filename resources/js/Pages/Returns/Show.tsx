@@ -20,8 +20,8 @@ interface ReturnShowProps extends App.Interfaces.AppPageProps {
 export default function Show({ returnOrder }: ReturnShowProps) {
   const { t, getLocalizedField } = useI18n();
 
-  const totalRefundAmount = returnOrder.return_items?.reduce((sum, item) => sum + parseFloat(item.total_price), 0) || 0;
-
+  const totalRefundAmount = returnOrder.return_items?.reduce((sum, item) => sum + parseFloat(item.subtotal), 0) || 0;
+    console.log(returnOrder);
   return (
     <>
       <Head title={t("return_details", "Return Details")} />

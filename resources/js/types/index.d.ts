@@ -261,7 +261,7 @@ declare namespace App.Models {
         | "shipped"
         | "delivered"
         | "cancelled";
-    export type PaymentStatus = "pending" | "paid";
+    export type PaymentStatus = "pending" | "paid" | "failed" | "in_review";
 
     export interface Order {
         id: number;
@@ -334,7 +334,7 @@ declare namespace App.Models {
         order_item_id: number;
         quantity: number;
         unit_price: string;
-        total_price: string;
+        subtotal: string;
         return_order?: ReturnOrder;
         order_item?: OrderItem;
         created_at: string;

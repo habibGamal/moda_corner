@@ -3,7 +3,7 @@ import React from "react";
 export default function LogoAnimation() {
     return (
         <div id="section-logo-animation" className="section-logo-animation w-[200px] h-[200px] absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <svg
+            {/* <svg
                 className="active"
                 xmlns="http://www.w3.org/2000/svg"
                 width="100%"
@@ -84,7 +84,7 @@ c-211 0 -222 -1 -208 -17z"
                         className="svg-elem-8"
                     />
                 </g>
-            </svg>
+            </svg> */}
         </div>
     );
 }

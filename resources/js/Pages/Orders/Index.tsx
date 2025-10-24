@@ -57,6 +57,8 @@ export default function Index() {
     // Helper function to get appropriate payment status badge color
     const getPaymentStatusBadgeColor = (status: App.Models.PaymentStatus) => {
         switch (status) {
+            case "in_review":
+                return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-500";
             case "paid":
                 return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500";
             case "pending":
@@ -87,7 +89,7 @@ export default function Index() {
                     />
                 <ItemGrid<App.Models.Order>
                     className="py-0"
-                    sectionId="orders"
+                    sectionId="orders_items"
                     dataKey="orders_data"
                     paginationKey="orders_pagination"
                     viewType="scroll"

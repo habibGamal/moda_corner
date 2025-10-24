@@ -368,8 +368,8 @@ c-211 0 -222 -1 -208 -17z" class="svg-elem-7"></path>
             <!-- Generator: Adobe Illustrator 24.3.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
             <svg id="section-logo-animation" class="active" version="1.1" id="Layer_1"
                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                viewBox="0 0 1472 704" style="enable-background:new 0 0 1472 704;" xml:space="preserve" width="1472"
-                height="704">
+                viewBox="0 0 1472 704" style="enable-background:new 0 0 200 200;" xml:space="preserve" width="200"
+                height="200">
                 <style type="text/css">
                     .st0 {
                         fill: #CC5200;

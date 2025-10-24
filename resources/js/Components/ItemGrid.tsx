@@ -114,7 +114,7 @@ export default function ItemGrid<T = any>({
                         viewType === "scroll"
                             ? scrollDirection === "horizontal"
                                 ? "flex overflow-x-auto pb-4 gap-4 snap-x scrollbar-hide"
-                                : "flex flex-col pb-4 gap-4 snap-y scrollbar-hide max-h-[70vh]"
+                                : "flex flex-col pb-4 gap-4 snap-y scrollbar-hide "
                             : `grid ${gridCols.default} ${gridCols.sm} ${gridCols.lg} ${gridCols.xl} gap-4 md:gap-6`
                     )}
                 >

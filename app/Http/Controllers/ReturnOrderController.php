@@ -41,7 +41,8 @@ class ReturnOrderController extends Controller
                 'order.user',
                 'order.shippingAddress',
                 'returnItems.orderItem.product',
-                'returnItems.orderItem.variant',)
+                'returnItems.orderItem.variant',
+            )
             ->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Returns/Index', [
@@ -59,7 +60,7 @@ class ReturnOrderController extends Controller
                 ->with(['items.product', 'items.variant'])
                 ->findOrFail($orderId);
 
-            if (! $this->returnOrderService->isOrderEligibleForReturn($order)) {
+            if (!$this->returnOrderService->isOrderEligibleForReturn($order)) {
                 return redirect()->route('orders.show', $order->id)
                     ->with('error', 'This order is not eligible for return.');
             }
@@ -140,12 +141,19 @@ class ReturnOrderController extends Controller
     /**
      * Display the specified return order.
      */
-    public function show(string $returnNumber)
+    public function show(int $id)
     {
         try {
-            $returnOrder = $this->returnOrderService->getByReturnNumber($returnNumber);
+            $returnOrder = ReturnOrder::where('id', $id)
+                ->with([
+                    'order.user',
+                    'order.shippingAddress',
+                    'returnItems.orderItem.product',
+                    'returnItems.orderItem.variant',
+                ])
+                ->first();
 
-            if (! $returnOrder || $returnOrder->user_id !== Auth::id()) {
+            if (!$returnOrder || $returnOrder->user_id !== Auth::id()) {
                 return redirect()->route('returns.index')
                     ->with('error', 'Return order not found.');
             }
@@ -155,7 +163,7 @@ class ReturnOrderController extends Controller
             ]);
         } catch (Exception $e) {
             Log::error('Failed to show return order', [
-                'return_number' => $returnNumber,
+                'return_number' => $id,
                 'user_id' => Auth::id(),
                 'error' => $e->getMessage(),
             ]);
