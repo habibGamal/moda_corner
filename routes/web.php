@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReturnOrderController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\StockNotificationController;
 use App\Http\Controllers\WishlistController;
 use App\Models\User;
 use App\Notifications\Notify;
@@ -43,6 +44,11 @@ Route::get('/sections/{section}', [SectionController::class, 'show'])->name('sec
 // Search routes
 Route::get('/search', [SearchController::class, 'results'])->name('search.results');
 Route::get('/search/suggestions', [SearchController::class, 'suggestions'])->name('search.suggestions');
+
+// Stock notification routes (guest accessible)
+Route::post('/stock-notifications/subscribe', [StockNotificationController::class, 'subscribe'])->name('stock-notifications.subscribe');
+Route::post('/stock-notifications/unsubscribe', [StockNotificationController::class, 'unsubscribe'])->name('stock-notifications.unsubscribe');
+Route::get('/stock-notifications/check', [StockNotificationController::class, 'checkSubscription'])->name('stock-notifications.check');
 
 // Pages routes
 Route::get('/privacy', [App\Http\Controllers\PagesController::class, 'privacy'])->name('pages.privacy');

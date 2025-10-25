@@ -9,6 +9,7 @@ use App\Enums\PaymentStatus;
 use App\Models\Address;
 use App\Models\Order;
 use App\Models\Promotion;
+use App\Notifications\OrderConfirmationNotification;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -84,6 +85,9 @@ class OrderService
 
             // Send notification to admin about the new order
             $this->adminNotificationService->sendOrderPlacedNotification($order);
+
+            // Send order confirmation email to customer
+            $order->user->notify(new OrderConfirmationNotification($order));
 
             // Return the created order with all its related items
             return $order->load('items.product', 'items.variant', 'shippingAddress');

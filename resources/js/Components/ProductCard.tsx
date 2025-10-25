@@ -70,9 +70,16 @@ export default function ProductCard({ product }: ProductCardProps) {
                         </div>
                     )}
 
+                    {/* Special Label Badge */}
+                    {product.special_label && (
+                        <div className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                            {product.special_label}
+                        </div>
+                    )}
+
                     {/* Stock Status Badge */}
                     {product.quantity <= 0 && (
-                        <div className="absolute top-3 left-3 bg-gray-900/90 dark:bg-gray-100/90 text-white dark:text-gray-900 text-xs font-medium px-3 py-1.5 rounded-full">
+                        <div className="absolute bottom-3 left-3 bg-gray-900/90 dark:bg-gray-100/90 text-white dark:text-gray-900 text-xs font-medium px-3 py-1.5 rounded-full">
                             {t("out_of_stock", "Out of Stock")}
                         </div>
                     )}

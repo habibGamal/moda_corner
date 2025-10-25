@@ -402,5 +402,19 @@
     "instapay_instruction_3": "3. Upload the screenshot above",
     "instapay_instruction_4": "4. Wait for admin verification (usually within 24 hours)",
     "after_verification": "After Verification",
-    "verification_message": "Once verified, your order will be processed and shipped to your address."
+    "verification_message": "Once verified, your order will be processed and shipped to your address.",
+
+    "notify_me": "Notify Me",
+    "notify_when_available": "Notify Me When Available",
+    "get_notified_back_in_stock": "Get notified when this product is back in stock",
+    "your_email": "Your Email",
+    "email_placeholder": "Enter your email address",
+    "subscribe_to_notifications": "Subscribe to Notifications",
+    "subscribing": "Subscribing...",
+    "youll_be_notified": "You'll be notified when back in stock",
+    "unsubscribe": "Unsubscribe",
+    "unsubscribing": "Unsubscribing...",
+    "notification_subscribed": "You will be notified when this product is back in stock.",
+    "notification_unsubscribed": "You have been unsubscribed from stock notifications.",
+    "notification_error": "Failed to subscribe to notifications. Please try again."
 }

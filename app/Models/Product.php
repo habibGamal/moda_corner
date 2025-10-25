@@ -35,6 +35,7 @@ class Product extends Model
         'brand_id',
         'is_active',
         'is_featured',
+        'special_label',
     ];
 
     /**

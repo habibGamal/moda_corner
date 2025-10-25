@@ -72,6 +72,11 @@ class ProductResource extends Resource
                                 Forms\Components\Toggle::make('is_featured')
                                     ->label('مميز')
                                     ->default(false),
+                                Forms\Components\TextInput::make('special_label')
+                                    ->label('تصنيف خاص')
+                                    ->maxLength(255)
+                                    ->nullable()
+                                    ->placeholder('مثال: محدود، EVA، جديد'),
                             ]),
                         Forms\Components\Tabs\Tab::make('الوصف')
                             ->schema([
@@ -139,6 +144,12 @@ class ProductResource extends Resource
                     ->label('مميز')
                     ->boolean()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('special_label')
+                    ->label('تصنيف خاص')
+                    ->badge()
+                    ->color('warning')
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('total_quantity')
                     ->label('المخزون')
                     ->badge()

@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Jobs\ImportCsv;
+use App\Models\ProductVariant;
 use App\Models\Setting;
+use App\Observers\ProductVariantObserver;
 use App\Observers\SettingObserver;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Filament\Actions\Imports\Jobs\ImportCsv as BaseImportCsv;
@@ -151,6 +153,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Register observers
         Setting::observe(SettingObserver::class);
+        ProductVariant::observe(ProductVariantObserver::class);
 
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch

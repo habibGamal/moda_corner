@@ -241,7 +241,7 @@ export default function ProductVariantSelector({
                 <div className="mt-4">
                     <Badge variant={selectedVariant.quantity > 0 ? "outline" : "destructive"} className="text-sm">
                         {selectedVariant.quantity > 0
-                            ? `${t("in_stock", "In Stock")} · ${selectedVariant.quantity} ${t("available", "available")}`
+                            ? `${t("in_stock", "In Stock")} · ${t("available", "available")}`
                             : t("out_of_stock", "Out of Stock")}
                     </Badge>
                 </div>

@@ -438,5 +438,19 @@
     "instapay_instruction_3": "3. قم برفع لقطة الشاشة أعلاه",
     "instapay_instruction_4": "4. انتظر التحقق من قبل الإدارة (عادةً خلال 24 ساعة)",
     "after_verification": "بعد التحقق",
-    "verification_message": "بمجرد التحقق، سيتم معالجة طلبك وشحنه إلى عنوانك."
+    "verification_message": "بمجرد التحقق، سيتم معالجة طلبك وشحنه إلى عنوانك.",
+
+    "notify_me": "أخبرني",
+    "notify_when_available": "أخبرني عند التوفر",
+    "get_notified_back_in_stock": "احصل على إشعار عندما يتوفر هذا المنتج مرة أخرى",
+    "your_email": "بريدك الإلكتروني",
+    "email_placeholder": "أدخل عنوان بريدك الإلكتروني",
+    "subscribe_to_notifications": "الاشتراك في الإشعارات",
+    "subscribing": "جاري الاشتراك...",
+    "youll_be_notified": "سيتم إشعارك عند توفر المنتج",
+    "unsubscribe": "إلغاء الاشتراك",
+    "unsubscribing": "جاري الإلغاء...",
+    "notification_subscribed": "سيتم إشعارك عندما يتوفر هذا المنتج مرة أخرى.",
+    "notification_unsubscribed": "تم إلغاء اشتراكك في إشعارات المخزون.",
+    "notification_error": "فشل الاشتراك في الإشعارات. يرجى المحاولة مرة أخرى."
 }

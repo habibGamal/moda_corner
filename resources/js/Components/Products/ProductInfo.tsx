@@ -3,6 +3,7 @@ import { useI18n } from "@/hooks/use-i18n";
 import { Link } from "@inertiajs/react";
 import { AlertCircle, Check } from "lucide-react";
 import { App } from "@/types";
+import NotifyMeButton from "./NotifyMeButton";
 
 interface ProductInfoProps {
     product: App.Models.Product;
@@ -43,9 +44,20 @@ export default function ProductInfo({ product, selectedVariant }: ProductInfoPro
             )}
 
             {/* Product Name */}
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">
-                {getLocalizedField(product, "name")}
-            </h1>
+            <div className="flex items-start gap-3 mb-4">
+                <h1 className="text-3xl md:text-4xl font-bold flex-1">
+                    {getLocalizedField(product, "name")}
+                </h1>
+                {/* Special Label Badge */}
+                {product.special_label && (
+                    <Badge
+                        variant="secondary"
+                        className="bg-orange-500 text-white border-0 text-sm font-semibold px-3 py-1"
+                    >
+                        {product.special_label}
+                    </Badge>
+                )}
+            </div>
 
             {/* Price */}
             <div className="flex items-center gap-3 mb-6">
@@ -97,16 +109,19 @@ export default function ProductInfo({ product, selectedVariant }: ProductInfoPro
                         )}
                         <span className="font-medium">
                             {isInStock
-                                ? `${t("in_stock", "In Stock")} · ${
-                                      selectedVariant
-                                        ? selectedVariant.quantity
-                                        : product.totalQuantity
-                                  } ${t("available", "available")}`
+                                ? `${t("in_stock", "In Stock")} ·  ${t("available", "available")}`
                                 : t("out_of_stock", "Out of Stock")}
                         </span>
                     </Badge>
                 </div>
             </div>
+
+            {/* Notify Me Button - shown only when out of stock */}
+            {!isInStock && (
+                <div className="my-4">
+                    <NotifyMeButton product={product} />
+                </div>
+            )}
         </div>
     );
 }

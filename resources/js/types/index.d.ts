@@ -65,6 +65,7 @@ declare namespace App.Models {
         category?: Category;
         is_active: boolean;
         is_featured: boolean;
+        special_label?: string;
         dimensions?: {
             width?: number;
             height?: number;
