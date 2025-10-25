@@ -8,19 +8,37 @@ import { Link } from "@inertiajs/react";
 import { router } from "@inertiajs/react";
 import { App } from "@/types";
 import ReactPixel from "react-facebook-pixel";
+import { useMemo } from "react";
 
 interface ProductCardProps {
-    product: App.Models.Product;
+    product: App.Models.Product & {
+        selectedVariant?: App.Models.ProductVariant;
+    };
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
     const { getLocalizedField, t } = useI18n();
     const { addToCart, addingToCart } = useCart();
+
+    // Use selected variant data if available, otherwise use product data
+    const displayData = useMemo(() => {
+        const variant = product.selectedVariant;
+
+        return {
+            image: variant?.featured_image || product.featured_image || "/placeholder.jpg",
+            price: variant?.price || product.price,
+            salePrice: variant?.sale_price || product.sale_price,
+            quantity: variant?.quantity || product.quantity,
+            variantId: variant?.id,
+            color: variant?.color,
+        };
+    }, [product, product.selectedVariant]);
+
     const hasDiscount =
-        product.sale_price && product.sale_price !== product.price;
+        displayData.salePrice && displayData.salePrice !== displayData.price;
     const discountPercentage = hasDiscount
         ? Math.round(
-              ((product.price - product.sale_price!) / product.price) * 100
+              ((displayData.price - displayData.salePrice!) / displayData.price) * 100
           )
         : 0;
 
@@ -56,7 +74,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             >
                 <div className="aspect-[1/1] relative bg-gradient-to-br from-muted/30 to-muted/60 dark:from-muted/50 dark:to-muted/80 overflow-hidden">
                     <Image
-                        src={product.featured_image || "/placeholder.jpg"}
+                        src={displayData.image}
                         alt={getLocalizedField(product, "name")}
                         className="object-contain w-full h-full aspect-square transition-transform duration-500 group-hover:scale-110"
                     />
@@ -78,7 +96,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     )}
 
                     {/* Stock Status Badge */}
-                    {product.quantity <= 0 && (
+                    {displayData.quantity <= 0 && (
                         <div className="absolute bottom-3 left-3 bg-gray-900/90 dark:bg-gray-100/90 text-white dark:text-gray-900 text-xs font-medium px-3 py-1.5 rounded-full">
                             {t("out_of_stock", "Out of Stock")}
                         </div>
@@ -86,14 +104,19 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </div>
 
                 <CardContent className="p-5 flex-1 space-y-3">
-                    {/* Brand */}
-                    {product.brand && (
-                        <div className="flex items-center">
+                    {/* Brand & Color */}
+                    <div className="flex items-center gap-2 flex-wrap">
+                        {product.brand && (
                             <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
                                 {getLocalizedField(product.brand, "name")}
                             </span>
-                        </div>
-                    )}
+                        )}
+                        {displayData.color && (
+                            <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                                {displayData.color}
+                            </span>
+                        )}
+                    </div>
 
                     {/* Product Name */}
                     <h3 className="font-semibold text-lg leading-tight line-clamp-2 group-hover:text-primary transition-colors duration-200">
@@ -133,16 +156,16 @@ export default function ProductCard({ product }: ProductCardProps) {
                             {hasDiscount ? (
                                 <div className="flex flex-col">
                                     <span className="text-xl font-bold text-primary">
-                                        {Number(product.sale_price).toFixed(2)}{" "}
+                                        {Number(displayData.salePrice).toFixed(2)}{" "}
                                         EGP
                                     </span>
                                     <span className="text-muted-foreground text-sm line-through">
-                                        {Number(product.price).toFixed(2)} EGP
+                                        {Number(displayData.price).toFixed(2)} EGP
                                     </span>
                                 </div>
                             ) : (
                                 <span className="text-xl font-bold text-foreground">
-                                    {Number(product.price).toFixed(2)} EGP
+                                    {Number(displayData.price).toFixed(2)} EGP
                                 </span>
                             )}
                         </div>
@@ -177,16 +200,16 @@ export default function ProductCard({ product }: ProductCardProps) {
             {/* Main Action Buttons */}
             <CardFooter className="p-2 md:p-5 pt-0">
                 <Button
-                    variant={product.quantity <= 0 ? "secondary" : "default"}
+                    variant={displayData.quantity <= 0 ? "secondary" : "default"}
                     className="w-full font-medium transition-all duration-200 hover:shadow-md"
                     size="lg"
-                    onClick={() => addToCart(product.id, 1, undefined, product)}
-                    disabled={addingToCart[product.id] || product.quantity <= 0}
+                    onClick={() => addToCart(product.id, 1, displayData.variantId, product)}
+                    disabled={addingToCart[product.id] || displayData.quantity <= 0}
                 >
                     <ShoppingBag className="h-4 w-4 mr-2" />
                     {addingToCart[product.id]
                         ? t("adding", "Adding...")
-                        : product.quantity <= 0
+                        : displayData.quantity <= 0
                         ? t("out_of_stock", "Out of Stock")
                         : t("add_to_cart", "Add to Cart")}
                 </Button>

@@ -139,7 +139,7 @@ class SectionService
         // If pagination is requested, use FeedScrollService
         if ($paginate) {
             $query = $section->products()
-                ->with('brand')
+                ->with(['brand', 'variants'])
                 ->getQuery();
 
             // dd($query->toSql(),$section->products()->getQuery()->toSql());

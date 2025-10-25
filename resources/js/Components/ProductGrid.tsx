@@ -6,6 +6,7 @@ import { Skeleton } from "@/Components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import EmptyState from "./ui/empty-state";
 import { App } from "@/types";
+import { useMemo } from "react";
 
 interface ProductGridProps {
     title?: string | null;
@@ -16,6 +17,63 @@ interface ProductGridProps {
     dataKey?: string;
     paginationKey?: string;
     viewType?: "scroll" | "grid"; // Added viewType prop
+}
+
+interface ProductWithVariant extends App.Models.Product {
+    selectedVariant?: App.Models.ProductVariant;
+}
+
+/**
+ * Get unique color variants from a product
+ * Groups variants by color and returns one representative variant per unique color
+ */
+function getUniqueColorVariants(
+    product: App.Models.Product
+): App.Models.ProductVariant[] {
+    if (!product.variants || product.variants.length === 0) {
+        return [];
+    }
+
+    // Group variants by color
+    const colorMap = new Map<string, App.Models.ProductVariant>();
+
+    product.variants.forEach((variant) => {
+        const color = variant.color?.toLowerCase() || "default";
+        // Only keep the first variant of each color
+        if (!colorMap.has(color)) {
+            colorMap.set(color, variant);
+        }
+    });
+
+    return Array.from(colorMap.values());
+}
+
+/**
+ * Flatten products to show each unique color variant as a separate card
+ */
+function flattenProductsWithVariants(
+    products: App.Models.Product[]
+): ProductWithVariant[] {
+    const result: ProductWithVariant[] = [];
+
+    products.forEach((product) => {
+        const uniqueColorVariants = getUniqueColorVariants(product);
+
+        // If product has variants with different colors, create a card for each color
+        if (uniqueColorVariants.length > 1) {
+            uniqueColorVariants.forEach((variant) => {
+                result.push({
+                    ...product,
+                    selectedVariant: variant,
+                });
+            });
+        } else {
+            // If no variants or only one color, show product as is
+            result.push(product);
+        }
+    });
+
+    return result;
 }
 
 export default function ProductGrid({
@@ -57,6 +115,11 @@ export default function ProductGrid({
         </div>
     );
 
+    // Flatten products to show each unique color variant as a separate card
+    const displayProducts = useMemo(() => {
+        if (!products) return [];
+        return flattenProductsWithVariants(products);
+    }, [products]);
     return (
         <section className={cn(`py-12 md:py-16`, className)}>
             {(title || viewAllLink) && (
@@ -87,7 +150,7 @@ export default function ProductGrid({
                 </div>
             )}
 
-            {products && products.length > 0 ? (
+            {displayProducts && displayProducts.length > 0 ? (
                 <div
                     className={cn(
                         viewType === "scroll"
@@ -95,18 +158,25 @@ export default function ProductGrid({
                             : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6"
                     )}
                 >
-                    {products.map((product) => (
-                        <div
-                            key={product.id}
-                            className={cn(
-                                viewType === "scroll"
-                                    ? "snap-start flex-shrink-0 w-[250px] sm:w-[300px]"
-                                    : ""
-                            )}
-                        >
-                            <ProductCard product={product} />
-                        </div>
-                    ))}
+                    {displayProducts.map((product, index) => {
+                        // Create unique key: use variant id if selected, otherwise product id
+                        const uniqueKey = product.selectedVariant
+                            ? `${product.id}-variant-${product.selectedVariant.id}`
+                            : `product-${product.id}`;
+
+                        return (
+                            <div
+                                key={uniqueKey}
+                                className={cn(
+                                    viewType === "scroll"
+                                        ? "snap-start flex-shrink-0 w-[250px] sm:w-[300px]"
+                                        : ""
+                                )}
+                            >
+                                <ProductCard product={product} />
+                            </div>
+                        );
+                    })}
 
                     {pagination && pagination.next_page_url && (
                         <WhenVisible

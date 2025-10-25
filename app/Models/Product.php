@@ -98,10 +98,26 @@ class Product extends Model
         $text = mb_strtolower($text, 'UTF-8');
         // Normalize common Arabic letter variations
         $search = [
-            'أ', 'إ', 'آ', 'ى', 'ئ', 'ؤ', 'ة', 'ٱ', 'ء',
+            'أ',
+            'إ',
+            'آ',
+            'ى',
+            'ئ',
+            'ؤ',
+            'ة',
+            'ٱ',
+            'ء',
         ];
         $replace = [
-            'ا', 'ا', 'ا', 'ي', 'ي', 'و', 'ه', 'ا', '',
+            'ا',
+            'ا',
+            'ا',
+            'ي',
+            'ي',
+            'و',
+            'ه',
+            'ا',
+            '',
         ];
 
         return str_replace($search, $replace, $text);
@@ -249,6 +265,7 @@ class Product extends Model
                 'brand' => function ($query) {
                     $query->select('id', 'name_en', 'name_ar', 'slug', 'image');
                 },
+                'variants',
             ]);
     }
 
