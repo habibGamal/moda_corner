@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useI18n } from "@/hooks/use-i18n";
 import { Card, CardContent } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
@@ -22,6 +22,7 @@ export default function ProductVariantSelector({
 }: ProductVariantSelectorProps) {
     const { t } = useI18n();
     const [selectedVariant, setSelectedVariant] = useState<App.Models.ProductVariant | null>(null);
+    const isInitialized = useRef(false);
 
     // Get all variants with colors and without colors
     const variantsWithColors = product.variants?.filter((v: App.Models.ProductVariant) => v.color) || [];
@@ -91,9 +92,9 @@ export default function ProductVariantSelector({
         return matches;
     });
 
-    // Find default variant
+    // Find default variant - only run once on mount
     useEffect(() => {
-        if (!product.variants?.length) return;
+        if (!product.variants?.length || isInitialized.current) return;
 
         // If there's a selected variant ID, use that
         if (selectedVariantId) {
@@ -103,6 +104,7 @@ export default function ProductVariantSelector({
                 setSelectedColor(variant.color || null);
                 setSelectedSize(variant.size || null);
                 setSelectedCapacity(variant.capacity || null);
+                isInitialized.current = true;
                 return;
             }
         }
@@ -113,6 +115,7 @@ export default function ProductVariantSelector({
         setSelectedColor(defaultVariant.color || null);
         setSelectedSize(defaultVariant.size || null);
         setSelectedCapacity(defaultVariant.capacity || null);
+        isInitialized.current = true;
     }, [product.variants, selectedVariantId]);
 
     // Update selected size and capacity when color changes

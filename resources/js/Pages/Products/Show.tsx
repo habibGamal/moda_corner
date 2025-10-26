@@ -11,7 +11,7 @@ import { useI18n } from "@/hooks/use-i18n";
 import { App } from "@/types";
 import { Head, Link } from "@inertiajs/react";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ReactPixel from "react-facebook-pixel";
 
 interface ShowProps {
@@ -26,25 +26,33 @@ export default function Show({ product, auth }: ShowProps) {
     const { t, getLocalizedField } = useI18n();
     const [quantity, setQuantity] = useState(1);
 
+    // Get variant ID from URL query parameter (calculated once)
+    const initialVariantId = useMemo(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const variantParam = urlParams.get('variant');
+        return variantParam ? parseInt(variantParam) : undefined;
+    }, []);
+
     // Initialize with first variant if variants exist
     const getDefaultVariant = () => {
         if (!product.variants || product.variants.length === 0) return null;
-        // Try to find default variant first, otherwise use first variant
-        return (
-            product.variants.find((v) => v.is_default) || product.variants[0]
-        );
+
+        // First priority: variant from URL
+        if (initialVariantId) {
+            const urlVariant = product.variants.find((v) => v.id === initialVariantId);
+            if (urlVariant) return urlVariant;
+        }
+
+        // Second priority: default variant
+        const defaultVariant = product.variants.find((v) => v.is_default);
+        if (defaultVariant) return defaultVariant;
+
+        // Last resort: first variant
+        return product.variants[0];
     };
 
     const [selectedVariant, setSelectedVariant] =
         useState<App.Models.ProductVariant | null>(getDefaultVariant());
-
-    // Ensure the ProductVariantSelector knows about the initial selection
-    useEffect(() => {
-        const defaultVariant = getDefaultVariant();
-        if (defaultVariant && !selectedVariant) {
-            setSelectedVariant(defaultVariant);
-        }
-    }, [product.variants]);
 
     const handleVariantChange = (variant: App.Models.ProductVariant) => {
         console.log("Selected variant:", variant);

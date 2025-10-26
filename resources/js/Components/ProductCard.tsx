@@ -25,7 +25,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         const variant = product.selectedVariant;
 
         return {
-            image: variant?.featured_image || product.featured_image || "/placeholder.jpg",
+            image: variant?.images?.[0] || product.featured_image || "/placeholder.jpg",
             price: variant?.price || product.price,
             salePrice: variant?.sale_price || product.sale_price,
             quantity: variant?.quantity || product.quantity,
@@ -66,10 +66,15 @@ export default function ProductCard({ product }: ProductCardProps) {
         });
     };
 
+    console.log("Product Card Render:", product);
     return (
         <Card className="group overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col border-0 shadow-sm bg-card/50 backdrop-blur-sm dark:shadow-lg dark:hover:shadow-2xl">
             <Link
-                href={`/products/${product.id}`}
+                href={
+                    displayData.variantId
+                        ? `/products/${product.id}?variant=${displayData.variantId}`
+                        : `/products/${product.id}`
+                }
                 className="flex-1 flex flex-col"
             >
                 <div className="aspect-[1/1] relative bg-gradient-to-br from-muted/30 to-muted/60 dark:from-muted/50 dark:to-muted/80 overflow-hidden">

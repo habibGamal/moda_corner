@@ -138,9 +138,13 @@ class SectionService
 
         // If pagination is requested, use FeedScrollService
         if ($paginate) {
-            $query = $section->products()
-                ->with(['brand', 'variants'])
-                ->getQuery();
+            // $query = $section->pro
+            $query = Product::forCards()
+                ->whereIn('products.id', function ($subquery) use ($section) {
+                    $subquery->select('product_id')
+                        ->from('section_product')
+                        ->where('section_id', $section->id);
+                });
 
             // dd($query->toSql(),$section->products()->getQuery()->toSql());
             return $this->paginateProducts($query, (string) $section->id, $perPage);

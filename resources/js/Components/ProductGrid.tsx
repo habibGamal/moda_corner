@@ -120,6 +120,7 @@ export default function ProductGrid({
         if (!products) return [];
         return flattenProductsWithVariants(products);
     }, [products]);
+    console.log("Display Products:", displayProducts, products);
     return (
         <section className={cn(`py-12 md:py-16`, className)}>
             {(title || viewAllLink) && (
