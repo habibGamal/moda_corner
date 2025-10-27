@@ -62,7 +62,8 @@ export default function Show({
     const needsPayment = () => {
         return (
             order.payment_method !== "cash_on_delivery" &&
-            order.payment_status === "pending" &&
+            (order.payment_status === "pending" ||
+                order.payment_status === "failed") &&
             order.order_status !== "cancelled"
         );
     };

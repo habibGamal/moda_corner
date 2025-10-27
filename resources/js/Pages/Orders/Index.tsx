@@ -72,7 +72,8 @@ export default function Index() {
     const needsPayment = (order: App.Models.Order) => {
         return (
             order.payment_method !== "cash_on_delivery" &&
-            order.payment_status === "pending" &&
+            (order.payment_status === "pending" ||
+                order.payment_status === "failed") &&
             order.order_status !== "cancelled"
         );
     };
@@ -87,128 +88,130 @@ export default function Index() {
                         title={t("my_orders", "My Orders")}
                         icon={<ShoppingBag className="h-6 w-6 text-primary" />}
                     />
-                <ItemGrid<App.Models.Order>
-                    className="py-0"
-                    sectionId="orders_items"
-                    dataKey="orders_data"
-                    paginationKey="orders_pagination"
-                    viewType="scroll"
-                    scrollDirection="vertical"
-                    renderItem={(order) => (
-                        <Card key={order.id} className="overflow-hidden">
-                            <CardHeader className="bg-muted/30 pb-3">
-                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                    <CardTitle className="text-base font-medium">
-                                        {t("order_number", "Order")} #{order.id}
-                                    </CardTitle>
-                                    <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
-                                        <span>
-                                            {formatDate(order.created_at)}
-                                        </span>
-                                        <span className="hidden sm:inline">
-                                            •
-                                        </span>
-                                        <Badge
-                                            variant="outline"
-                                            className={getStatusBadgeColor(
-                                                order.order_status
-                                            )}
-                                        >
-                                            {t(
-                                                `order_status_${order.order_status}`,
-                                                order.order_status
-                                            )}
-                                        </Badge>
-                                        <Badge
-                                            variant="outline"
-                                            className={getPaymentStatusBadgeColor(
-                                                order.payment_status
-                                            )}
-                                        >
-                                            {t(
-                                                `payment_status_${order.payment_status}`,
-                                                order.payment_status
-                                            )}
-                                        </Badge>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="pt-4">
-                                <div className="flex flex-col sm:flex-row justify-between gap-4">
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-medium">
-                                            {t("items", "Items")}
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">
-                                            {order.items?.length || 0}{" "}
-                                            {t("items", "items")}
-                                        </p>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-medium">
-                                            {t("total", "Total")}
-                                        </p>
-                                        <p className="text-sm">
-                                            EGP {Number(order.total).toFixed(2)}
-                                        </p>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-medium">
-                                            {t(
-                                                "payment_method",
-                                                "Payment Method"
-                                            )}
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">
-                                            {t(
-                                                `payment_method_${order.payment_method}`,
-                                                order.payment_method ===
-                                                    "cash_on_delivery"
-                                                    ? "Cash on Delivery"
-                                                    : order.payment_method
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        {needsPayment(order) && (
-                                            <Button
-                                                asChild
-                                                className="flex items-center gap-1"
-                                                variant="default"
-                                            >
-                                                <Link
-                                                    href={route(
-                                                        "payment.show",
-                                                        order.id
-                                                    )}
-                                                >
-                                                    <CreditCard className="h-4 w-4" />
-                                                    {t(
-                                                        "complete_payment",
-                                                        "Complete Payment"
-                                                    )}
-                                                </Link>
-                                            </Button>
-                                        )}
-                                        <Button asChild variant="outline">
-                                            <Link
-                                                href={route(
-                                                    "orders.show",
-                                                    order.id
+                    <ItemGrid<App.Models.Order>
+                        className="py-0"
+                        sectionId="orders_items"
+                        dataKey="orders_data"
+                        paginationKey="orders_pagination"
+                        viewType="scroll"
+                        scrollDirection="vertical"
+                        renderItem={(order) => (
+                            <Card key={order.id} className="overflow-hidden">
+                                <CardHeader className="bg-muted/30 pb-3">
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                        <CardTitle className="text-base font-medium">
+                                            {t("order_number", "Order")} #
+                                            {order.id}
+                                        </CardTitle>
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+                                            <span>
+                                                {formatDate(order.created_at)}
+                                            </span>
+                                            <span className="hidden sm:inline">
+                                                •
+                                            </span>
+                                            <Badge
+                                                variant="outline"
+                                                className={getStatusBadgeColor(
+                                                    order.order_status
                                                 )}
                                             >
                                                 {t(
-                                                    "view_details",
-                                                    "View Details"
+                                                    `order_status_${order.order_status}`,
+                                                    order.order_status
                                                 )}
-                                            </Link>
-                                        </Button>
+                                            </Badge>
+                                            <Badge
+                                                variant="outline"
+                                                className={getPaymentStatusBadgeColor(
+                                                    order.payment_status
+                                                )}
+                                            >
+                                                {t(
+                                                    `payment_status_${order.payment_status}`,
+                                                    order.payment_status
+                                                )}
+                                            </Badge>
+                                        </div>
                                     </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    )}
-                />
+                                </CardHeader>
+                                <CardContent className="pt-4">
+                                    <div className="flex flex-col sm:flex-row justify-between gap-4">
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-medium">
+                                                {t("items", "Items")}
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                {order.items?.length || 0}{" "}
+                                                {t("items", "items")}
+                                            </p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-medium">
+                                                {t("total", "Total")}
+                                            </p>
+                                            <p className="text-sm">
+                                                EGP{" "}
+                                                {Number(order.total).toFixed(2)}
+                                            </p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-medium">
+                                                {t(
+                                                    "payment_method",
+                                                    "Payment Method"
+                                                )}
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                {t(
+                                                    `payment_method_${order.payment_method}`,
+                                                    order.payment_method ===
+                                                        "cash_on_delivery"
+                                                        ? "Cash on Delivery"
+                                                        : order.payment_method
+                                                )}
+                                            </p>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            {needsPayment(order) && (
+                                                <Button
+                                                    asChild
+                                                    className="flex items-center gap-1"
+                                                    variant="default"
+                                                >
+                                                    <Link
+                                                        href={route(
+                                                            "payment.show",
+                                                            order.id
+                                                        )}
+                                                    >
+                                                        <CreditCard className="h-4 w-4" />
+                                                        {t(
+                                                            "complete_payment",
+                                                            "Complete Payment"
+                                                        )}
+                                                    </Link>
+                                                </Button>
+                                            )}
+                                            <Button asChild variant="outline">
+                                                <Link
+                                                    href={route(
+                                                        "orders.show",
+                                                        order.id
+                                                    )}
+                                                >
+                                                    {t(
+                                                        "view_details",
+                                                        "View Details"
+                                                    )}
+                                                </Link>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
+                    />
                 </div>
             </div>
         </>
