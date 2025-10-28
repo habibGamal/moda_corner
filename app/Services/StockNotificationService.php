@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\ProductDesire;
 use App\Models\StockNotification;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,6 +18,13 @@ class StockNotificationService
 
         // Check if product exists
         $product = Product::findOrFail($productId);
+
+        // Record the desire for analytics
+        ProductDesire::create([
+            'product_id' => $productId,
+            'user_id' => $userId,
+            'email' => $email,
+        ]);
 
         // Create or update the stock notification
         return StockNotification::updateOrCreate(

@@ -65,24 +65,26 @@ class InstaPayController extends Controller
         // Validate the request
         $validated = $request->validate([
             'instapay_account' => 'nullable|string|max:255',
-            'payment_proof' => 'required|image|max:10240', // 10MB max
+            'payment_proof' => 'nullable|image|max:10240', // 10MB max
         ], [
-            'payment_proof.required' => 'يجب إرفاق صورة إثبات الدفع.',
             'payment_proof.image' => 'يجب أن يكون الملف صورة.',
             'payment_proof.max' => 'حجم الصورة يجب ألا يتجاوز 10 ميجابايت.',
         ]);
 
         try {
-            // Delete old payment proof if exists
-            if ($order->payment_proof) {
-                Storage::disk('public')->delete($order->payment_proof);
+            // Handle file upload only if provided
+            if ($request->hasFile('payment_proof')) {
+                // Delete old payment proof if exists
+                if ($order->payment_proof) {
+                    Storage::disk('public')->delete($order->payment_proof);
+                }
+
+                // Store the new payment proof image
+                $path = $request->file('payment_proof')->store('payment-proofs', 'public');
+                $order->payment_proof = $path;
             }
 
-            // Store the new payment proof image
-            $path = $request->file('payment_proof')->store('payment-proofs', 'public');
-
             // Update order with payment proof and details
-            $order->payment_proof = $path;
             $order->payment_status = PaymentStatus::IN_REVIEW;
             $order->payment_details = json_encode([
                 'instapay_account' => $validated['instapay_account'] ?? null,
@@ -97,7 +99,6 @@ class InstaPayController extends Controller
             Log::info('InstaPay payment proof uploaded', [
                 'order_id' => $order->id,
                 'user_id' => auth()->id(),
-                'payment_proof' => $path,
             ]);
 
             return redirect()->route('orders.show', $order->id)
@@ -137,26 +138,28 @@ class InstaPayController extends Controller
         // Validate the request
         $validated = $request->validate([
             'instapay_account' => 'nullable|string|max:255',
-            'payment_proof' => 'required|image|max:10240', // 10MB max
+            'payment_proof' => 'nullable|image|max:10240', // 10MB max
         ], [
-            'payment_proof.required' => 'يجب إرفاق صورة إثبات الدفع.',
             'payment_proof.image' => 'يجب أن يكون الملف صورة.',
             'payment_proof.max' => 'حجم الصورة يجب ألا يتجاوز 10 ميجابايت.',
         ]);
 
         try {
-            // Delete old payment proof if exists
-            if ($order->payment_proof) {
-                Storage::disk('public')->delete($order->payment_proof);
-            }
+            // Handle file upload only if provided
+            if ($request->hasFile('payment_proof')) {
+                // Delete old payment proof if exists
+                if ($order->payment_proof) {
+                    Storage::disk('public')->delete($order->payment_proof);
+                }
 
-            // Store the new payment proof image
-            $path = $request->file('payment_proof')->store('payment-proofs', 'public');
+                // Store the new payment proof image
+                $path = $request->file('payment_proof')->store('payment-proofs', 'public');
+                $order->payment_proof = $path;
+            }
 
             // Get existing details and update
             $existingDetails = json_decode($order->payment_details, true) ?? [];
             // Update order with new payment proof
-            $order->payment_proof = $path;
             $order->payment_status = PaymentStatus::IN_REVIEW;
             $order->payment_details = json_encode(array_merge($existingDetails, [
                 'instapay_account' => $validated['instapay_account'] ?? null,
@@ -166,7 +169,6 @@ class InstaPayController extends Controller
                 'rejected_at' => null, // Clear rejection
             ]));
             $order->save();
-            $order->save();
 
             // Send email notification to admin
             $this->notifyAdmin($order, true);
@@ -174,7 +176,7 @@ class InstaPayController extends Controller
             Log::info('InstaPay payment proof re-uploaded', [
                 'order_id' => $order->id,
                 'user_id' => auth()->id(),
-                'payment_proof' => $path,
+                'payment_proof' => $order->payment_proof ?? null,
             ]);
 
             return redirect()->route('orders.show', $order->id)

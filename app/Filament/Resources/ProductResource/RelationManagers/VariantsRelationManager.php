@@ -170,6 +170,54 @@ class VariantsRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('duplicate')
+                    ->label('نسخ')
+                    ->icon('heroicon-o-document-duplicate')
+                    ->color('warning')
+                    ->form([
+                        Forms\Components\TextInput::make('size')
+                            ->label('الحجم (اختياري)')
+                            ->maxLength(255)
+                            ->helperText('اترك فارغاً للحفاظ على الحجم الأصلي'),
+
+                        Forms\Components\TextInput::make('color')
+                            ->label('اللون (اختياري)')
+                            ->maxLength(255)
+                            ->helperText('اترك فارغاً للحفاظ على اللون الأصلي'),
+
+                        Forms\Components\TextInput::make('capacity')
+                            ->label('السعة (اختياري)')
+                            ->maxLength(255)
+                            ->helperText('اترك فارغاً للحفاظ على السعة الأصلية'),
+                    ])
+                    ->action(function (array $data, $record): void {
+                        $newVariant = $record->replicate();
+
+                        // Generate unique SKU
+                        $baseSku = $record->sku;
+                        $counter = 1;
+                        do {
+                            $newSku = $baseSku . '-copy-' . $counter;
+                            $counter++;
+                        } while (\App\Models\ProductVariant::where('sku', $newSku)->exists());
+
+                        $newVariant->sku = $newSku;
+                        $newVariant->is_default = false;
+
+                        // Update attributes if provided
+                        if (!empty($data['size'])) {
+                            $newVariant->size = $data['size'];
+                        }
+                        if (!empty($data['color'])) {
+                            $newVariant->color = $data['color'];
+                        }
+                        if (!empty($data['capacity'])) {
+                            $newVariant->capacity = $data['capacity'];
+                        }
+
+                        $newVariant->save();
+                    })
+                    ->successNotificationTitle('تم نسخ المتغير بنجاح'),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

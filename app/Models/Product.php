@@ -164,6 +164,14 @@ class Product extends Model
     }
 
     /**
+     * Get the desires for this product.
+     */
+    public function desires(): HasMany
+    {
+        return $this->hasMany(ProductDesire::class);
+    }
+
+    /**
      * Check if the product is in the wishlist of the given user.
      *
      * @param  int|null  $userId

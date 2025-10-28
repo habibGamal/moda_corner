@@ -30,7 +30,8 @@ class ViewOrder extends ViewRecord
                 ->label('تأكيد الدفع')
                 ->icon('heroicon-o-check-badge')
                 ->color('success')
-                ->visible(fn ($record) =>
+                ->visible(
+                    fn($record) =>
                     $record->payment_method === PaymentMethod::INSTAPAY &&
                     $record->payment_status === PaymentStatus::IN_REVIEW &&
                     $record->payment_proof !== null
@@ -66,7 +67,8 @@ class ViewOrder extends ViewRecord
                 ->label('رفض الدفع')
                 ->icon('heroicon-o-x-circle')
                 ->color('danger')
-                ->visible(fn ($record) =>
+                ->visible(
+                    fn($record) =>
                     $record->payment_method === PaymentMethod::INSTAPAY &&
                     $record->payment_status === PaymentStatus::IN_REVIEW &&
                     $record->payment_proof !== null
@@ -102,8 +104,9 @@ class ViewOrder extends ViewRecord
             Action::make('mark_shipped')
                 ->label('تحديد كمشحون')
                 ->icon('heroicon-o-paper-airplane')
+                ->requiresConfirmation()
                 ->color('info')
-                ->visible(fn ($record) => $record->order_status === OrderStatus::PROCESSING)
+                ->visible(fn($record) => $record->order_status === OrderStatus::PROCESSING)
                 ->action(function () {
                     try {
                         app(MarkOrderAsShippedAction::class)->execute($this->record);
@@ -124,7 +127,7 @@ class ViewOrder extends ViewRecord
                 ->label('تم التوصيل')
                 ->icon('heroicon-o-check-circle')
                 ->color('success')
-                ->visible(fn ($record) => in_array($record->order_status, [OrderStatus::PROCESSING, OrderStatus::SHIPPED]))
+                ->visible(fn($record) => in_array($record->order_status, [OrderStatus::PROCESSING, OrderStatus::SHIPPED]))
                 ->action(function () {
                     try {
                         app(MarkOrderAsDeliveredAction::class)->execute($this->record);
@@ -145,7 +148,7 @@ class ViewOrder extends ViewRecord
                 ->label('إلغاء الطلب')
                 ->icon('heroicon-o-x-circle')
                 ->color('danger')
-                ->visible(fn ($record) => ! in_array($record->order_status, [OrderStatus::CANCELLED, OrderStatus::DELIVERED]))
+                ->visible(fn($record) => !in_array($record->order_status, [OrderStatus::CANCELLED, OrderStatus::DELIVERED]))
                 ->requiresConfirmation()
                 ->modalHeading('إلغاء الطلب')
                 ->modalDescription('هل أنت متأكد من إلغاء هذا الطلب؟ سيتم إرجاع البضائع للمخزون.')
@@ -169,7 +172,7 @@ class ViewOrder extends ViewRecord
                 ->label('الموافقة على الإرجاع')
                 ->icon('heroicon-o-check')
                 ->color('info')
-                ->visible(fn ($record) => $record->return_status === ReturnStatus::RETURN_REQUESTED)
+                ->visible(fn($record) => $record->return_status === ReturnStatus::RETURN_REQUESTED)
                 ->action(function () {
                     try {
                         app(ApproveReturnAction::class)->execute($this->record);
@@ -190,7 +193,7 @@ class ViewOrder extends ViewRecord
                 ->label('رفض الإرجاع')
                 ->icon('heroicon-o-x-mark')
                 ->color('danger')
-                ->visible(fn ($record) => $record->return_status === ReturnStatus::RETURN_REQUESTED)
+                ->visible(fn($record) => $record->return_status === ReturnStatus::RETURN_REQUESTED)
                 ->form([
                     Forms\Components\Textarea::make('rejection_reason')
                         ->label('سبب الرفض')
@@ -217,7 +220,7 @@ class ViewOrder extends ViewRecord
                 ->label('إكمال الإرجاع')
                 ->icon('heroicon-o-arrow-uturn-left')
                 ->color('success')
-                ->visible(fn ($record) => $record->return_status === ReturnStatus::RETURN_APPROVED)
+                ->visible(fn($record) => $record->return_status === ReturnStatus::RETURN_APPROVED)
                 ->requiresConfirmation()
                 ->modalHeading('إكمال عملية الإرجاع')
                 ->modalDescription('سيتم إرجاع البضائع للمخزون ومعالجة الاسترداد إذا لزم الأمر. هل أنت متأكد؟')
@@ -241,10 +244,10 @@ class ViewOrder extends ViewRecord
                 ->label('معالجة الاسترداد')
                 ->icon('heroicon-o-currency-dollar')
                 ->color('warning')
-                ->visible(fn ($record) => $record->needsRefund())
+                ->visible(fn($record) => $record->needsRefund())
                 ->requiresConfirmation()
                 ->modalHeading('معالجة الاسترداد')
-                ->modalDescription(fn ($record) => 'سيتم تحديث حالة الدفع إلى "تم الاسترداد" للطلب رقم #'.$record->id.'. المبلغ: '.number_format($record->total, 2).' جنيه. هل أنت متأكد؟')
+                ->modalDescription(fn($record) => 'سيتم تحديث حالة الدفع إلى "تم الاسترداد" للطلب رقم #' . $record->id . '. المبلغ: ' . number_format($record->total, 2) . ' جنيه. هل أنت متأكد؟')
                 ->action(function () {
                     try {
                         app(ProcessRefundAction::class)->execute($this->record);
