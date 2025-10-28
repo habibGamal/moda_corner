@@ -140,7 +140,7 @@ class OrderController extends Controller
             // Pass allowed payment methods using enum values
             'paymentMethods' => [
                 \App\Enums\PaymentMethod::CASH_ON_DELIVERY->value,
-                \App\Enums\PaymentMethod::CREDIT_CARD->value,
+                // \App\Enums\PaymentMethod::CREDIT_CARD->value,
                 // \App\Enums\PaymentMethod::WALLET->value,
                 \App\Enums\PaymentMethod::INSTAPAY->value,
             ],
