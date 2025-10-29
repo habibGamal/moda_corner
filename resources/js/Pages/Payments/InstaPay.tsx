@@ -132,8 +132,8 @@ export default function InstaPay({
                             <div className="space-y-2">
                                 <Label htmlFor="payment_proof">
                                     {t("payment_proof", "Payment Proof Image")}
-                                    <span className="text-destructive ms-1">
-                                        *
+                                    <span className="text-xs text-muted-foreground ms-2">
+                                        ({t("optional", "Optional")})
                                     </span>
                                 </Label>
                                 <div className="flex items-center gap-4">
@@ -191,7 +191,7 @@ export default function InstaPay({
                             <Button
                                 type="submit"
                                 className="w-full gap-2"
-                                disabled={processing || !data.payment_proof}
+                                disabled={processing}
                             >
                                 <Upload className="h-4 w-4" />
                                 {processing

@@ -91,4 +91,12 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(ProductReview::class);
     }
+
+    /**
+     * Get the product desires associated with the user.
+     */
+    public function productDesires()
+    {
+        return $this->hasMany(ProductDesire::class);
+    }
 }

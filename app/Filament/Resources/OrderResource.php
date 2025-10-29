@@ -355,10 +355,20 @@ class OrderResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\Action::make('whatsapp')
+                    ->label('واتساب')
+                    ->icon('heroicon-o-chat-bubble-left-right')
+                    ->color('success')
+                    ->url(fn (Order $record) => $record->shippingAddress?->phone
+                        ? 'https://wa.me/2' . preg_replace('/[^0-9]/', '', $record->shippingAddress->phone)
+                        : null)
+                    ->openUrlInNewTab()
+                    ->visible(fn (Order $record) => $record->shippingAddress?->phone),
                 Tables\Actions\Action::make('mark_shipped')
                     ->label('تحديد كمشحون')
                     ->icon('heroicon-o-paper-airplane')
                     ->color('info')
+                    ->requiresConfirmation()
                     ->visible(fn (Order $record) => $record->order_status === OrderStatus::PROCESSING)
                     ->action(function (Order $record) {
                         try {
@@ -378,6 +388,7 @@ class OrderResource extends Resource
                 Tables\Actions\Action::make('mark_delivered')
                     ->label('تم التوصيل')
                     ->icon('heroicon-o-check-circle')
+                    ->requiresConfirmation()
                     ->color('success')
                     ->visible(fn (Order $record) => in_array($record->order_status, [OrderStatus::PROCESSING, OrderStatus::SHIPPED]))
                     ->action(function (Order $record) {
@@ -421,6 +432,7 @@ class OrderResource extends Resource
                 Tables\Actions\Action::make('approve_return')
                     ->label('الموافقة على الإرجاع')
                     ->icon('heroicon-o-check')
+                    ->requiresConfirmation()
                     ->color('info')
                     ->visible(fn (Order $record) => $record->return_status === ReturnStatus::RETURN_REQUESTED)
                     ->action(function (Order $record) {
