@@ -296,11 +296,11 @@ class FacebookDataFeedController extends Controller
                 }
             }
         }
-        if (str_contains($categoryName, 'Women') || str_contains($productName, 'women')) {
+        if (str_contains($categoryName, 'women') || str_contains($productName, 'women')) {
             return 'female';
         }
 
-        if (str_contains($categoryName, 'Men') || str_contains($productName, 'men')) {
+        if (str_contains($categoryName, 'men') || str_contains($productName, 'men')) {
             return 'male';
         }
 
