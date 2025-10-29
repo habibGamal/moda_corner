@@ -263,7 +263,7 @@ class FacebookDataFeedController extends Controller
         $productName = strtolower($product->name_en);
         // Check product additional_attributes for gender/sex
         if (! empty($product->additional_attributes) && is_array($product->additional_attributes)) {
-            $genderValue = strtolower(trim((string) ($product->additional_attributes['gender'] ?? $product->additional_attributes['sex'] ?? '')));
+            $genderValue = strtolower(string: trim((string) ($product->additional_attributes['gender'] ?? $product->additional_attributes['sex'] ?? '')));
             if ($genderValue !== '') {
                 if (preg_match('/\b(wom|women|female|f|girl)\b/i', $genderValue)) {
                     return 'female';
@@ -296,11 +296,11 @@ class FacebookDataFeedController extends Controller
                 }
             }
         }
-        if (str_contains($categoryName, 'women') || str_contains($productName, 'women')) {
+        if (str_contains($categoryName, 'Women') || str_contains($productName, 'women')) {
             return 'female';
         }
 
-        if (str_contains($categoryName, 'men') || str_contains($productName, 'men')) {
+        if (str_contains($categoryName, 'Men') || str_contains($productName, 'men')) {
             return 'male';
         }
 
