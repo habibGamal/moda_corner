@@ -32,9 +32,9 @@ export default function useCart() {
             });
 
             ReactPixel.track("AddToCart", {
-                content_ids: [productId],
+                content_ids: [variantId || productId],
                 content_type: "product",
-                contents: variantId ? [{id: variantId, quantity}] : [{id: productId, quantity}],
+                contents: [{id: variantId || productId, quantity}],
                 value: product?.sale_price,
                 currency: "EGP",
             });

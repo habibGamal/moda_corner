@@ -264,10 +264,10 @@ export default function Index({
                 onFinish: () => setIsSubmitting(false),
                 onSuccess: () => {
                     ReactPixel.track("Purchase", {
-                        content_ids: cartItems.map((item) => item.product_id),
+                        content_ids: cartItems.map((item) => item.variant_id || item.product_id),
                         content_type:
                             cartItems.length > 1 ? "product_group" : "product",
-                        contents: cartItems.map((item) => ({id: item.product_id, quantity: item.quantity})),
+                        contents: cartItems.map((item) => ({id: item.variant_id || item.product_id, quantity: item.quantity})),
                         num_items: cartSummary.totalItems,
                         value: cartSummary.totalPrice,
                         currency: "EGP",

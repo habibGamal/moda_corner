@@ -16,8 +16,8 @@ export function OrderSummary({ items, cartSummary }: OrderSummaryProps) {
     const checkout = () => {
         router.get(route("checkout.index"));
         ReactPixel.track("InitiateCheckout", {
-            content_ids: items.map((item) => item.product_id),
-            contents: items.map((item) => ({id: item.product_id, quantity: item.quantity})),
+            content_ids: items.map((item) => item.variant_id || item.product_id),
+            contents: items.map((item) => ({id: item.variant_id || item.product_id, quantity: item.quantity})),
             value: cartSummary.totalPrice,
             num_items: cartSummary.totalItems,
             currency: "EGP",

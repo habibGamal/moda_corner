@@ -49,10 +49,11 @@ export default function ProductCard({ product }: ProductCardProps) {
             {
                 preserveScroll: true,
                 onSuccess: () => {
+                    const variantId = displayData.variantId || product.id;
                     ReactPixel.track("AddToWishlist", {
-                        content_ids: [product.id],
-                        contents: [{ id: product.id, quantity: 1 }],
-                        value: product?.sale_price,
+                        content_ids: [variantId],
+                        contents: [{ id: variantId, quantity: 1 }],
+                        value: displayData.salePrice || product?.sale_price,
                         currency: "EGP",
                     });
                 },

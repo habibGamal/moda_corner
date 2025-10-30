@@ -45,10 +45,12 @@ export default function ProductActions({
             {
                 preserveScroll: true,
                 onSuccess: () => {
+                    const variantId = selectedVariant?.id || product.id;
+                    const value = selectedVariant?.sale_price || product?.sale_price;
                     ReactPixel.track("AddToWishlist", {
-                        content_ids: [product.id],
-                        contents: [{ id: product.id, quantity: 1 }],
-                        value: product?.sale_price,
+                        content_ids: [variantId],
+                        contents: [{ id: variantId, quantity: 1 }],
+                        value: value,
                         currency: "EGP",
                     });
                 },
